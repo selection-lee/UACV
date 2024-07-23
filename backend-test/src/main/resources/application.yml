@@ -1,0 +1,30 @@
+spring:
+  application:
+    name: mqttdemo
+  output:
+    ansi:
+      enabled: always
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017
+      database: study
+      username: ssafy
+      password: 1234
+  datasource:
+    hikari:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      jdbc-url: jdbc:mysql://localhost:3306/study
+      username: ssafy
+      password: 1234
+  jpa:
+    properties:
+      hibernate:
+        # dialect: org.hibernate.dialect.MySQLDialect
+        format_sql: true
+    hibernate:
+      ddl-auto: create
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+logging:
+  level:
+    org.hibernate.SQL: debug
