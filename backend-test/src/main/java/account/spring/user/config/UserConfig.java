@@ -7,7 +7,7 @@ import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
 import org.springframework.context.annotation.Bean;
@@ -19,6 +19,7 @@ import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.transaction.PlatformTransactionManager;
 
+import com.zaxxer.hikari.HikariDataSource;
 
 @Configuration
 @EnableJpaRepositories(
@@ -31,12 +32,29 @@ public class UserConfig {
     @Autowired
     private Environment env;
 
+    @Value("${MYSQL_URL}")
+    private String jdbcUrl;
+
+    @Value("${MYSQL_USERNAME}")
+    private String username;
+
+    @Value("${MYSQL_PASSWORD}")
+    private String password;
+
+    @Value("${MYSQL_DRIVER}")
+    private String driverClassName;
+
     // Database 선택
     @Primary
     @Bean
-    @ConfigurationProperties("spring.datasource.hikari")
     public DataSource mysqlDataSource() {
-        return DataSourceBuilder.create().build();
+        return DataSourceBuilder.create()
+                .type(HikariDataSource.class)
+                .driverClassName(driverClassName)
+                .url(jdbcUrl)
+                .username(username)
+                .password(password)
+                .build();
     }
 
     // EntityManagerFactory
@@ -45,12 +63,11 @@ public class UserConfig {
     public LocalContainerEntityManagerFactoryBean userEntityManagerFactory(
             EntityManagerFactoryBuilder builder,
             @Qualifier("mysqlDataSource") DataSource dataSource) {
-        
-        
+
         Map<String, Object> properties = new HashMap<>();
         properties.put("hibernate.hbm2ddl.auto", env.getProperty("spring.jpa.hibernate.ddl-auto"));
-        // properties.put("hibernate.dialect", env.getProperty("spring.jpa.properties.hibernate.dialect"));
         properties.put("hibernate.format_sql", env.getProperty("spring.jpa.properties.hibernate.format_sql"));
+        // properties.put("hibernate.dialect", env.getProperty("spring.jpa.properties.hibernate.dialect"));
 
         return builder
                 .dataSource(dataSource)
@@ -60,6 +77,7 @@ public class UserConfig {
                 .build();
     }
 
+    @SuppressWarnings("null")
     @Primary
     @Bean
     public PlatformTransactionManager userTransactionManager(
