@@ -2,6 +2,8 @@ spring:
   # .env import
   config:
     import: optional:file:.env[.properties]
+  profiles:
+    include: jwt
   application:
     name: ${APP_NAME}
   output:

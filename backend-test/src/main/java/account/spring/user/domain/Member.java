@@ -1,9 +1,17 @@
 package account.spring.user.domain;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Getter @Setter
@@ -19,6 +27,7 @@ public class Member extends BasetimeEntity {
 
     @Enumerated(EnumType.STRING)
     private Role role;
+
 
     //== 정보수정 ==//
     public void updatePassword(PasswordEncoder passwordEncoder, String password) {
