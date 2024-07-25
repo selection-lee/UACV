@@ -8,7 +8,7 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class TokenInfo {
-
+    //== 토큰 출력시 사용 ==//
     private String grantType;
     private String accessToken;
     private String refreshToken;

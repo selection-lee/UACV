@@ -2,6 +2,7 @@ package account.spring.user.security;
 
 import account.spring.user.security.jwt.JwtAuthenticationFilter;
 import account.spring.user.security.jwt.JwtTokenProvider;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -19,27 +20,11 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @EnableWebSecurity
 public class SecurityConfig {
 
-//    @Bean
-//    public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtTokenProvider jwtTokenProvider) throws Exception {
-//        http.csrf((csrf) -> csrf.disable())
-//                .cors((c) -> c.disable())
-//                .headers((headers) -> headers.disable())
-//                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-//                .authorizeHttpRequests(authorize -> authorize
-//                        .requestMatchers("/user/login").permitAll())
-//                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)
-//                .build();
-////                .formLogin((formLogin) -> formLogin
-////                        .loginPage("/user/login")
-////                        .defaultSuccessUrl("/"))
-////                .logout((logout) -> logout
-////                        .logoutRequestMatcher(new AntPathRequestMatcher("/user/logout"))
-////                        .logoutSuccessUrl("/")
-////                        .invalidateHttpSession(true))
-//        ;
-//
-//        return http.build();
-//    }
+    private final JwtTokenProvider jwtTokenProvider;
+
+    public SecurityConfig(JwtTokenProvider jwtTokenProvider) {
+        this.jwtTokenProvider = jwtTokenProvider;
+    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtTokenProvider jwtTokenProvider) throws Exception {
@@ -47,9 +32,13 @@ public class SecurityConfig {
                 .cors((cors) -> cors.disable())
                 .headers((headers) -> headers.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/user/login", "/user/signup").permitAll()
-                        .anyRequest().authenticated())
+                .authorizeRequests(authorize -> authorize
+                        .requestMatchers("/user/signup", "/user/login").permitAll()
+                        .requestMatchers("/user/ok").hasRole("ADMIN"))
+//                .authorizeHttpRequests(authorize -> authorize
+//                        .requestMatchers("/user/signup", "/user/login").permitAll()
+//                        .requestMatchers("/user/ok").hasRole("ADMIN")
+//                        .anyRequest().authenticated())
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();

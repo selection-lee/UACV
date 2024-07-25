@@ -40,6 +40,7 @@ public class JwtTokenProvider {
 
         // Access Token 생성
         Date accessTokenExpiresIn = new Date(now + 86400000);
+
         String accessToken = Jwts.builder()
                 .setSubject(authentication.getName())
                 .claim("auth", authorities)
@@ -68,7 +69,8 @@ public class JwtTokenProvider {
             throw new RuntimeException("권한 정보가 없는 토큰");
         }
 
-        Collection<? extends GrantedAuthority> authorities = Arrays.stream(claims.get("auth").toString().split(","))
+        Collection<? extends GrantedAuthority> authorities =
+                Arrays.stream(claims.get("auth").toString().split(","))
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
 
@@ -83,15 +85,20 @@ public class JwtTokenProvider {
                     .build()
                     .parseClaimsJws(token);
             return true;
+
         } catch (SecurityException | MalformedJwtException e) {
             log.info("Invalid JWT Token", e);
+
         } catch (ExpiredJwtException e) {
             log.info("Expired JWT Token", e);
+
         } catch (UnsupportedJwtException e) {
             log.info("Unsupported JWT Token", e);
+
         } catch (IllegalArgumentException e) {
             log.info("JWT claims string is empty.", e);
         }
+
         return false;
     }
 
@@ -102,6 +109,7 @@ public class JwtTokenProvider {
                     .build()
                     .parseClaimsJws(accessToken)
                     .getBody();
+
         } catch (ExpiredJwtException e) {
             return e.getClaims();
         }
