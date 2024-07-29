@@ -1,13 +1,11 @@
 package account.spring.user.service;
 
 import account.spring.user.domain.Member;
-import account.spring.user.domain.MemberRole;
 import account.spring.user.dto.SignupDto;
 import account.spring.user.repository.UserRepository;
 import account.spring.user.security.jwt.JwtTokenProvider;
 import account.spring.user.security.jwt.TokenInfo;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -38,6 +36,7 @@ public class UserService {
         member.setMemberRole(signupDto.getMemberRole());
         return userRepository.save(member);
     }
+
 
     //== 로그인 ==//
     @Transactional

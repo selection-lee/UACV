@@ -75,8 +75,8 @@ public class Member extends BasetimeEntity implements UserDetails {
     }
 
     // 비밀번호 업데이트 메서드
-    public void updatePassword(String password) {
-        this.password = password;
+    public void updatePassword(String newPassword) {
+        this.password = newPassword;
     }
 
     // 사용자 이름 업데이트 메서드

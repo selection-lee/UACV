@@ -1,16 +1,18 @@
 package account.spring.user.controller;
 
 import account.spring.user.domain.Member;
+import account.spring.user.domain.Response;
 import account.spring.user.dto.MemberLoginRequestDto;
 import account.spring.user.dto.SignupDto;
+import account.spring.user.repository.UpdatePassword;
 import account.spring.user.security.jwt.TokenInfo;
 import account.spring.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.aspectj.weaver.MemberUtils;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RestController
@@ -22,19 +24,17 @@ public class UserController {
     private final PasswordEncoder passwordEncoder;
 
     //== 회원가입 ==//
-    @PostMapping("signup")
-    public SignupDto signup(SignupDto signupDto) {
-        userService.signUp(signupDto);
-
-        return signupDto;
+    @ResponseStatus(HttpStatus.OK)
+    @PostMapping("/signup")
+    public Response<?> register(@RequestBody SignupDto signupDto) {
+        return new Response<>(userService.signUp(signupDto));
     }
 
     //== 로그인 ==//
     @PostMapping("/login")
-    public TokenInfo login(MemberLoginRequestDto memberLoginRequestDto) {
+    public TokenInfo login(@RequestBody MemberLoginRequestDto memberLoginRequestDto) {
         String username = memberLoginRequestDto.getUsername();
         String password = memberLoginRequestDto.getPassword();
-        System.out.println(username + password);
 
         Member userInfo = userService.findUser(username);
         String DbPassword = userInfo.getPassword();
@@ -47,10 +47,11 @@ public class UserController {
         return tokenInfo;
     }
 
+    //== 회원정보수정 ==//
     //== 로그아웃 ==//
 
     //== 권한 확인 ==//
-    @PostMapping("/admin")
+    @GetMapping("/admin")
     public String admin() {
         return "ADMIN 권한이다 이자식아";
     }
