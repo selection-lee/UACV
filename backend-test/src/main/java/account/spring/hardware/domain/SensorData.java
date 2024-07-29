@@ -1,10 +1,7 @@
 package account.spring.hardware.domain;
 
 import java.time.LocalDateTime;
-import java.util.Date;
-
-import org.hibernate.annotations.CreationTimestamp;
-import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import lombok.Data;
@@ -15,8 +12,7 @@ public class SensorData {
     // @Id
     // private Long deviceId;
 
-    // DB 삽입 일자
-    // @CreationTimestamp
+    @CreatedDate
     private LocalDateTime receivedDate;
 
     // 차체 방향

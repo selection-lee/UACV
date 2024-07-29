@@ -1,10 +1,5 @@
 package account.spring.hardware.service.implement;
 
-import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.List;
-import java.util.stream.Collectors;
-
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,8 +32,8 @@ public class ReceiveServiceImpl implements ReceiveService {
         try {
             String jsonString = new String(message.getBody());
             SensorDataDto sensorDataDto = objectMapper.readValue(jsonString, SensorDataDto.class);
-            SensorDataDto savedDto = createSensor(sensorDataDto);
-            System.out.println("Received and saved sensor data: " + savedDto);
+            SensorData insertedData = insertSensorData(sensorDataDto);
+            System.out.println("Received and saved sensor data: " + insertedData);
         } catch (JsonMappingException e) {
             System.err.println("Error mapping JSON: {}" + e.getMessage());
             System.err.println("Raw message content: {}" + message.getBody());
@@ -63,11 +58,19 @@ public class ReceiveServiceImpl implements ReceiveService {
     //             .orElse(null);
     // }
 
-    public SensorDataDto createSensor(SensorDataDto sensorDataDto) {
+    public SensorData insertSensorData(SensorDataDto sensorDataDto) {
         // SensorDataDto sensorDataDto = new SensorDataDto();
-        SensorData sensorData = convertToEntity(sensorDataDto);
-        SensorData savedData = hardwareRepository.insert(sensorData);
-        return convertToDto(savedData);
+        // SensorData sensorData = convertToEntity(sensorDataDto);
+        SensorData sensorData = new SensorData();
+
+        sensorData.setChassisDir(sensorDataDto.getChassisDir());
+        sensorData.setCannonDir(sensorDataDto.getCannonDir());
+        sensorData.setThrottleValue(sensorDataDto.getThrottleValue());
+        sensorData.setTemperature(sensorDataDto.getTemperature());
+        sensorData.setReceivedDate(sensorDataDto.getReceivedDate());
+
+        SensorData insertedData = hardwareRepository.insert(sensorData);
+        return insertedData;
     }
 
     /*
@@ -88,37 +91,25 @@ public class ReceiveServiceImpl implements ReceiveService {
     // private SensorDataDto convertToDto(SensorData sensorData) {
     //     SensorDataDto sensorDataDto = new SensorDataDto();
 
-    //     sensorDataDto.setDeviceId(sensorData.getDeviceId());
+    //     // sensorDataDto.setDeviceId(sensorData.getDeviceId());
     //     sensorDataDto.setChassisDir(sensorData.getChassisDir());
     //     sensorDataDto.setCannonDir(sensorData.getCannonDir());
     //     sensorDataDto.setThrottleValue(sensorData.getThrottleValue());
     //     sensorDataDto.setTemperature(sensorData.getTemperature());
+    //     sensorDataDto.setReceivedDate(LocalDateTime.now());
         
     //     return sensorDataDto;
     // }
-
-    private SensorDataDto convertToDto(SensorData sensorData) {
-        SensorDataDto sensorDataDto = new SensorDataDto();
-
-        // sensorDataDto.setDeviceId(sensorData.getDeviceId());
-        sensorDataDto.setChassisDir(sensorData.getChassisDir());
-        sensorDataDto.setCannonDir(sensorData.getCannonDir());
-        sensorDataDto.setThrottleValue(sensorData.getThrottleValue());
-        sensorDataDto.setTemperature(sensorData.getTemperature());
-        sensorDataDto.setReceivedDate(LocalDateTime.now());
-        
-        return sensorDataDto;
-    }
     
-    private SensorData convertToEntity(SensorDataDto sensorDataDto) {
-        SensorData sensorData = new SensorData();
-        // sensorData.setDeviceId(sensorDataDto.getDeviceId());
-        sensorData.setChassisDir(sensorDataDto.getChassisDir());
-        sensorData.setCannonDir(sensorDataDto.getCannonDir());
-        sensorData.setThrottleValue(sensorDataDto.getThrottleValue());
-        sensorData.setTemperature(sensorDataDto.getTemperature());
-        sensorData.setReceivedDate(sensorDataDto.getReceivedDate());
+    // private SensorData convertToEntity(SensorDataDto sensorDataDto) {
+    //     SensorData sensorData = new SensorData();
+    //     // sensorData.setDeviceId(sensorDataDto.getDeviceId());
+    //     sensorData.setChassisDir(sensorDataDto.getChassisDir());
+    //     sensorData.setCannonDir(sensorDataDto.getCannonDir());
+    //     sensorData.setThrottleValue(sensorDataDto.getThrottleValue());
+    //     sensorData.setTemperature(sensorDataDto.getTemperature());
+    //     sensorData.setReceivedDate(sensorDataDto.getReceivedDate());
 
-        return sensorData;
-    }
+    //     return sensorData;
+    // }
 }

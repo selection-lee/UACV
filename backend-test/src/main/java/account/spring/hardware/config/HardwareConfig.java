@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.mongodb.MongoDatabaseFactory;
+import org.springframework.data.mongodb.config.EnableMongoAuditing;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.SimpleMongoClientDatabaseFactory;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
@@ -18,6 +19,7 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
         basePackages = "account.spring.hardware.repository",
         mongoTemplateRef = "mongoTemplate"
 )
+@EnableMongoAuditing
 public class HardwareConfig {
 
     @Value("${MONGO_URI}")
