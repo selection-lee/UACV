@@ -29,9 +29,9 @@ public class RabbitmqConfig {
     @Value("${RABBITMQ_PASSWORD}")
     private String password;
 
-    static final String exchange_name = "test_exchange";
-    static final String queue_name = "test_queue";
-    static final String routing_key = "raspberry.sensors.data";
+    static final String exchange_name = "amp.topic";
+    static final String queue_name = "sensor_queue";
+    static final String routing_key = "raspberry.#";
 
     @Bean
     TopicExchange topicExchange() {
