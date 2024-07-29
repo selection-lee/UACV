@@ -15,10 +15,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 @EnableWebSecurity
-public class SecurityConfig {
+public class SecurityConfig implements WebMvcConfigurer {
 
     private final JwtTokenProvider jwtTokenProvider;
 
@@ -32,16 +34,22 @@ public class SecurityConfig {
                 .cors((cors) -> cors.disable())
                 .headers((headers) -> headers.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeRequests(authorize -> authorize
+                .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/user/signup", "/user/login").permitAll()
-                        .requestMatchers("/user/ok").hasRole("ADMIN"))
-//                .authorizeHttpRequests(authorize -> authorize
-//                        .requestMatchers("/user/signup", "/user/login").permitAll()
-//                        .requestMatchers("/user/ok").hasRole("ADMIN")
-//                        .anyRequest().authenticated())
+                        .requestMatchers("/user/admin").hasRole("ADMIN")
+                        .requestMatchers("/user/control").hasRole("CONTROL")
+                        .requestMatchers("/user/monitor").hasRole("MONITOR")
+                        .anyRequest().authenticated())
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
+    }
+
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**")
+                .allowedOrigins("http://localhost:5173")
+                .allowedMethods("GET", "POST", "PUT", "DELETE");
     }
 
     @Bean

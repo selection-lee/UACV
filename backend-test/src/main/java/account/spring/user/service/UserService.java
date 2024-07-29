@@ -7,6 +7,9 @@ import account.spring.user.repository.UserRepository;
 import account.spring.user.security.jwt.JwtTokenProvider;
 import account.spring.user.security.jwt.TokenInfo;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -21,6 +24,7 @@ import java.util.List;
 @Transactional(readOnly = true)
 public class UserService {
 
+    private static final Logger log = LoggerFactory.getLogger(UserService.class);
     private final UserRepository userRepository;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final JwtTokenProvider jwtTokenProvider;
@@ -32,7 +36,6 @@ public class UserService {
         member.setUsername(signupDto.getUsername());
         member.setPassword(new BCryptPasswordEncoder().encode(signupDto.getPassword1()));
         member.setMemberRole(signupDto.getMemberRole());
-
         return userRepository.save(member);
     }
 
@@ -43,7 +46,6 @@ public class UserService {
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, password);
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
         TokenInfo tokenInfo = jwtTokenProvider.generateToken(authentication);
-
         return tokenInfo;
     }
 

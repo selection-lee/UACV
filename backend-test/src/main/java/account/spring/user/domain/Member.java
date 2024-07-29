@@ -9,11 +9,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Entity
 @Getter
@@ -41,15 +38,10 @@ public class Member extends BasetimeEntity implements UserDetails {
         this.memberRole = memberRole;
     }
 
-    // 권한 설정
-    public void setRole(MemberRole memberRole) {
-        this.memberRole = memberRole;
-    }
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
 
-        return Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + memberRole.name()));
+        return Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + memberRole));
     }
 
     @Override
