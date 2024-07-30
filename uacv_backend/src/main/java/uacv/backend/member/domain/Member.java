@@ -9,6 +9,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -74,13 +75,8 @@ public class Member extends BasetimeEntity implements UserDetails {
         return true;
     }
 
-    // 비밀번호 업데이트 메서드
+    //== 비밀번호 변경 ==//
     public void updatePassword(String newPassword) {
         this.password = newPassword;
-    }
-
-    // 사용자 이름 업데이트 메서드
-    public void updateUsername(String username) {
-        this.username = username;
     }
 }

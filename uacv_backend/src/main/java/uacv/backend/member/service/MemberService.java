@@ -1,6 +1,7 @@
 package uacv.backend.member.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import uacv.backend.member.domain.Member;
 import uacv.backend.member.dto.SignupDto;
 import uacv.backend.member.repository.MemberRepository;
@@ -27,6 +28,7 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final JwtTokenProvider jwtTokenProvider;
+    private final PasswordEncoder passwordEncoder;
 
     //== 회원가입 ==//
     @Transactional
@@ -59,6 +61,16 @@ public class MemberService {
         return memberRepository.findByUsername(username).orElseThrow(() -> {
             return new IllegalStateException("User not found");
         });
+    }
+
+    //== 비밀번호 변경 ==//
+    @Transactional
+    public void updatePassword(String username, String currentPassword, String newPassword) {
+        Member member = memberRepository.findByUsername(username).orElseThrow(() -> {
+            return new IllegalStateException("User not found");
+        });
+
+        member.updatePassword(passwordEncoder.encode(newPassword));
     }
 
 

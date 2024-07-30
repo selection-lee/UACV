@@ -13,7 +13,10 @@
       <div class="text-center">
         <router-link :to="{path: '/login'}">로그인</router-link>
         <span> | </span>
-        <router-link :to="{path: '/signup'}">관리자 등록</router-link>
+        <router-link :to="{path: '/adminsignup'}">관리자 등록</router-link>
+        <span> | </span>
+        <router-link :to="{path: '/updatePassword'}">비밀번호 변경</router-link>
+
       </div>
       <div class="py-4" />
 
