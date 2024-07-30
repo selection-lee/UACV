@@ -4,7 +4,6 @@ import account.spring.user.domain.Member;
 import account.spring.user.domain.Response;
 import account.spring.user.dto.MemberLoginRequestDto;
 import account.spring.user.dto.SignupDto;
-import account.spring.user.repository.UpdatePassword;
 import account.spring.user.security.jwt.TokenInfo;
 import account.spring.user.service.UserService;
 import lombok.RequiredArgsConstructor;
