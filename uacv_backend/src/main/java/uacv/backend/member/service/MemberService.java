@@ -12,12 +12,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uacv.backend.member.domain.Member;
 import uacv.backend.member.domain.MemberRole;
+import uacv.backend.member.dto.MemberDto;
 import uacv.backend.member.dto.SignupDto;
 import uacv.backend.member.repository.MemberRepository;
 import uacv.backend.member.security.jwt.JwtTokenProvider;
 import uacv.backend.member.security.jwt.TokenInfo;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -40,7 +42,6 @@ public class MemberService {
         return memberRepository.save(member);
     }
 
-
     //== 로그인 ==//
     @Transactional
     public TokenInfo login(String username, String password) {
@@ -52,8 +53,20 @@ public class MemberService {
     }
 
     //== 회원 리스트 ==//
-    public List<Member> findAll() {
-        return memberRepository.findAll();
+    public List<MemberDto> memberList() {
+        return memberRepository.findAll().stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
+    }
+
+    private MemberDto convertToDto(Member member) {
+        MemberDto memberDto = new MemberDto();
+        memberDto.setId(member.getId());
+        memberDto.setUsername(member.getUsername());
+        memberDto.setMemberRole(member.getMemberRole());
+        memberDto.setCreatedDate(member.getCreatedDate());
+        memberDto.setLastModifiedDate(member.getLastModifiedDate());
+        return memberDto;
     }
 
     //== username으로 해당 member 찾기 ==//
