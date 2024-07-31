@@ -95,5 +95,32 @@ export const useUserStore = defineStore('counter', () => {
 
   }
 
-  return { signUp, LogIn, updatePassword, token }
+  // 권한 변경
+  const updateRole = function (memberRole) {
+    axios({
+      method: 'put',
+      url: `${BASE_URL}/updateRole`,
+      data:{
+        memberRole
+      },
+      headers:{
+        Authorization: `Bearer ${token.value}`
+      }
+    })
+    .then((response) => {
+      console.log(response)
+      // 권한 변경 성공 시 메인페이지로 이동
+      // 삭제 예정
+      router.push(
+        {
+          path: '/'
+        }
+      )
+    })
+    .catch((error) => {
+      console.log(error)
+    })
+  }
+
+  return { signUp, LogIn, updatePassword, updateRole, token }
 }, { persist: true })

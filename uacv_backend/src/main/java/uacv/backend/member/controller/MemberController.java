@@ -1,17 +1,18 @@
 package uacv.backend.member.controller;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.*;
 import uacv.backend.member.domain.Member;
 import uacv.backend.member.domain.MemberAuthorizationUtil;
 import uacv.backend.member.domain.Response;
 import uacv.backend.member.dto.MemberLoginRequestDto;
 import uacv.backend.member.dto.SignupDto;
 import uacv.backend.member.dto.UpdatePasswordDto;
+import uacv.backend.member.dto.UpdateRoleDto;
 import uacv.backend.member.security.jwt.TokenInfo;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.*;
 import uacv.backend.member.service.MemberService;
 
 @RequiredArgsConstructor
@@ -51,10 +52,19 @@ public class MemberController {
     // 1. 비밀번호 변경
     @PutMapping("/updatePassword")
     public String updatePassword(@RequestBody UpdatePasswordDto updatePassword) {
-        System.out.println(updatePassword.getNewPassword());
         String username = MemberAuthorizationUtil.getLoginUsername();
         userService.updatePassword(username, updatePassword.getCurrentPassword(), updatePassword.getNewPassword());
         return "비밀번호 수정 완료";
+    }
+
+    // 2. 권한 변경
+    @PutMapping("updateRole")
+    public String updateRole(@RequestBody UpdateRoleDto updateRole) {
+        System.out.println(updateRole.getMemberRole());
+        String username = MemberAuthorizationUtil.getLoginUsername();
+        userService.updateRole(username, updateRole.getMemberRole());
+
+        return "권한 수정 완료";
     }
     //== 로그아웃 ==//
 

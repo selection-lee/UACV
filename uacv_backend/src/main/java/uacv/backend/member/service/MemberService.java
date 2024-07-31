@@ -1,21 +1,21 @@
 package uacv.backend.member.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import uacv.backend.member.domain.Member;
-import uacv.backend.member.dto.SignupDto;
-import uacv.backend.member.repository.MemberRepository;
-import uacv.backend.member.security.jwt.JwtTokenProvider;
-import uacv.backend.member.security.jwt.TokenInfo;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import uacv.backend.member.domain.Member;
+import uacv.backend.member.domain.MemberRole;
+import uacv.backend.member.dto.SignupDto;
+import uacv.backend.member.repository.MemberRepository;
+import uacv.backend.member.security.jwt.JwtTokenProvider;
+import uacv.backend.member.security.jwt.TokenInfo;
 
 import java.util.List;
 
@@ -73,5 +73,13 @@ public class MemberService {
         member.updatePassword(passwordEncoder.encode(newPassword));
     }
 
+    //== 권한 변경 ==//
+    @Transactional
+    public void updateRole(String username, MemberRole memberRole) {
+        Member member = memberRepository.findByUsername(username).orElseThrow(() -> {
+            return new IllegalStateException("User not found");
+        });
 
+        member.updateRole(memberRole);
+    }
 }

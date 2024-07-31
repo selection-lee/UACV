@@ -16,7 +16,8 @@
         <router-link :to="{path: '/adminsignup'}">관리자 등록</router-link>
         <span> | </span>
         <router-link :to="{path: '/updatePassword'}">비밀번호 변경</router-link>
-
+        <span> | </span>
+        <router-link :to="{path: '/updaterole'}">권한 변경</router-link>
       </div>
       <div class="py-4" />
 

@@ -9,7 +9,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -45,6 +44,16 @@ public class Member extends BasetimeEntity implements UserDetails {
         return Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + memberRole));
     }
 
+    //== 비밀번호 변경 ==//
+    public void updatePassword(String newPassword) {
+        this.password = newPassword;
+    }
+
+    //== 권한 변경 ==//
+    public void updateRole(MemberRole newMemberRole) {
+        this.memberRole = newMemberRole;
+    }
+
     @Override
     public String getPassword() {
         return this.password;
@@ -75,8 +84,5 @@ public class Member extends BasetimeEntity implements UserDetails {
         return true;
     }
 
-    //== 비밀번호 변경 ==//
-    public void updatePassword(String newPassword) {
-        this.password = newPassword;
-    }
+
 }
