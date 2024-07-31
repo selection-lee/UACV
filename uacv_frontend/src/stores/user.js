@@ -24,6 +24,9 @@ export const useUserStore = defineStore('counter', () => {
     })
       .then((response) => {
         console.log(response.data)
+
+        // 성공시 login 페이지로 이동 
+        // 삭제 예정
         router.push(
           {
             path: '/login'
@@ -49,6 +52,12 @@ export const useUserStore = defineStore('counter', () => {
       .then((response) => {
         token.value = response.data.accessToken
         console.log(token.value)
+        //  로그인 성공시 메인 페이지로 이동
+        router.push(
+          {
+            path: '/'
+          }
+        )
       })
       .catch((error) => {
         console.log(error)
@@ -56,5 +65,62 @@ export const useUserStore = defineStore('counter', () => {
 
   }
 
-  return { signUp, LogIn, token }
-})
+  // 비밀번호 변경
+  const updatePassword = function (payload) {
+    const { currentPassword, newPassword } = payload
+
+    axios({
+      method: 'put',
+      url: `${BASE_URL}/updatePassword`,
+      data:{
+        currentPassword, newPassword
+      },
+      headers:{
+        Authorization: `Bearer ${token.value}`
+      }
+    })
+    .then((response) => {
+      console.log(response)
+      //비밀번호 변경 성공시 메인 페이지로 이동
+      // 삭제 예정
+      router.push(
+        {
+          path: '/'
+        }
+      )
+    })
+    .catch((error) => {
+      console.log(error)
+    })
+
+  }
+
+  // 권한 변경
+  const updateRole = function (memberRole) {
+    axios({
+      method: 'put',
+      url: `${BASE_URL}/updateRole`,
+      data:{
+        memberRole
+      },
+      headers:{
+        Authorization: `Bearer ${token.value}`
+      }
+    })
+    .then((response) => {
+      console.log(response)
+      // 권한 변경 성공 시 메인페이지로 이동
+      // 삭제 예정
+      router.push(
+        {
+          path: '/'
+        }
+      )
+    })
+    .catch((error) => {
+      console.log(error)
+    })
+  }
+
+  return { signUp, LogIn, updatePassword, updateRole, token }
+}, { persist: true })
