@@ -9,9 +9,13 @@ export const useUserStore = defineStore('counter', () => {
 
   const BASE_URL = 'http://localhost:8080/user'
   const router = useRouter()
+  //== token값 저장 ==//
   const token = ref(null)
 
-  //회원가입
+  //== memberList 저장 ==//
+  const members = ref(null)
+
+  //== 회원가입 ==//
   const signUp = function (payload) {
     const { username, password1, password2, memberRole } = payload
 
@@ -38,7 +42,7 @@ export const useUserStore = defineStore('counter', () => {
       })
   }
 
-  //로그인
+  //== 로그인 ==//
   const LogIn = function (payload) {
     const { username, password } = payload
 
@@ -65,7 +69,7 @@ export const useUserStore = defineStore('counter', () => {
 
   }
 
-  // 비밀번호 변경
+  //== 비밀번호 변경 ==//
   const updatePassword = function (payload) {
     const { currentPassword, newPassword } = payload
 
@@ -95,7 +99,7 @@ export const useUserStore = defineStore('counter', () => {
 
   }
 
-  // 권한 변경
+  //== 권한 변경 ==//
   const updateRole = function (memberRole) {
     axios({
       method: 'put',
@@ -122,5 +126,24 @@ export const useUserStore = defineStore('counter', () => {
     })
   }
 
-  return { signUp, LogIn, updatePassword, updateRole, token }
+  //== 회원 리스트 출력 ==//
+  const memberList = function() {
+    axios({
+      method: 'get',
+      url: `${BASE_URL}/memberList`,
+      headers: {
+        Authorization: `Bearer ${token.value}`
+      }
+    })
+    .then((response) => {
+      members.value = response.data
+      // console.log(members.value)
+    })
+    .catch((error) => {
+      console.log(error)
+    })
+  }
+
+  return { signUp, LogIn, updatePassword, updateRole, memberList,
+    members, token }
 }, { persist: true })
