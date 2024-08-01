@@ -7,7 +7,7 @@ import axios from 'axios'
 
 export const useUserStore = defineStore('counter', () => {
 
-  const BASE_URL = 'http://localhost:8080/user'
+  const BASE_URL = '/api/user'
   const router = useRouter()
   //== token값 저장 ==//
   const token = ref(null)
