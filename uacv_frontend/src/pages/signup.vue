@@ -37,6 +37,7 @@
       }
       store.signUp(payload)
     }
+    
   </script>
   
   <style scoped></style>

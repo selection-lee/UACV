@@ -7,5 +7,8 @@ import uacv.backend.member.domain.MemberRole;
 @Data
 public class UpdateRoleDto {
     @NotBlank
+    private String username;
+
+    @NotBlank
     private MemberRole memberRole;
 }

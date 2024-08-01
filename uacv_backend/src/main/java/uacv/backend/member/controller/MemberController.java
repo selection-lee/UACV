@@ -47,8 +47,6 @@ public class MemberController {
         return tokenInfo;
     }
 
-    //== 로그아웃 ==//
-
     //== 회원삭제 ==//
 
     //== 회원 리스트 출력 ==//
@@ -63,14 +61,14 @@ public class MemberController {
     public String updatePassword(@RequestBody UpdatePasswordDto updatePassword) {
         String username = MemberAuthorizationUtil.getLoginUsername();
         memberService.updatePassword(username, updatePassword.getCurrentPassword(), updatePassword.getNewPassword());
+
         return "비밀번호 수정 완료";
     }
 
     // 2. 권한 변경
     @PutMapping("updateRole")
     public String updateRole(@RequestBody UpdateRoleDto updateRole) {
-        String username = MemberAuthorizationUtil.getLoginUsername();
-        memberService.updateRole(username, updateRole.getMemberRole());
+        memberService.updateRole(updateRole.getUsername(), updateRole.getMemberRole());
 
         return "권한 수정 완료";
     }

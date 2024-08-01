@@ -79,20 +79,32 @@ public class MemberService {
     //== 비밀번호 변경 ==//
     @Transactional
     public void updatePassword(String username, String currentPassword, String newPassword) {
-        Member member = memberRepository.findByUsername(username).orElseThrow(() -> {
-            return new IllegalStateException("User not found");
-        });
+        Member member = validatePassword(username, currentPassword);
 
         member.updatePassword(passwordEncoder.encode(newPassword));
+
+
+    }
+
+    //== 해당 유저 확인 ==//
+    public Member validatePassword(String username, String currentPassword) {
+        Member member = memberRepository.findByUsername(username)
+                .orElseThrow(() -> new IllegalStateException("User not found"));
+
+        if (!passwordEncoder.matches(currentPassword, member.getPassword())) {
+            throw new IllegalStateException("Wrong password");
+        }
+
+        return member;
     }
 
     //== 권한 변경 ==//
     @Transactional
     public void updateRole(String username, MemberRole memberRole) {
+
         Member member = memberRepository.findByUsername(username).orElseThrow(() -> {
             return new IllegalStateException("User not found");
         });
-
         member.updateRole(memberRole);
     }
 }
