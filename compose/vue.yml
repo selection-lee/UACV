@@ -1,0 +1,17 @@
+services:
+    vue:
+        expose:
+            - 90
+        container_name: vue
+        networks:
+            - caddy
+        labels:
+            caddy: i11c102.p.ssafy.io
+            caddy.handle: /*
+            caddy.handle.reverse_proxy: "{{upstreams 90}}"
+        image: vue:latest
+        pull_policy: never
+networks:
+    caddy:
+        external: true
+        name: caddy

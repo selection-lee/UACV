@@ -1,0 +1,33 @@
+services:
+    rabbitmq:
+        container_name: rabbitmq
+        hostname: ssafy-c102
+        expose:
+            - 15672
+        ports:
+            - 1883:1883
+            # - 5672:5672
+        restart: unless-stopped
+        image: rabbitmq:management-alpine
+        networks:
+            - caddy
+        labels:
+            caddy: i11c102.p.ssafy.io
+            caddy.redir: /rabbit/console /rabbit/console/
+            caddy.handle_path: /rabbit/console/*
+            caddy.handle_path.0_reverse_proxy: "{{upstreams 15672}}"
+            caddy_1: localhost:1883
+            caddy_1.reverse_proxy: "{{upstreams 1883}}"
+        command: "/bin/bash -c \"rabbitmq-plugins enable --offline rabbitmq_mqtt rabbitmq_web_mqtt; rabbitmq-server\""
+        volumes:
+            - rabbitmq_data:/var/lib/rabbitmq
+            - /etc/localtime:/etc/localtime:ro
+            - /home/ubuntu/docker/rabbitmq/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf
+            - /home/ubuntu/docker/rabbitmq/default.json:/etc/rabbitmq/default.json
+volumes:
+    rabbitmq_data:
+        name: rabbitmq_data
+        external: false
+networks:
+    caddy:
+        external: true
