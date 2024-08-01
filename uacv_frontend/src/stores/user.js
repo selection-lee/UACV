@@ -12,9 +12,6 @@ export const useUserStore = defineStore('counter', () => {
   //== token값 저장 ==//
   const token = ref(null)
 
-  //== memberList 저장 ==//
-  const members = ref(null)
-
   //== 회원가입 ==//
   const signUp = function (payload) {
     const { username, password1, password2, memberRole } = payload
@@ -55,7 +52,6 @@ export const useUserStore = defineStore('counter', () => {
     })
       .then((response) => {
         token.value = response.data.accessToken
-        console.log(token.value)
         //  로그인 성공시 메인 페이지로 이동
         router.push(
           {
@@ -99,35 +95,12 @@ export const useUserStore = defineStore('counter', () => {
 
   }
 
-  //== 권한 변경 ==//
-  const updateRole = function (memberRole) {
-    axios({
-      method: 'put',
-      url: `${BASE_URL}/updateRole`,
-      data:{
-        memberRole
-      },
-      headers:{
-        Authorization: `Bearer ${token.value}`
-      }
-    })
-    .then((response) => {
-      console.log(response)
-      // 권한 변경 성공 시 메인페이지로 이동
-      // 삭제 예정
-      router.push(
-        {
-          path: '/'
-        }
-      )
-    })
-    .catch((error) => {
-      console.log(error)
-    })
-  }
+  //== memberList 저장 ==//
+  const members = ref(null)
 
   //== 회원 리스트 출력 ==//
   const memberList = function() {
+    console.log(token.value)
     axios({
       method: 'get',
       url: `${BASE_URL}/memberList`,
@@ -137,13 +110,12 @@ export const useUserStore = defineStore('counter', () => {
     })
     .then((response) => {
       members.value = response.data
-      // console.log(members.value)
+
     })
     .catch((error) => {
       console.log(error)
     })
   }
 
-  return { signUp, LogIn, updatePassword, updateRole, memberList,
-    members, token }
+  return { signUp, LogIn, updatePassword, memberList, members, token }
 }, { persist: true })

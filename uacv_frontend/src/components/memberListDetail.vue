@@ -1,16 +1,18 @@
 <template>
-
-    <tr>
-        <td>{{ prop.member.id }}</td>
-        <td>{{ prop.member.username }}</td>
-        <td>{{ prop.member.memberRole }}</td>
-        <td>{{ prop.member.createdDate }}</td>
-        <td>{{ prop.member.lastModifiedDate }}</td>
-        <td>
-            <v-btn type="button">권한수정</v-btn>
-        </td>
-    </tr>
-
+  <tr>
+    <td>{{ props.member.id }}</td>
+    <td>{{ props.member.username }}</td>
+    <td>{{ props.member.memberRole }}</td>
+    <td>{{ props.member.createdDate }}</td>
+    <td>{{ props.member.lastModifiedDate }}</td>
+    <td>
+      <v-btn type="button" >
+        <router-link :to="{path: `/${props.member.id}`}">
+          권한수정
+        </router-link>
+      </v-btn>
+    </td>
+  </tr>
 </template>
 
 <script setup>
@@ -20,9 +22,10 @@ import { useUserStore } from '@/stores/user'
 const store = useUserStore()
 const member = ref(null)
 
-const prop = defineProps({
-    member : Object
+const props = defineProps({
+  member : Object
 })
+
 </script>
 
 <style scoped>

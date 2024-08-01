@@ -6,7 +6,7 @@
 
     <div class="text-center mt-5">
       <v-form>
-        <v-text-field v-model.trim="username" label="Username" />
+        <v-text-field v-model.trim="username" label="Username" required/>
         <v-text-field v-model.trim="password1" label="Password" type="password" />
         <v-text-field v-model.trim="password2" label="Password 확인" type="password" />
         <v-btn class="block" @click="SignUp">등록</v-btn>
