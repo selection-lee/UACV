@@ -348,7 +348,10 @@
                  result += "E";
              }
          }
-         
+
+         if(result !== "C"){
+            console.log(result);
+         }
          return result;
      }
  
