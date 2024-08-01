@@ -1,0 +1,12 @@
+services:
+    mongodb-ce:
+        container_name: mongodb
+        expose:
+            - 27017
+        networks:
+            - caddy
+        image: mongodb/mongodb-community-server:7.0-ubuntu2204
+networks:
+    caddy:
+        external: true
+        name: caddy
