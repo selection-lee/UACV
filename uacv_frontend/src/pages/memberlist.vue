@@ -25,7 +25,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref, nextTick } from 'vue';
+import { onMounted, ref } from 'vue';
 import { useUserStore } from '@/stores/user'
 import memberListDetail from '@/components/memberListDetail.vue'
 
@@ -33,8 +33,15 @@ const store = useUserStore()
 
 const members = ref(null)
 
-onMounted(() => {
+// 비동기화
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms))
+}
+
+onMounted(async () => {
     store.memberList()
+    // 기다려!
+    await sleep(100)
     members.value = store.members
 })
 
