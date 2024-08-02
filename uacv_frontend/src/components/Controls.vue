@@ -25,18 +25,24 @@
   </script>
   
   <style scoped>
+  .controls {
+    text-align: center; 
+  }
   button {
-  background-color: #750E21;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  font-size: 16px;
-  cursor: pointer;
-}
+    background-color: #750E21;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+  }
 
-button:hover {
-  background-color: #750E21; 
-}
+  button:hover {
+    background-color: #750E21; 
+  }
+  
+  .status {
+    margin-top: 10px; 
+  }
 
   </style>
-  

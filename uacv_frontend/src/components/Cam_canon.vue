@@ -3,9 +3,7 @@
     <div class="cam-canon">
       <img src="@/assets/cam.jpg" alt="카메라 피드" />
       <div class="details">
-        <p>{{ speed }} km/h</p>
-        <p>{{ distance }} km</p>
-        <p>{{ ammo }} / 10</p>
+        <p>잔탄 {{ ammo }} / 10</p>
       </div>
     </div>
   </template>
@@ -14,9 +12,6 @@
   export default {
     name: 'Cam_canon',
     props: {
-      camSrc: String,
-      speed: Number,
-      distance: Number,
       ammo: Number
     }
   }
@@ -24,10 +19,18 @@
   
   <style scoped>
   .cam-canon {
-    /* 카메라 컴포넌트 스타일 */
+    text-align: center; 
   }
-  .details {
-    /* 세부사항 스타일 */
+
+  .cam-canon-image {
+    width: 100%; 
+    max-width: 600px;
+    height: auto;
+  }
+
+  .status {
+    margin-top: 10px; 
   }
   </style>
+
   
