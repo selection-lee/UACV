@@ -9,10 +9,12 @@ import uacv.backend.member.domain.Member;
 import uacv.backend.member.domain.MemberAuthorizationUtil;
 import uacv.backend.member.domain.Response;
 import uacv.backend.member.dto.*;
+import uacv.backend.member.repository.MemberRepository;
 import uacv.backend.member.security.jwt.TokenInfo;
 import uacv.backend.member.service.MemberService;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @RequiredArgsConstructor
 @RestController
@@ -22,6 +24,7 @@ public class MemberController {
 
     private final MemberService memberService;
     private final PasswordEncoder passwordEncoder;
+    private final MemberRepository memberRepository;
 
     //== 회원가입 ==//
     @ResponseStatus(HttpStatus.OK)
@@ -50,6 +53,23 @@ public class MemberController {
     @DeleteMapping("/delete/{id}")
     public String deleteMember(@PathVariable Long id) {
         return memberService.deleteMember(id);
+    }
+
+    //== 중복확인 ==//
+    @GetMapping("/check")
+    public String checkUsername (@RequestParam String username) {
+        System.out.println(username);
+
+        Member member = null;
+
+        try {
+            member = memberService.findUser(username);
+            return "사용불가";
+
+        } catch (IllegalStateException e) {
+            return "사용가능";
+        }
+
     }
 
     //== 회원 리스트 출력 ==//

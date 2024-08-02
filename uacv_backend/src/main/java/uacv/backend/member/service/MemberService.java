@@ -42,6 +42,8 @@ public class MemberService {
         return memberRepository.save(member);
     }
 
+    //== username 중복 체크 ==//
+    
     //== 로그인 ==//
     @Transactional
     public TokenInfo login(String username, String password) {

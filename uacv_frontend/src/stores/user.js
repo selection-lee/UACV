@@ -4,7 +4,6 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 import axios from 'axios'
-
 export const useUserStore = defineStore('counter', () => {
 
   // const BASE_URL = '/api/user'
@@ -35,6 +34,26 @@ export const useUserStore = defineStore('counter', () => {
       .catch((error) => {
         console.log(error)
       })
+  }
+
+  const check = ref(null)
+
+  //== 중복 아이디 검사 ==//
+  const checkUsername = function(username) {
+    axios({
+      method: 'get',
+      url: `${BASE_URL}/check`,
+      params: {
+        "username": username
+      }
+    })
+    .then((response) => {
+      check.value = response.data
+      console.log(check.value)
+    })
+    .catch((error) => {
+      console.log(error)
+    })
   }
 
   //== 로그인 ==//
@@ -94,5 +113,6 @@ export const useUserStore = defineStore('counter', () => {
 
   }
 
-  return { signUp, LogIn, updatePassword, token }
+  return { signUp, LogIn, updatePassword, checkUsername,
+    check, token }
 }, { persist: true })

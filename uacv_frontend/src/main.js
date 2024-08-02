@@ -22,6 +22,4 @@ const pinia = createPinia()
 pinia.use(piniaPluginPersistedstate)
 
 registerPlugins(app)
-
-app.use(pinia)
 app.mount('#app')
