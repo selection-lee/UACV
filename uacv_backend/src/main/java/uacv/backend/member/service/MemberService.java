@@ -45,10 +45,10 @@ public class MemberService {
     //== 로그인 ==//
     @Transactional
     public TokenInfo login(String username, String password) {
-
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, password);
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
         TokenInfo tokenInfo = jwtTokenProvider.generateToken(authentication);
+        tokenInfo.setMemberRole(memberRepository.findByUsername(username).get().getMemberRole());
         return tokenInfo;
     }
 
