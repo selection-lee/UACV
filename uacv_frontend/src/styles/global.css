@@ -1,0 +1,7 @@
+html, body, #app {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    background-color: #12372A; /* 전체 배경 색상 */
+  }
+  
