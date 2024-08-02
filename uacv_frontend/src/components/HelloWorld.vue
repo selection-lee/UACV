@@ -3,89 +3,98 @@
 <template>
   <v-app>
     <v-navigation-drawer
-      app
-      v-model="drawer"
-      :mini-variant.sync="mini"
-      :mini-variant-width="miniWidth"
-      :width="drawerWidth"
-      @mouseover="expandDrawer"
-      @mouseleave="collapseDrawer"
-    >
-      <v-list dense>
-        <v-list-item>
-          <v-list-item-icon>
-            <v-icon>mdi-menu</v-icon>
-          </v-list-item-icon>
-          <v-list-item-content v-if="!mini">
-            <v-list-item-title class="title">Menu</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-        <v-divider></v-divider>
-        <v-list-item to="/">
-          <v-list-item-icon>
-            <v-icon>mdi-home</v-icon>
-          </v-list-item-icon>
-          <v-list-item-content v-if="!mini">
-            <v-list-item-title>Home</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-        <v-list-item>
-          <v-list-item-icon>
-            <v-icon>mdi-camera-account</v-icon>
-          </v-list-item-icon>
-          <v-list-item-content v-if="!mini">
-            <v-list-item-title>기록보기</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-        <v-list-item to="/log_text">
-          <v-list-item-content v-if="!mini">
-            <v-list-item>로그</v-list-item>
-          </v-list-item-content>
-        </v-list-item>
-        <v-list-item to="/log_cam">
-          <v-list-item-content v-if="!mini">
-            <v-list-item>영상</v-list-item>
-          </v-list-item-content>
-        </v-list-item>
-        <v-list-item to="/imformation_edit">
-          <v-list-item-content v-if="!mini">
+    app
+    v-model="drawer"
+    :mini-variant.sync="mini"
+    :mini-variant-width="miniWidth"
+    :width="drawerWidth"
+    @mouseover="expandDrawer"
+    @mouseleave="collapseDrawer"
+  >
+    <v-list dense>
+      <v-list-item>
+        <v-list-item-icon>
+          <v-icon>mdi-menu</v-icon>
+        </v-list-item-icon>
+        <v-list-item-content v-if="!mini">
+          <v-list-item-title class="title">Menu</v-list-item-title>
+        </v-list-item-content>
+      </v-list-item>
+      <v-divider></v-divider>
+      <v-list-item to="/">
+        <v-list-item-icon>
+          <v-icon>mdi-home</v-icon>
+        </v-list-item-icon>
+        <v-list-item-content v-if="!mini">
+          <v-list-item-title>Home</v-list-item-title>
+        </v-list-item-content>
+      </v-list-item>
+      <v-list-item>
+        <v-list-item-icon>
+          <v-icon>mdi-camera-account</v-icon>
+        </v-list-item-icon>
+        <v-list-item-content v-if="!mini">
+          <v-list-item-title>기록보기</v-list-item-title>
+        </v-list-item-content>
+      </v-list-item>
+      <v-list-item to="/log_text">
+        <v-list-item-content v-if="!mini">
+          <v-list-item>로그</v-list-item>
+        </v-list-item-content>
+      </v-list-item>
+      <v-list-item to="/log_cam">
+        <v-list-item-content v-if="!mini">
+          <v-list-item>영상</v-list-item>
+        </v-list-item-content>
+      </v-list-item>
+      <v-list-item to="/imformation_edit">
+        <v-list-item-content v-if="!mini">
           <v-list-item-icon>
             <v-icon>mdi-pencil</v-icon>
           </v-list-item-icon>
-            <v-list-item-title>정보수정</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-        <v-list-item to="/user_management">
-          <v-list-item-content v-if="!mini">
+          <v-list-item-title>정보수정</v-list-item-title>
+        </v-list-item-content>
+      </v-list-item>
+      <v-list-item to="/user_management">
+        <v-list-item-content v-if="!mini">
           <v-list-item-icon>
             <v-icon>mdi-car-back</v-icon>
           </v-list-item-icon>
-            <v-list-item-title>사용자관리</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-      </v-list>
-    </v-navigation-drawer>
+          <v-list-item-title>사용자관리</v-list-item-title>
+        </v-list-item-content>
+      </v-list-item>
+      <v-divider></v-divider>
+      <v-list-item @click="logout">
+        <v-list-item-icon>
+          <v-icon>mdi-logout</v-icon>
+        </v-list-item-icon>
+        <v-list-item-content v-if="!mini">
+          <v-list-item-title>로그아웃</v-list-item-title>
+        </v-list-item-content>
+      </v-list-item>
+    </v-list>
+  </v-navigation-drawer>
+
+    <v-app-bar app>
+        <v-toolbar-title>
+          <v-img src="@/assets/logo.png" height="100" contain></v-img>
+          <span class="ml-3">UACV</span>
+        </v-toolbar-title>
+        <v-spacer></v-spacer>
+    </v-app-bar>
 
     <v-main>
       <v-container class="fill-height">
         <v-responsive class="align-center fill-height mx-auto" max-width="900">
-          <v-img class="mb-4" height="150" src="@/assets/logo.png" />
-
-          <div class="text-center">
-            <div class="text-body-2 font-weight-light mb-n1">Welcome to</div>
-            <h1 class="text-h2 font-weight-bold">UACV</h1>
-          </div>
+          <v-row align="center">
+            <v-col cols="auto">
+              <h4 class="text-h4 font-weight-bold">UACV</h4>
+            </v-col>
+          </v-row>
 
           <div class="py-4" />
 
-          <div class="text-center">
-            <router-link :to="{ path: '/login' }">로그인</router-link>
-            <span> | </span>
-            <router-link :to="{ path: '/signup' }">관리자 등록</router-link>
-          </div>
-          <div class="py-4" />
-
-          <!-- Custom Dashboard Components -->
+          <!--Dashboard Components -->
           <v-row>
             <v-col cols="6">
               <div class="map-section">
@@ -107,25 +116,33 @@
           </v-row>
 
           <v-row>
-            <v-col cols="4">
+            <v-col cols="6">
               <div class="log-section">
                 <Log />
               </div>
             </v-col>
 
-            <v-col cols="4">
+            <v-col cols="3">
               <div class="controls-section">
                 <Controls />
               </div>
             </v-col>
 
-            <v-col cols="4">
+            <v-col cols="3">
               <h5 class="text-h5 font-weight-bold">원격주행</h5>
               <div class="remote-control-section">
-                <router-link :to="{ path: '/remote_control' }">원격 주행</router-link>
-                <RemoteControl />
+                <router-link :to="{ path: '/remote_control' }">
+                  <v-icon>mdi-gamepad-round</v-icon>
+                </router-link>
+              <RemoteControl />
               </div>
             </v-col>
+
+            <div class="text-center">
+              <router-link :to="{ path: '/login' }">로그인</router-link>
+              <span> | </span>
+              <router-link :to="{ path: '/signup' }">관리자 등록</router-link>
+            </div>
           </v-row>
         </v-responsive>
       </v-container>
@@ -165,7 +182,10 @@ export default {
     collapseDrawer() {
       this.mini = true;
       this.drawerWidth = 56; 
-    }
+    },
+    logout() {
+      this.$router.push('/login'); 
+    },
   }
 };
 </script>
@@ -180,6 +200,14 @@ export default {
   grid-gap: 20px;
 }
 
+.v-main {
+  background-color: #093028;
+  color: #FFFFEF;
+}
+.v-toolbar {
+    background-color: #004d40;
+}
+  
 .map-section {
   grid-area: map-section;
 }
@@ -201,5 +229,14 @@ export default {
 
 .controls-section {
   grid-area: controls-section;
+}
+.remote-control-section {
+  grid-area: controls-section;
+  height: 100%;
+}
+.remote-control-section .v-icon {
+  cursor: pointer;
+  font-size: 100px;
+  color: #FFFFEF;
 }
 </style>
