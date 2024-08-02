@@ -26,10 +26,10 @@
 
 <script setup>
 import { onMounted, ref } from 'vue';
-import { useUserStore } from '@/stores/user'
+import { userAdminStore } from '@/stores/admin';
 import memberListDetail from '@/components/memberListDetail.vue'
 
-const store = useUserStore()
+const store = userAdminStore()
 
 const members = ref(null)
 

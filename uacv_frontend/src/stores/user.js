@@ -7,7 +7,8 @@ import axios from 'axios'
 
 export const useUserStore = defineStore('counter', () => {
 
-  const BASE_URL = '/api/user'
+  // const BASE_URL = '/api/user'
+  const BASE_URL = 'http://localhost:8080/user'
   const router = useRouter()
   //== token값 저장 ==//
   const token = ref(null)
@@ -95,27 +96,5 @@ export const useUserStore = defineStore('counter', () => {
 
   }
 
-  //== memberList 저장 ==//
-  const members = ref(null)
-
-  //== 회원 리스트 출력 ==//
-  const memberList = function() {
-    console.log(token.value)
-    axios({
-      method: 'get',
-      url: `${BASE_URL}/memberList`,
-      headers: {
-        Authorization: `Bearer ${token.value}`
-      }
-    })
-    .then((response) => {
-      members.value = response.data
-
-    })
-    .catch((error) => {
-      console.log(error)
-    })
-  }
-
-  return { signUp, LogIn, updatePassword, memberList, members, token }
+  return { signUp, LogIn, updatePassword, token }
 }, { persist: true })

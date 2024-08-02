@@ -1,5 +1,6 @@
 package uacv.backend.member.controller;
 
+import com.sun.tools.jconsole.JConsoleContext;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -43,16 +44,25 @@ public class MemberController {
         if (passwordEncoder.matches(password, DbPassword)) {
             tokenInfo = memberService.login(username, DbPassword);
         }
-
         return tokenInfo;
     }
 
     //== 회원삭제 ==//
+    @DeleteMapping("/delete/{id}")
+    public String deleteMember(@PathVariable Long id) {
+        return memberService.deleteMember(id);
+    }
 
     //== 회원 리스트 출력 ==//
     @GetMapping("/memberList")
     public List<MemberDto> getMemberList() {
         return memberService.memberList();
+    }
+
+    //== id로 회원 찾기 ==//
+    @GetMapping("/{id}")
+    public MemberDto getMemberById(@PathVariable Long id) {
+        return memberService.findUserById(id);
     }
 
     //== 회원정보수정 ==//

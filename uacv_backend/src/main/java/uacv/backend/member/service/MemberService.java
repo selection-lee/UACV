@@ -52,6 +52,16 @@ public class MemberService {
         return tokenInfo;
     }
 
+    //== 회원 삭제 ==//
+    @Transactional
+    public String deleteMember(Long id) {
+        Member member = memberRepository.findById(id).orElse(null);
+
+        memberRepository.delete(member);
+
+        return "회원 삭제 완료";
+    }
+
     //== 회원 리스트 ==//
     public List<MemberDto> memberList() {
         return memberRepository.findAll().stream()
@@ -69,6 +79,11 @@ public class MemberService {
         return memberDto;
     }
 
+    //== id로 해당 member 찾기 ==//
+    public MemberDto findUserById(Long id) {
+        return memberRepository.findById(id).stream().map(this::convertToDto).findFirst().orElse(null);
+    }
+
     //== username으로 해당 member 찾기 ==//
     public Member findUser(String username) {
         return memberRepository.findByUsername(username).orElseThrow(() -> {
@@ -82,7 +97,6 @@ public class MemberService {
         Member member = validatePassword(username, currentPassword);
 
         member.updatePassword(passwordEncoder.encode(newPassword));
-
 
     }
 
