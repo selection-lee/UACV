@@ -42,14 +42,26 @@ public class MemberService {
         return memberRepository.save(member);
     }
 
+    //== username 중복 체크 ==//
+    
     //== 로그인 ==//
     @Transactional
     public TokenInfo login(String username, String password) {
-
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, password);
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
         TokenInfo tokenInfo = jwtTokenProvider.generateToken(authentication);
+        tokenInfo.setMemberRole(memberRepository.findByUsername(username).get().getMemberRole());
         return tokenInfo;
+    }
+
+    //== 회원 삭제 ==//
+    @Transactional
+    public String deleteMember(Long id) {
+        Member member = memberRepository.findById(id).orElse(null);
+
+        memberRepository.delete(member);
+
+        return "회원 삭제 완료";
     }
 
     //== 회원 리스트 ==//
@@ -69,6 +81,11 @@ public class MemberService {
         return memberDto;
     }
 
+    //== id로 해당 member 찾기 ==//
+    public MemberDto findUserById(Long id) {
+        return memberRepository.findById(id).stream().map(this::convertToDto).findFirst().orElse(null);
+    }
+
     //== username으로 해당 member 찾기 ==//
     public Member findUser(String username) {
         return memberRepository.findByUsername(username).orElseThrow(() -> {
@@ -82,7 +99,6 @@ public class MemberService {
         Member member = validatePassword(username, currentPassword);
 
         member.updatePassword(passwordEncoder.encode(newPassword));
-
 
     }
 

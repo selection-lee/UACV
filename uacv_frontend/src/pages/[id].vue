@@ -1,14 +1,14 @@
 <template>
     <div>
         <h1>회원 정보 페이지</h1>
-        <h3>{{ id }}</h3>
-        <h3>{{ username }}</h3>
-        <h3>{{ memberRole }}</h3>
-        <v-select label="Select" v-model.trim="newMemberRole" :items="['CONTROL', 'MONITOR']"></v-select>
-        <h3>{{ createdDate }}</h3>
-        <h3>{{ lastModifiedDate }}</h3>
-
+        <h3 v-if="memberInfo">{{ memberInfo.id }}</h3>
+        <h3 v-if="memberInfo">{{ memberInfo.username }}</h3>
+        <!-- <h3 v-if="memberInfo">{{ memberInfo.memberRole }}</h3> -->
+        <v-select label="Select" v-model.trim="memberRole" :items="['CONTROL', 'MONITOR']" ></v-select>
+        <h3 v-if="memberInfo">{{ memberInfo.createdDate }}</h3>
+        <h3 v-if="memberInfo">{{ memberInfo.lastModifiedDate }}</h3>
         <v-btn @click="updateRole">권한 변경</v-btn>
+        <v-btn @click="deleteMember">회원 삭제</v-btn>
     </div>
 </template>
 
@@ -21,35 +21,35 @@ const memberInfo = ref(null)
 const route = useRoute()
 const id = route.params.id
 const store = userAdminStore()
-
-const username = ref(null)
 const memberRole = ref(null)
-const createdDate = ref(null)
-const lastModifiedDate = ref(null)
 
-// const check = ref(true)
-const newMemberRole = ref(null)
-
+//== 권한 변경 ==//
 const updateRole = function () {
   const payload = {
-    username: username.value,
-    memberRole: newMemberRole.value
+    username: memberInfo.value.username,
+    memberRole: memberRole.value
   }
 
-  store.updateRole(payload)
+  store.updateRole(id, payload)
 
-  alert("권한이 변경되었습니다.")
 }
 
-onMounted(() => {
-  memberInfo.value = store.findMember(id)[0]
-  username.value = memberInfo.value.username
+//== 회원 삭제 =//
+const deleteMember = function () {
+  store.deleteMember(id)
+}
+
+//== 비동기화 ==//
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms))
+}
+
+onMounted(async() => {
+  store.findMember(id)
+  await sleep(100)
+  memberInfo.value = store.memberInfo
   memberRole.value = memberInfo.value.memberRole
-  // if (memberRole === "ADMIN") {
-  //   check.value = false
-  // }
-  createdDate.value = memberInfo.value.createdDate
-  lastModifiedDate.value = memberInfo.value.lastModifiedDate
+
 })
 </script>
 

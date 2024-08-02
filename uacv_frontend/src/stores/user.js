@@ -4,13 +4,16 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 import axios from 'axios'
-
 export const useUserStore = defineStore('counter', () => {
 
-  const BASE_URL = '/api/user'
+  // const BASE_URL = '/api/user'
+  const BASE_URL = 'http://localhost:8080/user'
   const router = useRouter()
   //== token값 저장 ==//
   const token = ref(null)
+
+  //== Role 저장 ==//
+  const memberRole = ref(null)
 
   //== 회원가입 ==//
   const signUp = function (payload) {
@@ -24,19 +27,33 @@ export const useUserStore = defineStore('counter', () => {
       }
     })
       .then((response) => {
-        console.log(response.data)
-
-        // 성공시 login 페이지로 이동 
-        // 삭제 예정
-        router.push(
-          {
-            path: '/login'
-          }
-        )
+        router.push({
+          path: '/'
+        })
       })
       .catch((error) => {
         console.log(error)
       })
+  }
+
+  const check = ref(null)
+
+  //== 중복 아이디 검사 ==//
+  const checkUsername = function(username) {
+    axios({
+      method: 'get',
+      url: `${BASE_URL}/check`,
+      params: {
+        "username": username
+      }
+    })
+    .then((response) => {
+      check.value = response.data
+      console.log(check.value)
+    })
+    .catch((error) => {
+      console.log(error)
+    })
   }
 
   //== 로그인 ==//
@@ -51,6 +68,7 @@ export const useUserStore = defineStore('counter', () => {
       }
     })
       .then((response) => {
+        memberRole.value = response.data.memberRole
         token.value = response.data.accessToken
         //  로그인 성공시 메인 페이지로 이동
         router.push(
@@ -95,27 +113,6 @@ export const useUserStore = defineStore('counter', () => {
 
   }
 
-  //== memberList 저장 ==//
-  const members = ref(null)
-
-  //== 회원 리스트 출력 ==//
-  const memberList = function() {
-    console.log(token.value)
-    axios({
-      method: 'get',
-      url: `${BASE_URL}/memberList`,
-      headers: {
-        Authorization: `Bearer ${token.value}`
-      }
-    })
-    .then((response) => {
-      members.value = response.data
-
-    })
-    .catch((error) => {
-      console.log(error)
-    })
-  }
-
-  return { signUp, LogIn, updatePassword, memberList, members, token }
+  return { signUp, LogIn, updatePassword, checkUsername,
+    check, token }
 }, { persist: true })
