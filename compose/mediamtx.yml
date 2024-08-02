@@ -1,0 +1,18 @@
+services:
+    mediamtx:
+        container_name: mediamtx
+        networks:
+            - caddy
+        environment:
+            - MTX_PROTOCOLS=tcp
+        ports:
+            - 8554:8554
+        image: bluenviron/mediamtx:latest-ffmpeg
+        labels:
+            caddy: localhost:8554
+            caddy.reverse_proxy: "{{upstreams 8554}}"
+        volumes:
+            - /etc/localtime:/etc/localtime:ro
+networks:
+    caddy:
+        external: true

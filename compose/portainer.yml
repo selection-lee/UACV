@@ -1,0 +1,26 @@
+services:
+    portainer-ce:
+        container_name: portainer-ce
+        expose:
+            - 9000
+        restart: always
+        pull_policy: always
+        volumes:
+            - /etc/localtime:/etc/localtime:ro
+            - /var/run/docker.sock:/var/run/docker.sock
+            - portainer_data:/data
+        image: portainer/portainer-ce:latest
+        networks:
+            - caddy
+        labels:
+            caddy: i11c102.p.ssafy.io
+            caddy.redir: /portainer /portainer/
+            caddy.handle_path: /portainer/*
+            caddy.handle_path.0_reverse_proxy: "{{upstreams 9000}}"
+volumes:
+    portainer_data:
+        name: portainer_data
+        external: false
+networks:
+    caddy:
+        external: true
