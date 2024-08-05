@@ -7,6 +7,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.RequiredArgsConstructor;
+import uacv.backend.hardware.config.RabbitmqProperties;
 import uacv.backend.hardware.dto.ControlDataDto;
 import uacv.backend.hardware.service.SendService;
 
@@ -16,16 +17,27 @@ import uacv.backend.hardware.service.SendService;
 public class SendServiceImpl implements SendService {
     
     private final RabbitTemplate rabbitTemplate;
+    private RabbitmqProperties rabbitmqProperties;
 
     @Override
-    public void sendMessage(ControlDataDto controlDataDto) {
-        try {
-            // 객체 -> json
-            ObjectMapper objectMapper = new ObjectMapper();
-            String objectToJson = objectMapper.writeValueAsString(controlDataDto);
-            rabbitTemplate.convertAndSend("test-exchange", "test-key", objectToJson);
-        } catch (JsonProcessingException e) {
-            System.err.println("Failed to parse json");
+    public void sendCommand(String targetDevice, ControlDataDto controlDataDto) {
+        // try {
+        //     // 객체 -> json
+        //     ObjectMapper objectMapper = new ObjectMapper();
+        //     String objectToJson = objectMapper.writeValueAsString(controlDataDto);
+        //     rabbitTemplate.convertAndSend("test-exchange", "test-key", objectToJson);
+        // } catch (JsonProcessingException e) {
+        //     System.err.println("Failed to parse json");
+        // }
+        RabbitmqProperties.DeviceConfig deviceConfig = rabbitmqProperties.getDevices().get(targetDevice);
+        if (deviceConfig == null) {
+            throw new IllegalArgumentException("No configuration found for device: " + targetDevice);
         }
+
+        rabbitTemplate.convertAndSend(
+            deviceConfig.getExchange(),
+            deviceConfig.getRoutingKey(),
+            controlDataDto
+        );
     }
 }

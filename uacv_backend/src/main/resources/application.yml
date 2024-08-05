@@ -37,6 +37,14 @@ spring:
     port: ${RABBITMQ_PORT}
     username: ${RABBITMQ_USER}
     password: ${RABBITMQ_PW}
+    exchange: amq.topic
+    devices:
+      rpi:
+        queue: sensor_queue
+        routing-key: raspberry.#
+      orin:
+        queue: command_queue
+        routing-key: orin.#
 
 logging:
   level:
