@@ -11,22 +11,22 @@
 
 <script>
 export default {
-  name: 'Map'
-}
+  name: "Map",
+};
 </script>
 
 <style scoped>
 .map {
-  text-align: center; 
+  text-align: center;
 }
 
 .map-image {
-  width: 100%; 
+  width: 100%;
   max-width: 600px;
   height: auto;
 }
 
 .status {
-  margin-top: 10px; 
+  margin-top: 10px;
 }
 </style>

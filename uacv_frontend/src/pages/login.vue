@@ -11,30 +11,33 @@
         <input type="text" id="username" v-model.trim="username"> -->
         <!-- <label for="password">password</label>
         <input type="text" id="password" v-model.trim="password"> -->
-        <v-text-field v-model.trim="password" label="Password" type="password" />
+        <v-text-field
+          v-model.trim="password"
+          label="Password"
+          type="password"
+        />
         <v-btn class="block" @click="Login">Login</v-btn>
       </v-form>
     </div>
-
   </v-container>
 </template>
 
 <script setup>
-  import { ref } from 'vue'
-  import { useUserStore } from '@/stores/user'
+import { ref } from "vue";
+import { useUserStore } from "@/stores/user";
 
-  const store = useUserStore()
+const store = useUserStore();
 
-  const username = ref(null)
-  const password = ref(null)
+const username = ref(null);
+const password = ref(null);
 
-  const Login = function () {
-    const payload = {
-      username: username.value,
-      password: password.value
-    }
-    store.LogIn(payload)
-  }
+const Login = function () {
+  const payload = {
+    username: username.value,
+    password: password.value,
+  };
+  store.LogIn(payload);
+};
 </script>
 
 <style scoped></style>

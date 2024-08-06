@@ -9,7 +9,7 @@
       @mouseover="expandDrawer"
       @mouseleave="collapseDrawer"
     >
-    <v-list dense>
+      <v-list dense>
         <v-list-item>
           <v-list-item-icon>
             <v-icon>mdi-menu</v-icon>
@@ -89,7 +89,7 @@
               <h4 class="text-h4 font-weight-bold">원격주행</h4>
             </v-col>
           </v-row>
-      
+
           <!-- Components -->
           <v-row>
             <v-col cols="6">
@@ -113,30 +113,34 @@
                   <!-- Joystick -->
                   <!--<joy @move="handleJoystickMove" />-->
                   <!-- Button -->
-                  <v-btn 
-                    @mousedown="startLogging('right')" 
-                    @mouseup="stopLogging" 
+                  <v-btn
+                    @mousedown="startLogging('right')"
+                    @mouseup="stopLogging"
                     @mouseleave="stopLogging"
                     class="direction-btn mr-2"
-                  >Right</v-btn>
-                  <v-btn 
-                    @mousedown="startLogging('left')" 
-                    @mouseup="stopLogging" 
+                    >Right</v-btn
+                  >
+                  <v-btn
+                    @mousedown="startLogging('left')"
+                    @mouseup="stopLogging"
                     @mouseleave="stopLogging"
                     class="direction-btn mr-2"
-                  >Left</v-btn>
-                  <v-btn 
-                    @mousedown="startLogging('up')" 
-                    @mouseup="stopLogging" 
+                    >Left</v-btn
+                  >
+                  <v-btn
+                    @mousedown="startLogging('up')"
+                    @mouseup="stopLogging"
                     @mouseleave="stopLogging"
                     class="direction-btn mr-2"
-                  >UP</v-btn>
-                  <v-btn 
-                    @mousedown="startLogging('down')" 
-                    @mouseup="stopLogging" 
+                    >UP</v-btn
+                  >
+                  <v-btn
+                    @mousedown="startLogging('down')"
+                    @mouseup="stopLogging"
                     @mouseleave="stopLogging"
                     class="direction-btn"
-                  >DOWN</v-btn>
+                    >DOWN</v-btn
+                  >
                 </div>
               </v-form>
             </v-col>
@@ -146,30 +150,34 @@
                 <div class="mt-4">
                   <h5>포신방향</h5>
                   <!-- Button -->
-                  <v-btn 
-                    @mousedown="startLogging('right_cannon')" 
-                    @mouseup="stopLogging" 
+                  <v-btn
+                    @mousedown="startLogging('right_cannon')"
+                    @mouseup="stopLogging"
                     @mouseleave="stopLogging"
                     class="direction-btn mr-2"
-                  >Right</v-btn>
-                  <v-btn 
-                    @mousedown="startLogging('left_cannon')" 
-                    @mouseup="stopLogging" 
+                    >Right</v-btn
+                  >
+                  <v-btn
+                    @mousedown="startLogging('left_cannon')"
+                    @mouseup="stopLogging"
                     @mouseleave="stopLogging"
                     class="direction-btn mr-2"
-                  >Left</v-btn>
-                  <v-btn 
-                    @mousedown="startLogging('up_cannon')" 
-                    @mouseup="stopLogging" 
+                    >Left</v-btn
+                  >
+                  <v-btn
+                    @mousedown="startLogging('up_cannon')"
+                    @mouseup="stopLogging"
                     @mouseleave="stopLogging"
                     class="direction-btn mr-2"
-                  >UP</v-btn>
-                  <v-btn 
-                    @mousedown="startLogging('down_cannon')" 
-                    @mouseup="stopLogging" 
+                    >UP</v-btn
+                  >
+                  <v-btn
+                    @mousedown="startLogging('down_cannon')"
+                    @mouseup="stopLogging"
                     @mouseleave="stopLogging"
                     class="direction-btn"
-                  >DOWN</v-btn>
+                    >DOWN</v-btn
+                  >
                 </div>
               </v-form>
             </v-col>
@@ -181,68 +189,74 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import Cam from '@/components/Cam.vue'
-import Cam_canon from '@/components/Cam_canon.vue'
+import { ref } from "vue";
+import Cam from "@/components/Cam.vue";
+import Cam_canon from "@/components/Cam_canon.vue";
 
-const joystickX = ref(0)
-const joystickY = ref(0)
-const angle = ref(0)
-const distance = ref(0)
+const joystickX = ref(0);
+const joystickY = ref(0);
+const angle = ref(0);
+const distance = ref(0);
 
 const counts = ref({
   right: 0,
   left: 0,
   up: 0,
-  down: 0
-})
+  down: 0,
+});
 
 const calculateAngleAndDistance = (x, y) => {
-  const distance = Math.sqrt(x * x + y * y)
-  const angle = Math.atan2(y, x) * (180 / Math.PI)
-  return { angle, distance }
-}
+  const distance = Math.sqrt(x * x + y * y);
+  const angle = Math.atan2(y, x) * (180 / Math.PI);
+  return { angle, distance };
+};
 
 const handleJoystickMove = (joystickData) => {
-  joystickX.value = joystickData.x
-  joystickY.value = joystickData.y
+  joystickX.value = joystickData.x;
+  joystickY.value = joystickData.y;
 
-  const { angle: newAngle, distance: newDistance } = calculateAngleAndDistance(joystickX.value, joystickY.value)
-  angle.value = newAngle
-  distance.value = newDistance
-  console.log(`Angle: ${angle.value.toFixed(2)} degrees, Distance: ${distance.value.toFixed(2)}`)
-}
+  const { angle: newAngle, distance: newDistance } = calculateAngleAndDistance(
+    joystickX.value,
+    joystickY.value
+  );
+  angle.value = newAngle;
+  distance.value = newDistance;
+  console.log(
+    `Angle: ${angle.value.toFixed(
+      2
+    )} degrees, Distance: ${distance.value.toFixed(2)}`
+  );
+};
 
-const logInterval = ref(null)
+const logInterval = ref(null);
 
 const startLogging = (direction) => {
   logInterval.value = setInterval(() => {
-    console.log(direction)
-  }, 100)
-}
+    console.log(direction);
+  }, 100);
+};
 
 const stopLogging = () => {
   if (logInterval.value) {
-    clearInterval(logInterval.value)
-    logInterval.value = null
+    clearInterval(logInterval.value);
+    logInterval.value = null;
   }
-}
-
+};
 </script>
 
 <script>
 export default {
-  name: 'Cam_view',
+  name: "Cam_view",
   components: {
     Cam,
-    Cam_canon
+    Cam_canon,
   },
   data() {
     return {
       drawer: true,
       mini: true,
       miniWidth: 56,
-      drawerWidth: 56
+      drawerWidth: 56,
     };
   },
   methods: {
@@ -252,12 +266,12 @@ export default {
     },
     collapseDrawer() {
       this.mini = true;
-      this.drawerWidth = 56; 
+      this.drawerWidth = 56;
     },
     logout() {
-      this.$router.push('/login'); 
-    }
-  }
+      this.$router.push("/login");
+    },
+  },
 };
 </script>
 
@@ -265,8 +279,8 @@ export default {
 .cam_view {
   display: grid;
   grid-template-areas:
-    'cams-section cam-canon-section'
-    'joy-div direction-btn';
+    "cams-section cam-canon-section"
+    "joy-div direction-btn";
   grid-gap: 20px;
 }
 
@@ -280,7 +294,7 @@ export default {
 
 .v-main {
   background-color: #093028;
-  color: #FFFFEF;
+  color: #ffffef;
 }
 
 .v-toolbar {
