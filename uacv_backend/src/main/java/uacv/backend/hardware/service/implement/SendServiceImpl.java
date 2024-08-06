@@ -8,6 +8,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.RequiredArgsConstructor;
 import uacv.backend.hardware.config.RabbitmqProperties;
+import uacv.backend.hardware.domain.EventType;
+import uacv.backend.hardware.domain.LogType;
 import uacv.backend.hardware.dto.ControlDataDto;
 import uacv.backend.hardware.service.SendService;
 
@@ -15,7 +17,7 @@ import uacv.backend.hardware.service.SendService;
 @Service
 @RequiredArgsConstructor
 public class SendServiceImpl implements SendService {
-    
+
     private final RabbitTemplate rabbitTemplate;
     private RabbitmqProperties rabbitmqProperties;
 
@@ -35,9 +37,13 @@ public class SendServiceImpl implements SendService {
         }
 
         rabbitTemplate.convertAndSend(
-            deviceConfig.getExchange(),
-            deviceConfig.getRoutingKey(),
-            controlDataDto
-        );
+                deviceConfig.getExchange(),
+                deviceConfig.getRoutingKey(),
+                controlDataDto);
+    }
+
+    @Override
+    public void getDeviceLogs(LogType logType, EventType eventType, int pageCount) {
+
     }
 }
