@@ -137,12 +137,6 @@
               <RemoteControl />
               </div>
             </v-col>
-
-            <div class="text-center">
-              <router-link :to="{ path: '/login' }">로그인</router-link>
-              <span> | </span>
-              <router-link :to="{ path: '/signup' }">관리자 등록</router-link>
-            </div>
           </v-row>
         </v-responsive>
       </v-container>
