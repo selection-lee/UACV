@@ -15,6 +15,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import lombok.RequiredArgsConstructor;
 import uacv.backend.member.security.jwt.JwtAuthenticationFilter;
 import uacv.backend.member.security.jwt.JwtTokenProvider;
 
@@ -22,21 +23,18 @@ import java.util.List;
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfig implements WebMvcConfigurer {
 
-    private final JwtTokenProvider jwtTokenProvider;
-
-    public SecurityConfig(JwtTokenProvider jwtTokenProvider) {
-        this.jwtTokenProvider = jwtTokenProvider;
-    }
-
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtTokenProvider jwtTokenProvider) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtTokenProvider jwtTokenProvider)
+            throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> {
                     cors.configurationSource(request -> {
                         CorsConfiguration config = new CorsConfiguration();
-                        config.setAllowedOrigins(List.of("http://localhost:3000"));
+                        config.setAllowedOrigins(List.of("http://localhost:3000", "https://i11c102.p.ssafy.io",
+                                "http://i11c102.p.ssafy.io"));
                         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
                         config.setAllowedHeaders(List.of("*"));
                         config.setAllowCredentials(true);
@@ -45,12 +43,14 @@ public class SecurityConfig implements WebMvcConfigurer {
                 })
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/user/signup", "/user/login").permitAll()
-                        .requestMatchers("/user/admin").hasRole("ADMIN")
+                        .requestMatchers("/user/signup", "/user/login", "/user/check").permitAll()
+                        .requestMatchers("/user/admin", "/user/memberList", "/user/{id}", "/user/delete/{id}").hasRole("ADMIN")
                         .requestMatchers("/user/control").hasRole("CONTROL")
                         .requestMatchers("/user/monitor").hasRole("MONITOR")
+                        .requestMatchers("/user/updatePassword").authenticated()
                         .anyRequest().authenticated())
-                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider),
+                        UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
@@ -61,7 +61,8 @@ public class SecurityConfig implements WebMvcConfigurer {
     }
 
     @Bean
-    AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception{
+    AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration)
+            throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
 }

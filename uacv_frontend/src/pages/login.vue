@@ -7,15 +7,7 @@
     <div class="text-center mt-5">
       <v-form>
         <v-text-field v-model.trim="username" label="Username" />
-        <!-- <label for="username">username</label>
-        <input type="text" id="username" v-model.trim="username"> -->
-        <!-- <label for="password">password</label>
-        <input type="text" id="password" v-model.trim="password"> -->
-        <v-text-field
-          v-model.trim="password"
-          label="Password"
-          type="password"
-        />
+        <v-text-field v-model.trim="password" label="Password" type="password" />
         <v-btn class="block" @click="Login">Login</v-btn>
       </v-form>
     </div>

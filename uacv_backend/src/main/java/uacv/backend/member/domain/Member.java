@@ -44,6 +44,16 @@ public class Member extends BasetimeEntity implements UserDetails {
         return Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + memberRole));
     }
 
+    //== 비밀번호 변경 ==//
+    public void updatePassword(String newPassword) {
+        this.password = newPassword;
+    }
+
+    //== 권한 변경 ==//
+    public void updateRole(MemberRole newMemberRole) {
+        this.memberRole = newMemberRole;
+    }
+
     @Override
     public String getPassword() {
         return this.password;
@@ -74,13 +84,5 @@ public class Member extends BasetimeEntity implements UserDetails {
         return true;
     }
 
-    // 비밀번호 업데이트 메서드
-    public void updatePassword(String newPassword) {
-        this.password = newPassword;
-    }
 
-    // 사용자 이름 업데이트 메서드
-    public void updateUsername(String username) {
-        this.username = username;
-    }
 }
