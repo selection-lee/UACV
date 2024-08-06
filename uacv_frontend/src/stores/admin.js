@@ -21,7 +21,7 @@ export const userAdminStore = defineStore('admin', () => {
 
     axios({
       method: 'put',
-      url: `${BASE_URL}/updateRole`,
+      url: `${BASE_URL}/update/role`,
       data:{
         username, memberRole
       },
@@ -67,7 +67,7 @@ export const userAdminStore = defineStore('admin', () => {
   const memberList = function() {
     axios({
       method: 'get',
-      url: `${BASE_URL}/memberList`,
+      url: `${BASE_URL}/list`,
       headers: {
         Authorization: `Bearer ${token}`
       }

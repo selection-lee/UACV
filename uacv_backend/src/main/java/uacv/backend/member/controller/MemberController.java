@@ -9,26 +9,23 @@ import uacv.backend.member.domain.Member;
 import uacv.backend.member.domain.MemberAuthorizationUtil;
 import uacv.backend.member.domain.Response;
 import uacv.backend.member.dto.*;
-import uacv.backend.member.repository.MemberRepository;
 import uacv.backend.member.security.jwt.TokenInfo;
 import uacv.backend.member.service.MemberService;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/api/member")
 @Slf4j
 public class MemberController {
 
     private final MemberService memberService;
     private final PasswordEncoder passwordEncoder;
-    private final MemberRepository memberRepository;
 
-    //== 회원가입 ==//
+    //== 계정생성 ==//
     @ResponseStatus(HttpStatus.OK)
-    @PostMapping("/signup")
+    @PostMapping("/create")
     public Response<?> register(@RequestBody SignupDto signupDto) {
         return new Response<>(memberService.signUp(signupDto));
     }
@@ -73,7 +70,7 @@ public class MemberController {
     }
 
     //== 회원 리스트 출력 ==//
-    @GetMapping("/memberList")
+    @GetMapping("/list")
     public List<MemberDto> getMemberList() {
         return memberService.memberList();
     }
@@ -86,7 +83,7 @@ public class MemberController {
 
     //== 회원정보수정 ==//
     // 1. 비밀번호 변경
-    @PutMapping("/updatePassword")
+    @PutMapping("/update/password")
     public String updatePassword(@RequestBody UpdatePasswordDto updatePassword) {
         String username = MemberAuthorizationUtil.getLoginUsername();
         memberService.updatePassword(username, updatePassword.getCurrentPassword(), updatePassword.getNewPassword());
@@ -95,26 +92,10 @@ public class MemberController {
     }
 
     // 2. 권한 변경
-    @PutMapping("updateRole")
+    @PutMapping("update/role")
     public String updateRole(@RequestBody UpdateRoleDto updateRole) {
         memberService.updateRole(updateRole.getUsername(), updateRole.getMemberRole());
 
         return "권한 수정 완료";
-    }
-
-    //== 권한 확인 ==// -> 삭제 예정
-    @GetMapping("/admin")
-    public String admin() {
-        return "ADMIN 권한이다 이자식아";
-    }
-
-    @PostMapping("/control")
-    public String control() {
-        return "CONTROL 권한이다 이자식아";
-    }
-
-    @PostMapping("/monitor")
-    public String monitor() {
-        return "MONITOR 권한이다 이자식아";
     }
 }

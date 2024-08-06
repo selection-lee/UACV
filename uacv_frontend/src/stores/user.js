@@ -7,7 +7,7 @@ import axios from 'axios'
 export const useUserStore = defineStore('counter', () => {
 
   // const BASE_URL = '/api/user'
-  const BASE_URL = 'http://localhost:8080/user'
+  const BASE_URL = 'http://localhost:8080/api/member'
   const router = useRouter()
   //== token값 저장 ==//
   const token = ref(null)
@@ -15,13 +15,13 @@ export const useUserStore = defineStore('counter', () => {
   //== Role 저장 ==//
   const memberRole = ref(null)
 
-  //== 회원가입 ==//
+  //== 계정생성 ==//
   const signUp = function (payload) {
     const { username, password1, password2, memberRole } = payload
 
     axios({
       method: 'post',
-      url: `${BASE_URL}/signup`,
+      url: `${BASE_URL}/create`,
       data: {
         username, password1, password2, memberRole
       }
@@ -89,7 +89,7 @@ export const useUserStore = defineStore('counter', () => {
 
     axios({
       method: 'put',
-      url: `${BASE_URL}/updatePassword`,
+      url: `${BASE_URL}/update/password`,
       data:{
         currentPassword, newPassword
       },
