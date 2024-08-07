@@ -77,6 +77,7 @@
 
     <v-app-bar app>
       <v-toolbar-title>
+        <br>
         <v-img src="@/assets/logo.png" height="100" contain></v-img>
         <span class="ml-3">UACV</span>
       </v-toolbar-title>
@@ -206,7 +207,6 @@ export default {
     "log-section controls-section";
   grid-gap: 20px;
 }
-
 .v-main {
   background-color: #093028;
   color: #ffffef;
@@ -214,11 +214,9 @@ export default {
 .v-toolbar {
   background-color: #004d40;
 }
-
 .map-section {
   grid-area: map-section;
 }
-
 .cams-section {
   grid-area: cams-section;
   display: flex;
@@ -229,11 +227,9 @@ export default {
   display: flex;
   justify-content: space-around;
 }
-
 .log-section {
   grid-area: log-section;
 }
-
 .controls-section {
   grid-area: controls-section;
 }

@@ -74,6 +74,7 @@
     
     <v-app-bar app>
       <v-toolbar-title>
+        <br>
         <v-img src="@/assets/logo.png" height="100" contain />
         <span class="ml-3">UACV</span>
       </v-toolbar-title>
