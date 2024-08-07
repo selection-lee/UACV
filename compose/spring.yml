@@ -7,8 +7,8 @@ services:
             - caddy
         labels:
             caddy: i11c102.p.ssafy.io
-            caddy.handle_path: /api*
-            caddy.handle_path.reverse_proxy: "{{upstreams 8090}}"
+            caddy.handle: /api*
+            caddy.handle.reverse_proxy: "{{upstreams 8090}}"
         image: spring:latest
         pull_policy: never
 networks:

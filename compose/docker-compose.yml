@@ -1,0 +1,30 @@
+name: uacv-web
+services:
+    spring:
+        expose:
+            - 8090
+        container_name: uacv_backend
+        networks:
+            - caddy
+        labels:
+            caddy: i11c102.p.ssafy.io
+            caddy.handle: /api*
+            caddy.handle.reverse_proxy: "{{upstreams 8090}}"
+        image: spring:latest
+        pull_policy: never
+    vue:
+        expose:
+            - 90
+        container_name: uacv_frontend
+        networks:
+            - caddy
+        labels:
+            caddy: i11c102.p.ssafy.io
+            caddy.handle: /*
+            caddy.handle.reverse_proxy: "{{upstreams 90}}"
+        image: vue:latest
+        pull_policy: never
+networks:
+    caddy:
+        external: true
+        name: caddy
