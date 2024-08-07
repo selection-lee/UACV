@@ -1,0 +1,68 @@
+pipeline {
+    agent any
+    
+    environment {
+        GITLAB_REPO = 'S11P12C102'
+        DOCKER_IMAGE_NAME = 'your-docker-image-name'
+        DOCKER_REGISTRY = 'your-docker-registry-url'
+    }
+    
+    stages {
+        stage('Checkout') {
+            steps {
+                git branch: 'master', url: "https://lab.ssafy.com/s11-webmobile3-sub2/${GITLAB_REPO}.git"
+            }
+        }
+        
+        stage('Build Vue Project') {
+            steps {
+                dir('uacv_frontend') {
+                    sh 'npm install'
+                    sh 'npm run build'
+                }
+            }
+        }
+        
+        stage('Build Spring Boot Project') {
+            steps {
+                dir('uacv_backend') {
+                    sh './gradlew build' // or 'mvn clean package' if using Maven
+                }
+            }
+        }
+        
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    docker.build("${DOCKER_IMAGE_NAME}:${env.BUILD_NUMBER}")
+                }
+            }
+        }
+        
+        stage('Push Docker Image') {
+            steps {
+                script {
+                    docker.withRegistry("${DOCKER_REGISTRY}", 'docker-registry-credentials') {
+                        docker.image("${DOCKER_IMAGE_NAME}:${env.BUILD_NUMBER}").push()
+                        docker.image("${DOCKER_IMAGE_NAME}:${env.BUILD_NUMBER}").push('latest')
+                    }
+                }
+            }
+        }
+        
+        stage('Deploy') {
+            steps {
+                // Add your deployment steps here
+                // This could involve SSH'ing into your server and running docker commands
+                // or using a deployment tool like Ansible, Kubernetes, etc.
+                sh 'echo "Deploying..."'
+            }
+        }
+    }
+    
+    post {
+        always {
+            cleanWs()
+        }
+    }
+}
