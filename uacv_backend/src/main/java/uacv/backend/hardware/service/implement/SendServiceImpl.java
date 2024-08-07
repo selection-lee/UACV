@@ -22,7 +22,7 @@ public class SendServiceImpl implements SendService {
     private RabbitmqProperties rabbitmqProperties;
 
     @Override
-    public void sendCommand(String targetDevice, ControlDataDto controlDataDto) {
+    public void sendCommand(String routingKey, ControlDataDto controlDataDto) {
         // try {
         //     // 객체 -> json
         //     ObjectMapper objectMapper = new ObjectMapper();
@@ -31,15 +31,12 @@ public class SendServiceImpl implements SendService {
         // } catch (JsonProcessingException e) {
         //     System.err.println("Failed to parse json");
         // }
-        RabbitmqProperties.DeviceConfig deviceConfig = rabbitmqProperties.getDevices().get(targetDevice);
-        if (deviceConfig == null) {
-            throw new IllegalArgumentException("No configuration found for device: " + targetDevice);
-        }
+        // RabbitmqProperties.QueueConfig targetQueue = rabbitmqProperties.getQueues().get(queueName);
+        // if (targetQueue == null) {
+        //     throw new IllegalArgumentException("No configuration found for queue: " + targetQueue);
+        // }
 
-        rabbitTemplate.convertAndSend(
-                deviceConfig.getExchange(),
-                deviceConfig.getRoutingKey(),
-                controlDataDto);
+        rabbitTemplate.convertAndSend(routingKey, controlDataDto);
     }
 
     @Override

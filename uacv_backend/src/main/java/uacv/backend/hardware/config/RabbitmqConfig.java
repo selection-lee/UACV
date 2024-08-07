@@ -5,7 +5,6 @@ import java.util.Map;
 
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
-import org.springframework.amqp.core.ExchangeBuilder;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.core.TopicExchange;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
@@ -16,7 +15,6 @@ import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.env.Environment;
 
 @Configuration
 public class RabbitmqConfig {
@@ -24,42 +22,33 @@ public class RabbitmqConfig {
     @Autowired
     private RabbitmqProperties rabbitmqProperties;
 
-    @Autowired
-    private Environment env;
-
     @Bean
-    public Map<String, TopicExchange> topicExchanges() {
-        Map<String, TopicExchange> exchanges = new HashMap<>();
-
-        for (Map.Entry<String, RabbitmqProperties.DeviceConfig> entry : rabbitmqProperties.getDevices().entrySet()) {
-            String deviceName = entry.getKey();
-            RabbitmqProperties.DeviceConfig config = entry.getValue();
-            exchanges.put(deviceName, ExchangeBuilder.topicExchange(config.getExchange())
-                    .ignoreDeclarationExceptions().build());
-        }
-        return exchanges;
+    public TopicExchange topicExchange() {
+        return new TopicExchange(rabbitmqProperties.getExchangeName());
     }
 
     @Bean
     public Map<String, Queue> queues() {
         Map<String, Queue> queues = new HashMap<>();
-        for (Map.Entry<String, RabbitmqProperties.DeviceConfig> entry : rabbitmqProperties.getDevices().entrySet()) {
-            String deviceName = entry.getKey();
-            RabbitmqProperties.DeviceConfig config = entry.getValue();
-            queues.put(deviceName, new Queue(config.getQueue()));
+        for (Map.Entry<String, RabbitmqProperties.QueueConfig> entry : rabbitmqProperties.getQueues().entrySet()) {
+            String queueName = entry.getKey();
+            RabbitmqProperties.QueueConfig config = entry.getValue();
+            queues.put(queueName, new Queue(config.getQueueName()));
         }
         return queues;
     }
 
     @Bean
-    public Map<String, Binding> bindings(Map<String, TopicExchange> exchanges, Map<String, Queue> queues) {
+    public Map<String, Binding> bindings(TopicExchange exchange, Map<String, Queue> queues) {
         Map<String, Binding> bindings = new HashMap<>();
-        for (Map.Entry<String, RabbitmqProperties.DeviceConfig> entry : rabbitmqProperties.getDevices().entrySet()) {
-            String deviceName = entry.getKey();
-            RabbitmqProperties.DeviceConfig config = entry.getValue();
-            bindings.put(deviceName, BindingBuilder.bind(queues.get(deviceName))
-                    .to(exchanges.get(deviceName))
-                    .with(config.getRoutingKey()));
+        for (Map.Entry<String, RabbitmqProperties.QueueConfig> entry : rabbitmqProperties.getQueues().entrySet()) {
+            String queueName = entry.getKey();
+            RabbitmqProperties.QueueConfig config = entry.getValue();
+            Queue queue = queues.get(queueName);
+            for (String routingKey : config.getRoutingKeys()) {
+                String bindingKey = queueName + "." + routingKey;
+                bindings.put(bindingKey, BindingBuilder.bind(queue).to(exchange).with(routingKey));
+            }
         }
         return bindings;
     }

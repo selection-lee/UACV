@@ -7,6 +7,7 @@ import uacv.backend.hardware.dto.ControlDataDto;
 // 송신 서비스 인터페이스
 public interface SendService {
 
-    void sendCommand(String targetDevice, ControlDataDto controlDataDto);
+    void sendCommand(String routingKey, ControlDataDto controlDataDto);
     void getDeviceLogs(LogType logType, EventType eventType, int pageCount);
 }
+

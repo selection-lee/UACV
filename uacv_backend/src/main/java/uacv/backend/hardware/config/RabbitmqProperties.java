@@ -1,6 +1,7 @@
 package uacv.backend.hardware.config;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -14,10 +15,10 @@ import lombok.Data;
 @ConfigurationProperties(prefix = "rabbitmq")
 public class RabbitmqProperties {
 
-    @Value("${spring.rabbitmq.host}")
+    @Value("${RABBITMQ_HOST}")
     private String host;
 
-    @Value("${spring.rabbitmq.port}")
+    @Value("${RABBITMQ_PORT}")
     private int port;
 
     @Value("${RABBITMQ_USERNAME}")
@@ -26,12 +27,14 @@ public class RabbitmqProperties {
     @Value("${RABBITMQ_PASSWORD}")
     private String password;
 
-    private Map<String, DeviceConfig> devices = new HashMap<>();
+    @Value("${spring.rabbitmq.exchange}")
+    private String exchangeName;
+
+    private Map<String, QueueConfig> queues = new HashMap<>();
 
     @Data
-    public static class DeviceConfig {
-        private String exchange = "amq.topic";
-        private String queue;
-        private String routingKey;
+    public static class QueueConfig {
+        private String queueName;
+        private List<String> routingKeys;
     }
 }
