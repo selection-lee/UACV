@@ -61,7 +61,16 @@
             <v-list-item-title>사용자관리</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item @click="logout">
+        <v-list-item :to="{path: '/login'}" v-if="!store.isLogin">
+          <v-list-item-icon>
+            <v-icon>mdi-login</v-icon>
+          </v-list-item-icon>
+          <v-list-item-content v-if="!mini">
+            <v-list-item-title>로그인</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+
+        <v-list-item @click="store.LogOut()" v-else>
           <v-list-item-icon>
             <v-icon>mdi-logout</v-icon>
           </v-list-item-icon>
@@ -89,7 +98,7 @@
           </v-btn>
         </div>
 
-        <v-data-table :headers="headers" :items="items" class="elevation-1">
+        <v-data-table v-if="members" :headers="headers" :items="members" class="elevation-1">
           <template v-slot:top>
             <v-toolbar flat>
               <v-toolbar-title>기록보기</v-toolbar-title>
@@ -110,9 +119,31 @@
 </template>
 
 <script>
+import { ref, onMounted } from 'vue';
+import { userAdminStore } from '@/stores/admin';
+
+const store = userAdminStore()
+const members = ref(null)
+
+// 비동기화
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms))
+}
+
+onMounted(async () => {
+    store.memberList()
+    // 기다려!
+    await sleep(100)
+    members.value = store.members
+    console.log(members.value)
+})
+
+
 export default {
   data() {
     return {
+      store,
+      members,
       drawer: true,
       mini: true,
       miniWidth: 56,
@@ -127,80 +158,81 @@ export default {
         { text: "군번", value: "m_id" },
         { text: "비고", value: "icon" },
       ],
-      items: [
-        {
-          pk: "14572",
-          id: "gildong@army.ko",
-          authority: "관리자",
-          class: "대령",
-          m_id: "07-5789146",
-          icon: "",
-        },
-        {
-          pk: "14572",
-          id: "gildong@army.ko",
-          authority: "관리자",
-          class: "대령",
-          m_id: "07-5789146",
-          icon: "",
-        },
-        {
-          pk: "14572",
-          id: "gildong@army.ko",
-          authority: "관리자",
-          class: "대령",
-          m_id: "07-5789146",
-          icon: "",
-        },
-        {
-          pk: "14572",
-          id: "gildong@army.ko",
-          authority: "관리자",
-          class: "대령",
-          m_id: "07-5789146",
-          icon: "",
-        },
-        {
-          pk: "14572",
-          id: "gildong@army.ko",
-          authority: "관리자",
-          class: "대령",
-          m_id: "07-5789146",
-          icon: "",
-        },
-        {
-          pk: "14572",
-          id: "gildong@army.ko",
-          authority: "관리자",
-          class: "대령",
-          m_id: "07-5789146",
-          icon: "",
-        },
-        {
-          pk: "14572",
-          id: "gildong@army.ko",
-          authority: "관리자",
-          class: "대령",
-          m_id: "07-5789146",
-          icon: "",
-        },
-        {
-          pk: "14572",
-          id: "gildong@army.ko",
-          authority: "관리자",
-          class: "대령",
-          m_id: "07-5789146",
-          icon: "",
-        },
-        {
-          pk: "14572",
-          id: "gildong@army.ko",
-          authority: "관리자",
-          class: "대령",
-          m_id: "07-5789146",
-          icon: "",
-        },
-      ],
+      // items: members.value,
+      // [
+        // {
+        //   pk: "14572",
+        //   id: "gildong@army.ko",
+        //   authority: "관리자",
+        //   class: "대령",
+        //   m_id: "07-5789146",
+        //   icon: "",
+        // },
+        // {
+        //   pk: "14572",
+        //   id: "gildong@army.ko",
+        //   authority: "관리자",
+        //   class: "대령",
+        //   m_id: "07-5789146",
+        //   icon: "",
+        // },
+        // {
+        //   pk: "14572",
+        //   id: "gildong@army.ko",
+        //   authority: "관리자",
+        //   class: "대령",
+        //   m_id: "07-5789146",
+        //   icon: "",
+        // },
+        // {
+        //   pk: "14572",
+        //   id: "gildong@army.ko",
+        //   authority: "관리자",
+        //   class: "대령",
+        //   m_id: "07-5789146",
+        //   icon: "",
+        // },
+        // {
+        //   pk: "14572",
+        //   id: "gildong@army.ko",
+        //   authority: "관리자",
+        //   class: "대령",
+        //   m_id: "07-5789146",
+        //   icon: "",
+        // },
+        // {
+        //   pk: "14572",
+        //   id: "gildong@army.ko",
+        //   authority: "관리자",
+        //   class: "대령",
+        //   m_id: "07-5789146",
+        //   icon: "",
+        // },
+        // {
+        //   pk: "14572",
+        //   id: "gildong@army.ko",
+        //   authority: "관리자",
+        //   class: "대령",
+        //   m_id: "07-5789146",
+        //   icon: "",
+        // },
+        // {
+        //   pk: "14572",
+        //   id: "gildong@army.ko",
+        //   authority: "관리자",
+        //   class: "대령",
+        //   m_id: "07-5789146",
+        //   icon: "",
+        // },
+        // {
+        //   pk: "14572",
+        //   id: "gildong@army.ko",
+        //   authority: "관리자",
+        //   class: "대령",
+        //   m_id: "07-5789146",
+        //   icon: "",
+        // }
+      // ],
     };
   },
   methods: {

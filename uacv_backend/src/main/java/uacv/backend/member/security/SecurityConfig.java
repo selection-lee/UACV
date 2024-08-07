@@ -43,11 +43,9 @@ public class SecurityConfig implements WebMvcConfigurer {
                 })
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/user/signup", "/user/login", "/user/check").permitAll()
-                        .requestMatchers("/user/admin", "/user/memberList", "/user/{id}", "/user/delete/{id}").hasRole("ADMIN")
-                        .requestMatchers("/user/control").hasRole("CONTROL")
-                        .requestMatchers("/user/monitor").hasRole("MONITOR")
-                        .requestMatchers("/user/updatePassword").authenticated()
+                        .requestMatchers("/api/member/create", "/api/member/login", "/api/member/check", "/api/member/list").permitAll()
+                        .requestMatchers("/api/member/{id}", "/api/member/delete/{id}", "/api/member/update/role").hasRole("ADMIN")
+                        .requestMatchers("/api/member/update/password").authenticated()
                         .anyRequest().authenticated())
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider),
                         UsernamePasswordAuthenticationFilter.class);

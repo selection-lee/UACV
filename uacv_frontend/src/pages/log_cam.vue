@@ -61,7 +61,16 @@
             <v-list-item-title>사용자관리</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item @click="logout">
+        <v-list-item :to="{path: '/login'}" v-if="!store.isLogin">
+          <v-list-item-icon>
+            <v-icon>mdi-login</v-icon>
+          </v-list-item-icon>
+          <v-list-item-content v-if="!mini">
+            <v-list-item-title>로그인</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+
+        <v-list-item @click="store.LogOut()" v-else>
           <v-list-item-icon>
             <v-icon>mdi-logout</v-icon>
           </v-list-item-icon>
@@ -142,9 +151,14 @@
 </template>
 
 <script>
+import { useUserStore } from '@/stores/user';
+
+const store = useUserStore()
+
 export default {
   data() {
     return {
+      store,
       drawer: true,
       mini: true,
       miniWidth: 56,

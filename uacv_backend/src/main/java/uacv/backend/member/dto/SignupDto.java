@@ -14,4 +14,6 @@ public class SignupDto {
     private String password1;
     private String password2;
     private MemberRole memberRole;
+    private String rnk;
+    private String m_id;
 }
