@@ -6,8 +6,7 @@ import { useRouter } from 'vue-router'
 import axios from 'axios'
 export const useUserStore = defineStore('counter', () => {
 
-  // const BASE_URL = '/api/user'
-  const BASE_URL = 'http://localhost:8080/api/member'
+  const BASE_URL = '/api/member'
   const router = useRouter()
   //== token값 저장 ==//
   const token = ref(null)
