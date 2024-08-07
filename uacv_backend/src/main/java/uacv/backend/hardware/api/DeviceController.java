@@ -7,8 +7,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import uacv.backend.hardware.domain.EventType;
-import uacv.backend.hardware.domain.LogType;
+import uacv.backend.hardware.domain.enums.CommandType;
+import uacv.backend.hardware.domain.enums.EventType;
+import uacv.backend.hardware.domain.enums.LogType;
 import uacv.backend.hardware.dto.ControlDataDto;
 import uacv.backend.hardware.service.ReceiveService;
 import uacv.backend.hardware.service.SendService;
@@ -32,29 +33,47 @@ public class DeviceController {
     // 센서 정보 수신?
     // @PostMapping("/receive")
     // public String postMethodName(@RequestBody String entity) {
-    //     return entity;
+    // return entity;
     // }
 
     // 로그 기록 조회
     // 소리, 발사, 센서
-    // @GetMapping("/logs")
     @RequestMapping(value = "/log/{logType}", method = RequestMethod.GET)
     public ResponseEntity<?> getDeviceLogs(
             @PathVariable("logType") LogType logType,
             @RequestParam(name = "type", required = true) EventType eventType,
             @RequestParam(name = "page", defaultValue = "1") int pageCount) {
-        
+
         sendService.getDeviceLogs(logType, eventType, pageCount);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    // 조종 명령 송신
-    @PostMapping("/control")
-    public ResponseEntity<?> sendCommand(@RequestBody String targetDevice, ControlDataDto controlDataDto) {
-        sendService.sendCommand(targetDevice, controlDataDto);
-        return new ResponseEntity<>(HttpStatus.OK);
+    /*
+     * 조종 명령 수신
+     */
+    @RequestMapping(value = "/control/{command}", method = RequestMethod.POST)
+    public ResponseEntity<?> sendCommand(
+            @PathVariable("command") CommandType command,
+            @RequestBody ControlDataDto controlDataDto) {
+
+        if (sendService.saveCommand(command, controlDataDto)) {
+            try {
+                if (command.toString() == "cannon") {
+                    sendService.sendCommand("orin.cannon", controlDataDto);
+                } else if (command.toString() == "steer") {
+                    sendService.sendCommand("orin.steer", controlDataDto);
+                } else if (command.toString() == "throttle") {
+                    sendService.sendCommand("orin.throttle", controlDataDto);
+                } else if (command.toString() == "fire") {
+                    sendService.sendCommand("rpi.fire", controlDataDto);
+                }
+                return new ResponseEntity<>(HttpStatus.OK);
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+        } else {
+            System.out.println("Request Data not inserted: " + controlDataDto);
+        };
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
-
-    // 조종 명령 수행 완료 수신
-
 }
