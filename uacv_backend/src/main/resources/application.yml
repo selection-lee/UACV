@@ -37,6 +37,26 @@ spring:
     port: ${RABBITMQ_PORT}
     username: ${RABBITMQ_USER}
     password: ${RABBITMQ_PW}
+    exchange: amq.topic
+    queues:
+      sensor:
+        name: sensor_queue
+        routing-keys:
+          - rpi.sensor
+          - orin.sensor
+      command:
+        name: command_queue
+        routing-keys:
+          - rpi.fire
+          - orin.cannon
+          - orin.throttle
+          - orin.steer
+      mapping:
+        name: mapping_queue
+        routing-keys:
+          - ros.map1
+          - ros.map2
+          - ros.map3
 
 logging:
   level:
