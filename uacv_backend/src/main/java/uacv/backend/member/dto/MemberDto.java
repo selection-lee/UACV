@@ -14,6 +14,10 @@ public class MemberDto {
 
     private MemberRole memberRole;
 
+    private String rnk;
+
+    private String m_id;
+
     private LocalDateTime createdDate;
 
     private LocalDateTime lastModifiedDate;

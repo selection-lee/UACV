@@ -10,6 +10,8 @@
           <v-text-field v-model.trim="password1" label="Password" type="password" />
           <v-text-field v-model.trim="password2" label="Password 확인" type="password" />
           <v-select label="Select" v-model.trim="userRole" :items="['CONTROL', 'MONITOR']"></v-select>
+          <v-text-field v-model.trim="rnk" label="소속계급"/>
+          <v-text-field v-model.trim="m_id" label="군번"/>
           <v-btn class="block" @click="SignUp">등록</v-btn>
         </v-form>
       </div>
@@ -27,17 +29,22 @@
     const password1 = ref(null)
     const password2 = ref(null)
     const userRole = ref(null)
+    const rnk = ref(null)
+    const m_id = ref(null)
   
     const SignUp = function () {
       const payload = {
         username: username.value,
         password1: password1.value,
         password2: password2.value,
-        memberRole: userRole.value
+        memberRole: userRole.value,
+        rnk: rnk.value,
+        m_id: m_id.value
       }
       store.signUp(payload)
     }
     
   </script>
   
-  <style scoped></style>
+<style scoped>
+</style>

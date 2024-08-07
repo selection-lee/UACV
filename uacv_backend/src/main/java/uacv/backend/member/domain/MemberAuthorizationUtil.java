@@ -2,7 +2,6 @@ package uacv.backend.member.domain;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import uacv.backend.member.security.jwt.CustomUserDetailsService;
 
 public class MemberAuthorizationUtil {
 

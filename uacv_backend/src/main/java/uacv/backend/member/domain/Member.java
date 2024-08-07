@@ -28,6 +28,12 @@ public class Member extends BasetimeEntity implements UserDetails {
     @Column(nullable = false)
     private String password;
 
+    @Column(nullable = false)
+    private String rnk;
+
+    @Column(nullable = false)
+    private String m_id;
+
     @Enumerated(EnumType.STRING)
     private MemberRole memberRole;
 

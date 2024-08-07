@@ -1,6 +1,6 @@
 // Utilities
 import { defineStore } from 'pinia'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 import axios from 'axios'
@@ -15,26 +15,6 @@ export const useUserStore = defineStore('counter', () => {
   //== Role 저장 ==//
   const memberRole = ref(null)
 
-  //== 계정생성 ==//
-  const signUp = function (payload) {
-    const { username, password1, password2, memberRole } = payload
-
-    axios({
-      method: 'post',
-      url: `${BASE_URL}/create`,
-      data: {
-        username, password1, password2, memberRole
-      }
-    })
-      .then((response) => {
-        router.push({
-          path: '/'
-        })
-      })
-      .catch((error) => {
-        console.log(error)
-      })
-  }
 
   const check = ref(null)
 
@@ -83,6 +63,19 @@ export const useUserStore = defineStore('counter', () => {
 
   }
 
+  const LogOut = function () {
+    token.value = null
+  }
+
+  //== 로그인 상태 확인 ==//
+  const isLogin = computed(() => {
+    if (token.value === null) {
+      return false
+    } else {
+      return true
+    }
+  })
+
   //== 비밀번호 변경 ==//
   const updatePassword = function (payload) {
     const { currentPassword, newPassword } = payload
@@ -113,6 +106,6 @@ export const useUserStore = defineStore('counter', () => {
 
   }
 
-  return { signUp, LogIn, updatePassword, checkUsername,
+  return { LogIn, LogOut, isLogin, updatePassword, checkUsername,
     check, token }
 }, { persist: true })

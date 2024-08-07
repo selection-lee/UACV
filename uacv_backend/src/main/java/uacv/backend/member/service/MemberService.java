@@ -39,10 +39,11 @@ public class MemberService {
         member.setUsername(signupDto.getUsername());
         member.setPassword(new BCryptPasswordEncoder().encode(signupDto.getPassword1()));
         member.setMemberRole(signupDto.getMemberRole());
+        member.setRnk(signupDto.getRnk());
+        member.setM_id(signupDto.getM_id());
         return memberRepository.save(member);
     }
 
-    //== username 중복 체크 ==//
     
     //== 로그인 ==//
     @Transactional
