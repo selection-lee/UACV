@@ -27,6 +27,7 @@
 <script setup>
 import { onMounted, ref } from 'vue';
 import { userAdminStore } from '@/stores/admin';
+import { useUserStore } from '@/stores/user';
 import memberListDetail from '@/components/memberListDetail.vue'
 
 const store = userAdminStore()
@@ -43,6 +44,10 @@ onMounted(async () => {
     // 기다려!
     await sleep(100)
     members.value = store.members
+
+    console.log(useUserStore().memberRole)
+
+    if ()
 })
 
 </script>
