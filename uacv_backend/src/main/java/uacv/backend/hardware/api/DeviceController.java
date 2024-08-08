@@ -62,7 +62,7 @@ public class DeviceController {
                     sendService.sendCommand("orin.cannon", controlDataDto);
                 } else if (command.toString() == "steer") {
                     sendService.sendCommand("orin.steer", controlDataDto);
-                } else if (command.toString() == "throttle") {
+                } else if (command.toString() == "move") {
                     sendService.sendCommand("orin.throttle", controlDataDto);
                 } else if (command.toString() == "fire") {
                     sendService.sendCommand("rpi.fire", controlDataDto);

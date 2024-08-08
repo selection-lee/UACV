@@ -13,7 +13,6 @@
       </div>
       <div class="status">
         <p>배터리: 60%</p>
-        <p>총: 준비 완료</p>
       </div>
       <div class="zoom-controls">
         <label for="zoomSlider">Zoom Level:</label>

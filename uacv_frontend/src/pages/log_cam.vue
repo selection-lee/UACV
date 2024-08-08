@@ -19,7 +19,7 @@
           </v-list-item-content>
         </v-list-item>
         <v-divider></v-divider>
-        <v-list-item to="/">
+        <v-list-item to="/home">
           <v-list-item-icon>
             <v-icon>mdi-home</v-icon>
           </v-list-item-icon>
@@ -190,7 +190,7 @@ export default {
       this.drawerWidth = 56;
     },
     logout() {
-      this.$router.push("/login");
+      this.$router.push("/");
     },
   },
 };
