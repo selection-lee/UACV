@@ -5,13 +5,14 @@
  */
 
 // Plugins
-import vuetify from './vuetify'
 import pinia from '@/stores'
+import vuetify from './vuetify'
 import router from '@/router'
 
 export function registerPlugins (app) {
   app
+    .use(pinia)
     .use(vuetify)
     .use(router)
-    .use(pinia)
+    
 }

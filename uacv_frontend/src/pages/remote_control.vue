@@ -1,77 +1,6 @@
 <template>
   <v-app>
-    <v-navigation-drawer
-      app
-      v-model="drawer"
-      :mini-variant.sync="mini"
-      :mini-variant-width="miniWidth"
-      :width="drawerWidth"
-      @mouseover="expandDrawer"
-      @mouseleave="collapseDrawer"
-    >
-      <v-list dense>
-        <v-list-item>
-          <v-list-item-icon>
-            <v-icon>mdi-menu</v-icon>
-          </v-list-item-icon>
-          <v-list-item-content v-if="!mini">
-            <v-list-item-title class="title">Menu</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-        <v-divider></v-divider>
-        <v-list-item to="/home">
-          <v-list-item-icon>
-            <v-icon>mdi-home</v-icon>
-          </v-list-item-icon>
-          <v-list-item-content v-if="!mini">
-            <v-list-item-title>Home</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-        <v-list-item>
-          <v-list-item-icon>
-            <v-icon>mdi-camera-account</v-icon>
-          </v-list-item-icon>
-          <v-list-item-content v-if="!mini">
-            <v-list-item-title>기록보기</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-        <v-list-item to="/log_text">
-          <v-list-item-content v-if="!mini">
-            <v-list-item>로그</v-list-item>
-          </v-list-item-content>
-        </v-list-item>
-        <v-list-item to="/log_cam">
-          <v-list-item-content v-if="!mini">
-            <v-list-item>영상</v-list-item>
-          </v-list-item-content>
-        </v-list-item>
-        <v-list-item to="/imformation_edit">
-          <v-list-item-content v-if="!mini">
-            <v-list-item-icon>
-              <v-icon>mdi-pencil</v-icon>
-            </v-list-item-icon>
-            <v-list-item-title>정보수정</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-        <v-list-item to="/user_management">
-          <v-list-item-content v-if="!mini">
-            <v-list-item-icon>
-              <v-icon>mdi-car-back</v-icon>
-            </v-list-item-icon>
-            <v-list-item-title>사용자관리</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-        <v-divider></v-divider>
-        <v-list-item @click="logout">
-          <v-list-item-icon>
-            <v-icon>mdi-logout</v-icon>
-          </v-list-item-icon>
-          <v-list-item-content v-if="!mini">
-            <v-list-item-title>로그아웃</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-      </v-list>
-    </v-navigation-drawer>
+    <Navbar />
 
     <v-app-bar app>
       <v-toolbar-title>
@@ -114,34 +43,14 @@
                   <!-- Joystick -->
                   <!--<joy @move="handleJoystickMove" />-->
                   <!-- Button -->
-                  <v-btn
-                    @mousedown="startLogging('right')"
-                    @mouseup="stopLogging"
-                    @mouseleave="stopLogging"
-                    class="direction-btn mr-2"
-                    >Right</v-btn
-                  >
-                  <v-btn
-                    @mousedown="startLogging('left')"
-                    @mouseup="stopLogging"
-                    @mouseleave="stopLogging"
-                    class="direction-btn mr-2"
-                    >Left</v-btn
-                  >
-                  <v-btn
-                    @mousedown="startLogging('up')"
-                    @mouseup="stopLogging"
-                    @mouseleave="stopLogging"
-                    class="direction-btn mr-2"
-                    >UP</v-btn
-                  >
-                  <v-btn
-                    @mousedown="startLogging('down')"
-                    @mouseup="stopLogging"
-                    @mouseleave="stopLogging"
-                    class="direction-btn"
-                    >DOWN</v-btn
-                  >
+                  <v-btn @mousedown="startLogging('right')" @mouseup="stopLogging" @mouseleave="stopLogging"
+                    class="direction-btn mr-2">Right</v-btn>
+                  <v-btn @mousedown="startLogging('left')" @mouseup="stopLogging" @mouseleave="stopLogging"
+                    class="direction-btn mr-2">Left</v-btn>
+                  <v-btn @mousedown="startLogging('up')" @mouseup="stopLogging" @mouseleave="stopLogging"
+                    class="direction-btn mr-2">UP</v-btn>
+                  <v-btn @mousedown="startLogging('down')" @mouseup="stopLogging" @mouseleave="stopLogging"
+                    class="direction-btn">DOWN</v-btn>
                 </div>
               </v-form>
             </v-col>
@@ -151,34 +60,14 @@
                 <div class="mt-4">
                   <h5>포신방향</h5>
                   <!-- Button -->
-                  <v-btn
-                    @mousedown="startLogging('right_cannon')"
-                    @mouseup="stopLogging"
-                    @mouseleave="stopLogging"
-                    class="direction-btn mr-2"
-                    >Right</v-btn
-                  >
-                  <v-btn
-                    @mousedown="startLogging('left_cannon')"
-                    @mouseup="stopLogging"
-                    @mouseleave="stopLogging"
-                    class="direction-btn mr-2"
-                    >Left</v-btn
-                  >
-                  <v-btn
-                    @mousedown="startLogging('up_cannon')"
-                    @mouseup="stopLogging"
-                    @mouseleave="stopLogging"
-                    class="direction-btn mr-2"
-                    >UP</v-btn
-                  >
-                  <v-btn
-                    @mousedown="startLogging('down_cannon')"
-                    @mouseup="stopLogging"
-                    @mouseleave="stopLogging"
-                    class="direction-btn"
-                    >DOWN</v-btn
-                  >
+                  <v-btn @mousedown="startLogging('right_cannon')" @mouseup="stopLogging" @mouseleave="stopLogging"
+                    class="direction-btn mr-2">Right</v-btn>
+                  <v-btn @mousedown="startLogging('left_cannon')" @mouseup="stopLogging" @mouseleave="stopLogging"
+                    class="direction-btn mr-2">Left</v-btn>
+                  <v-btn @mousedown="startLogging('up_cannon')" @mouseup="stopLogging" @mouseleave="stopLogging"
+                    class="direction-btn mr-2">UP</v-btn>
+                  <v-btn @mousedown="startLogging('down_cannon')" @mouseup="stopLogging" @mouseleave="stopLogging"
+                    class="direction-btn">DOWN</v-btn>
                 </div>
               </v-form>
             </v-col>
@@ -193,6 +82,7 @@
 import { ref } from "vue";
 import Cam from "@/components/Cam.vue";
 import Cam_canon from "@/components/Cam_canon.vue";
+import Navbar from "@/components/navbar.vue";
 
 const joystickX = ref(0);
 const joystickY = ref(0);
@@ -243,37 +133,8 @@ const stopLogging = () => {
     logInterval.value = null;
   }
 };
-</script>
 
-<script>
-export default {
-  name: "Cam_view",
-  components: {
-    Cam,
-    Cam_canon,
-  },
-  data() {
-    return {
-      drawer: true,
-      mini: true,
-      miniWidth: 56,
-      drawerWidth: 56,
-    };
-  },
-  methods: {
-    expandDrawer() {
-      this.mini = false;
-      this.drawerWidth = 150;
-    },
-    collapseDrawer() {
-      this.mini = true;
-      this.drawerWidth = 56;
-    },
-    logout() {
-      this.$router.push("/");
-    },
-  },
-};
+
 </script>
 
 <style scoped>

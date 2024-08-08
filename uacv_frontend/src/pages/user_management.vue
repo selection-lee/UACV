@@ -1,85 +1,6 @@
 <template>
   <v-app>
-    <v-navigation-drawer
-      app
-      v-model="drawer"
-      :mini-variant.sync="mini"
-      :mini-variant-width="miniWidth"
-      :width="drawerWidth"
-      @mouseover="expandDrawer"
-      @mouseleave="collapseDrawer"
-    >
-      <v-list dense>
-        <v-list-item>
-          <v-list-item-icon>
-            <v-icon>mdi-menu</v-icon>
-          </v-list-item-icon>
-          <v-list-item-content v-if="!mini">
-            <v-list-item-title class="title">Menu</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-        <v-divider></v-divider>
-        <v-list-item to="/home">
-          <v-list-item-icon>
-            <v-icon>mdi-home</v-icon>
-          </v-list-item-icon>
-          <v-list-item-content v-if="!mini">
-            <v-list-item-title>Home</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-        <v-list-item>
-          <v-list-item-icon>
-            <v-icon>mdi-camera-account</v-icon>
-          </v-list-item-icon>
-          <v-list-item-content v-if="!mini">
-            <v-list-item-title>기록보기</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-        <v-list-item to="/log_text">
-          <v-list-item-content v-if="!mini">
-            <v-list-item>로그</v-list-item>
-          </v-list-item-content>
-        </v-list-item>
-        <v-list-item to="/log_cam">
-          <v-list-item-content v-if="!mini">
-            <v-list-item>영상</v-list-item>
-          </v-list-item-content>
-        </v-list-item>
-        <v-list-item to="/imformation_edit">
-          <v-list-item-content v-if="!mini">
-            <v-list-item-icon>
-              <v-icon>mdi-pencil</v-icon>
-            </v-list-item-icon>
-            <v-list-item-title>정보수정</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-        <v-list-item to="/user_management">
-          <v-list-item-content v-if="!mini">
-            <v-list-item-icon>
-              <v-icon>mdi-car-back</v-icon>
-            </v-list-item-icon>
-            <v-list-item-title>사용자관리</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-        <v-list-item :to="{path: '/login'}" v-if="!store.isLogin">
-          <v-list-item-icon>
-            <v-icon>mdi-login</v-icon>
-          </v-list-item-icon>
-          <v-list-item-content v-if="!mini">
-            <v-list-item-title>로그인</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-
-        <v-list-item @click="store.LogOut()" v-else>
-          <v-list-item-icon>
-            <v-icon>mdi-logout</v-icon>
-          </v-list-item-icon>
-          <v-list-item-content v-if="!mini">
-            <v-list-item-title>로그아웃</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-      </v-list>
-    </v-navigation-drawer>
+    <Navbar />
 
     <v-app-bar app>
       <v-toolbar-title>
@@ -99,157 +20,60 @@
           </v-btn>
         </div>
 
-        <v-data-table v-if="members" :headers="headers" :items="members" class="elevation-1">
+        <v-data-table v-if="members" :items="members" class="elevation-1">
           <template v-slot:top>
             <v-toolbar flat>
-              <v-toolbar-title>기록보기</v-toolbar-title>
+              <v-toolbar-title>전체 회원 정보 조회</v-toolbar-title>
               <v-divider inset vertical class="mx-4"></v-divider>
-              <v-spacer></v-spacer>
             </v-toolbar>
           </template>
+
+          <template v-slot:item.username="{ item }">
+            <a @click="goDetail(item.id)">{{ item.username }}</a>
+          </template>
+
+
         </v-data-table>
 
-        <v-pagination
-          v-model="page"
-          :length="pages"
-          class="mt-4"
-        ></v-pagination>
+        <v-pagination v-model="page" :length="pages" class="mt-4">
+        </v-pagination>
       </v-container>
     </v-main>
   </v-app>
 </template>
 
-<script>
-import { ref, onMounted } from 'vue';
+<script setup>
+
 import { userAdminStore } from '@/stores/admin';
+import { useUserStore } from '@/stores/user';
+import { useRouter } from 'vue-router';
+import { ref, onMounted } from 'vue';
 
-const store = userAdminStore()
+const store_admin = userAdminStore()
+const store = useUserStore()
+const router = useRouter()
 const members = ref(null)
+const role = ref(null)
 
-// 비동기화
+//== 비동기화 ==//
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms))
 }
 
 onMounted(async () => {
-    store.memberList()
-    // 기다려!
-    await sleep(100)
-    members.value = store.members
-    console.log(members.value)
+
+  store_admin.memberList()
+  role.value = store.memberRole
+
+  await sleep(100)
+  members.value = store_admin.members
 })
 
+const goDetail = function (memberId) {
+  console.log(memberId)
+  router.push(`/${memberId}`)
+}
 
-export default {
-  data() {
-    return {
-      store,
-      members,
-      drawer: true,
-      mini: true,
-      miniWidth: 56,
-      drawerWidth: 56,
-      page: 1,
-      pages: 5,
-      headers: [
-        { text: "PK", value: "pk" },
-        { text: "ID", value: "id" },
-        { text: "권한", value: "authority" },
-        { text: "소속계급", value: "class" },
-        { text: "군번", value: "m_id" },
-        { text: "비고", value: "icon" },
-      ],
-      // items: members.value,
-      // [
-        // {
-        //   pk: "14572",
-        //   id: "gildong@army.ko",
-        //   authority: "관리자",
-        //   class: "대령",
-        //   m_id: "07-5789146",
-        //   icon: "",
-        // },
-        // {
-        //   pk: "14572",
-        //   id: "gildong@army.ko",
-        //   authority: "관리자",
-        //   class: "대령",
-        //   m_id: "07-5789146",
-        //   icon: "",
-        // },
-        // {
-        //   pk: "14572",
-        //   id: "gildong@army.ko",
-        //   authority: "관리자",
-        //   class: "대령",
-        //   m_id: "07-5789146",
-        //   icon: "",
-        // },
-        // {
-        //   pk: "14572",
-        //   id: "gildong@army.ko",
-        //   authority: "관리자",
-        //   class: "대령",
-        //   m_id: "07-5789146",
-        //   icon: "",
-        // },
-        // {
-        //   pk: "14572",
-        //   id: "gildong@army.ko",
-        //   authority: "관리자",
-        //   class: "대령",
-        //   m_id: "07-5789146",
-        //   icon: "",
-        // },
-        // {
-        //   pk: "14572",
-        //   id: "gildong@army.ko",
-        //   authority: "관리자",
-        //   class: "대령",
-        //   m_id: "07-5789146",
-        //   icon: "",
-        // },
-        // {
-        //   pk: "14572",
-        //   id: "gildong@army.ko",
-        //   authority: "관리자",
-        //   class: "대령",
-        //   m_id: "07-5789146",
-        //   icon: "",
-        // },
-        // {
-        //   pk: "14572",
-        //   id: "gildong@army.ko",
-        //   authority: "관리자",
-        //   class: "대령",
-        //   m_id: "07-5789146",
-        //   icon: "",
-        // },
-        // {
-        //   pk: "14572",
-        //   id: "gildong@army.ko",
-        //   authority: "관리자",
-        //   class: "대령",
-        //   m_id: "07-5789146",
-        //   icon: "",
-        // }
-      // ],
-    };
-  },
-  methods: {
-    expandDrawer() {
-      this.mini = false;
-      this.drawerWidth = 150;
-    },
-    collapseDrawer() {
-      this.mini = true;
-      this.drawerWidth = 56;
-    },
-    logout() {
-      this.$router.push("/");
-    },
-  },
-};
 </script>
 
 <style scoped>

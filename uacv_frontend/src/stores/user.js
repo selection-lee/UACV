@@ -7,8 +7,8 @@ import axios from 'axios'
 
 export const useUserStore = defineStore('counter', () => {
 
-  // const BASE_URL = '/api/member'
-  const BASE_URL = 'http://localhost:8080/api/member'
+  const BASE_URL = '/api/member'
+  // const BASE_URL = 'http://localhost:8080/api/member'
   const router = useRouter()
   //== token값 저장 ==//
   const token = ref(null)
@@ -16,24 +16,22 @@ export const useUserStore = defineStore('counter', () => {
   //== Role 저장 ==//
   const memberRole = ref(null)
 
-
-  const check = ref(null)
-
-  //== 중복 아이디 검사 ==//
-  const checkUsername = function(username) {
+  //== 계정생성 ==//
+  const signUp = function (payload) {
+    const { username, password1, password2, memberRole, rnk, m_id } = payload
     axios({
-      method: 'get',
-      url: `${BASE_URL}/check`,
-      params: {
-        "username": username
+      method: 'post',
+      url: `${BASE_URL}/create`,
+      data: {
+        username, password1, password2, memberRole, rnk, m_id
       }
     })
-    .then((response) => {
-      check.value = response.data
-    })
-    .catch((error) => {
-      console.log(error)
-    })
+      .then((response) => {
+        router.go(0)
+      })
+      .catch((error) => {
+        console.log(error)
+      })
   }
 
   //== 로그인 ==//
@@ -63,8 +61,10 @@ export const useUserStore = defineStore('counter', () => {
 
   }
 
+  //== 로그아웃 ==//
   const LogOut = function () {
     token.value = null
+    router.go(0)
   }
 
   //== 로그인 상태 확인 ==//
@@ -83,29 +83,30 @@ export const useUserStore = defineStore('counter', () => {
     axios({
       method: 'put',
       url: `${BASE_URL}/update/password`,
-      data:{
+      data: {
         currentPassword, newPassword
       },
-      headers:{
+      headers: {
         Authorization: `Bearer ${token.value}`
       }
     })
-    .then((response) => {
-      console.log(response)
-      //비밀번호 변경 성공시 메인 페이지로 이동
-      // 삭제 예정
-      router.push(
-        {
-          path: '/'
-        }
-      )
-    })
-    .catch((error) => {
-      console.log(error)
-    })
+      .then((response) => {
+        console.log(response)
+        //비밀번호 변경 성공시 메인 페이지로 이동
+        // 삭제 예정
+        router.push(
+          {
+            path: '/'
+          }
+        )
+      })
+      .catch((error) => {
+        console.log(error)
+      })
 
   }
 
-  return { LogIn, LogOut, isLogin, updatePassword, checkUsername,
-    check, token, memberRole }
+  return {
+    LogIn, LogOut, isLogin, updatePassword, signUp, token, memberRole
+  }
 }, { persist: true })

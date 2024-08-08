@@ -1,93 +1,14 @@
 <template>
   <v-app>
-    <v-navigation-drawer
-      app
-      v-model="drawer"
-      :mini-variant.sync="mini"
-      :mini-variant-width="miniWidth"
-      :width="drawerWidth"
-      @mouseover="expandDrawer"
-      @mouseleave="collapseDrawer"
-    >
-      <v-list dense>
-        <v-list-item>
-          <v-list-item-icon>
-            <v-icon>mdi-menu</v-icon>
-          </v-list-item-icon>
-          <v-list-item-content v-if="!mini">
-            <v-list-item-title class="title">Menu</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-        <v-divider></v-divider>
-        <v-list-item to="/home">
-          <v-list-item-icon>
-            <v-icon>mdi-home</v-icon>
-          </v-list-item-icon>
-          <v-list-item-content v-if="!mini">
-            <v-list-item-title>Home</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-        <v-list-item>
-          <v-list-item-icon>
-            <v-icon>mdi-camera-account</v-icon>
-          </v-list-item-icon>
-          <v-list-item-content v-if="!mini">
-            <v-list-item-title>기록보기</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-        <v-list-item to="/log_text">
-          <v-list-item-content v-if="!mini">
-            <v-list-item>로그</v-list-item>
-          </v-list-item-content>
-        </v-list-item>
-        <v-list-item to="/log_cam">
-          <v-list-item-content v-if="!mini">
-            <v-list-item>영상</v-list-item>
-          </v-list-item-content>
-        </v-list-item>
-        <v-list-item to="/imformation_edit">
-          <v-list-item-content v-if="!mini">
-            <v-list-item-icon>
-              <v-icon>mdi-pencil</v-icon>
-            </v-list-item-icon>
-            <v-list-item-title>정보수정</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-        <v-list-item to="/user_management">
-          <v-list-item-content v-if="!mini">
-            <v-list-item-icon>
-              <v-icon>mdi-car-back</v-icon>
-            </v-list-item-icon>
-            <v-list-item-title>사용자관리</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-        <v-list-item :to="{path: '/login'}" v-if="!store.isLogin">
-          <v-list-item-icon>
-            <v-icon>mdi-login</v-icon>
-          </v-list-item-icon>
-          <v-list-item-content v-if="!mini">
-            <v-list-item-title>로그인</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-
-        <v-list-item @click="store.LogOut()" v-else>
-          <v-list-item-icon>
-            <v-icon>mdi-logout</v-icon>
-          </v-list-item-icon>
-          <v-list-item-content v-if="!mini">
-            <v-list-item-title>로그아웃</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-      </v-list>
-    </v-navigation-drawer>
+    <Navbar />
 
     <v-app-bar app>
       <v-toolbar-title>
         <br>
-        <v-img src="@/assets/logo.png" height="100" contain></v-img>
+        <v-img src="@/assets/logo.png" height="100" contain />
         <span class="ml-3">UACV</span>
       </v-toolbar-title>
-      <v-spacer></v-spacer>
+      <v-spacer />
     </v-app-bar>
 
     <v-main>
@@ -107,13 +28,7 @@
         <v-card class="mb-4 pa-4">
           <h4 class="text-h5 font-weight-bold">소리기록</h4>
           <v-row>
-            <v-col
-              v-for="(item, index) in soundRecords"
-              :key="index"
-              cols="12"
-              sm="6"
-              md="3"
-            >
+            <v-col v-for="(item, index) in soundRecords" :key="index" cols="12" sm="6" md="3">
               <v-card class="mx-auto" max-width="344">
                 <v-img :src="item.image" height="200px"></v-img>
                 <v-card-title>{{ item.date }}</v-card-title>
@@ -129,13 +44,7 @@
         <v-card class="pa-4">
           <h4 class="text-h5 font-weight-bold">발사기록</h4>
           <v-row>
-            <v-col
-              v-for="(item, index) in firingRecords"
-              :key="index"
-              cols="12"
-              sm="6"
-              md="3"
-            >
+            <v-col v-for="(item, index) in firingRecords" :key="index" cols="12" sm="6" md="3">
               <v-card class="mx-auto" max-width="344">
                 <v-img :src="item.image" height="200px"></v-img>
                 <v-card-title>{{ item.date }}</v-card-title>
@@ -151,49 +60,21 @@
   </v-app>
 </template>
 
-<script>
-import { useUserStore } from '@/stores/user';
+<script setup>
 
-const store = useUserStore()
+const soundRecords = [
+  { image: "@/assets/cam.jpg", date: "2024.07.26 11:08:25" },
+  { image: "@/assets/cam.jpg", date: "2024.07.25 16:14:20" },
+  { image: "@/assets/cam.jpg", date: "2024.07.25 16:12:59" },
+  { image: "@/assets/cam.jpg", date: "2024.07.25 13:25:59" },
+]
 
-export default {
-  data() {
-    return {
-      store,
-      drawer: true,
-      mini: true,
-      miniWidth: 56,
-      drawerWidth: 56,
-      page: 1,
-      pages: 5, // Set the total number of pages here
-      soundRecords: [
-        { image: "@/assets/cam.jpg", date: "2024.07.26 11:08:25" },
-        { image: "@/assets/cam.jpg", date: "2024.07.25 16:14:20" },
-        { image: "@/assets/cam.jpg", date: "2024.07.25 16:12:59" },
-        { image: "@/assets/cam.jpg", date: "2024.07.25 13:25:59" },
-      ],
-      firingRecords: [
-        { image: "@/assets/cam.jpg", date: "2024.07.26 13:01:54" },
-        { image: "@/assets/cam.jpg", date: "2024.07.25 18:27:02" },
-        { image: "@/assets/cam.jpg", date: "2024.07.25 17:12:38" },
-        { image: "@/assets/cam.jpg", date: "2024.07.25 12:48:08" },
-      ],
-    };
-  },
-  methods: {
-    expandDrawer() {
-      this.mini = false;
-      this.drawerWidth = 150;
-    },
-    collapseDrawer() {
-      this.mini = true;
-      this.drawerWidth = 56;
-    },
-    logout() {
-      this.$router.push("/");
-    },
-  },
-};
+const firingRecords = [
+  { image: "@/assets/cam.jpg", date: "2024.07.26 13:01:54" },
+  { image: "@/assets/cam.jpg", date: "2024.07.25 18:27:02" },
+  { image: "@/assets/cam.jpg", date: "2024.07.25 17:12:38" },
+  { image: "@/assets/cam.jpg", date: "2024.07.25 12:48:08" },
+]
 </script>
 
 <style scoped>
