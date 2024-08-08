@@ -20,7 +20,7 @@
           </v-list-item-content>
         </v-list-item>
         <v-divider></v-divider>
-        <v-list-item to="/">
+        <v-list-item to="/home">
           <v-list-item-icon>
             <v-icon>mdi-home</v-icon>
           </v-list-item-icon>
@@ -83,15 +83,6 @@
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
-
-    <v-app-bar app>
-      <v-toolbar-title>
-        <br>
-        <v-img src="@/assets/logo.png" height="100" contain></v-img>
-        <span class="ml-3">UACV</span>
-      </v-toolbar-title>
-      <v-spacer></v-spacer>
-    </v-app-bar>
 
     <v-main>
       <v-container class="fill-height">
@@ -204,6 +195,9 @@ export default {
       this.mini = true;
       this.drawerWidth = 56;
     },
+    logout() {
+      this.$router.push("/");
+    },
   },
 };
 </script>
@@ -220,9 +214,6 @@ export default {
 .v-main {
   background-color: #093028;
   color: #ffffef;
-}
-.v-toolbar {
-  background-color: #004d40;
 }
 .map-section {
   grid-area: map-section;
