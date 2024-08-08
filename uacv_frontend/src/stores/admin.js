@@ -7,8 +7,8 @@ import axios from "axios"
 
 export const userAdminStore = defineStore('admin', () => {
 
-  // const BASE_URL = '/api/member'
-  const BASE_URL = 'http://localhost:8080/api/member'
+  const BASE_URL = '/api/member'
+  // const BASE_URL = 'http://localhost:8080/api/member'
   const store = useUserStore()
   const router = useRouter()
 
@@ -26,7 +26,8 @@ export const userAdminStore = defineStore('admin', () => {
       }
     })
       .then((response) => {
-        router.go(0)
+        alert("회원 생성 완료")
+        router.push('/user_management')
       })
       .catch((error) => {
         console.log(error)

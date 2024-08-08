@@ -28,6 +28,7 @@ export default {
 .controls {
   text-align: center;
 }
+
 button {
   background-color: #750e21;
   color: white;

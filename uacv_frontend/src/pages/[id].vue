@@ -1,15 +1,14 @@
 <template>
-    <div>
-        <h1>회원 정보 페이지</h1>
-        <h3 v-if="memberInfo">{{ memberInfo.id }}</h3>
-        <h3 v-if="memberInfo">{{ memberInfo.username }}</h3>
-        <!-- <h3 v-if="memberInfo">{{ memberInfo.memberRole }}</h3> -->
-        <v-select label="Select" v-model.trim="memberRole" :items="['CONTROL', 'MONITOR']" ></v-select>
-        <h3 v-if="memberInfo">{{ memberInfo.createdDate }}</h3>
-        <h3 v-if="memberInfo">{{ memberInfo.lastModifiedDate }}</h3>
-        <v-btn @click="updateRole">권한 변경</v-btn>
-        <v-btn @click="deleteMember">회원 삭제</v-btn>
-    </div>
+  <div>
+    <h1>회원 정보 페이지</h1>
+    <h3 v-if="memberInfo">{{ memberInfo.id }}</h3>
+    <h3 v-if="memberInfo">{{ memberInfo.username }}</h3>
+    <v-select label="Select" v-model.trim="memberRole" :items="['CONTROL', 'MONITOR']"></v-select>
+    <h3 v-if="memberInfo">{{ memberInfo.createdDate }}</h3>
+    <h3 v-if="memberInfo">{{ memberInfo.lastModifiedDate }}</h3>
+    <v-btn @click="updateRole">권한 변경</v-btn>
+    <v-btn @click="deleteMember">회원 삭제</v-btn>
+  </div>
 </template>
 
 <script setup>
@@ -44,7 +43,7 @@ function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms))
 }
 
-onMounted(async() => {
+onMounted(async () => {
   store.findMember(id)
   await sleep(100)
   memberInfo.value = store.memberInfo
@@ -53,6 +52,4 @@ onMounted(async() => {
 })
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>
