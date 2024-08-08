@@ -4,9 +4,11 @@ import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 import axios from 'axios'
+
 export const useUserStore = defineStore('counter', () => {
 
-  const BASE_URL = '/api/member'
+  // const BASE_URL = '/api/member'
+  const BASE_URL = 'http://localhost:8080/api/member'
   const router = useRouter()
   //== token값 저장 ==//
   const token = ref(null)
@@ -28,7 +30,6 @@ export const useUserStore = defineStore('counter', () => {
     })
     .then((response) => {
       check.value = response.data
-      console.log(check.value)
     })
     .catch((error) => {
       console.log(error)
@@ -106,5 +107,5 @@ export const useUserStore = defineStore('counter', () => {
   }
 
   return { LogIn, LogOut, isLogin, updatePassword, checkUsername,
-    check, token }
+    check, token, memberRole }
 }, { persist: true })
