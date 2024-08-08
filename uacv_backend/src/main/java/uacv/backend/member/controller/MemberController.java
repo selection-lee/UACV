@@ -2,32 +2,32 @@ package uacv.backend.member.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import uacv.backend.member.domain.Member;
-import uacv.backend.member.domain.Response;
-import uacv.backend.member.dto.MemberLoginRequestDto;
-import uacv.backend.member.dto.SignupDto;
-import uacv.backend.member.security.jwt.TokenInfo;
-import uacv.backend.member.service.MemberService;
-
-import org.aspectj.weaver.MemberUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import uacv.backend.member.domain.Member;
+import uacv.backend.member.domain.MemberAuthorizationUtil;
+import uacv.backend.member.domain.Response;
+import uacv.backend.member.dto.*;
+import uacv.backend.member.security.jwt.TokenInfo;
+import uacv.backend.member.service.MemberService;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/api/member")
 @Slf4j
 public class MemberController {
 
-    private final MemberService userService;
+    private final MemberService memberService;
     private final PasswordEncoder passwordEncoder;
 
-    //== 회원가입 ==//
+    //== 계정생성 ==//
     @ResponseStatus(HttpStatus.OK)
-    @PostMapping("/signup")
+    @PostMapping("/create")
     public Response<?> register(@RequestBody SignupDto signupDto) {
-        return new Response<>(userService.signUp(signupDto));
+        return new Response<>(memberService.signUp(signupDto));
     }
 
     //== 로그인 ==//
@@ -36,37 +36,66 @@ public class MemberController {
         String username = memberLoginRequestDto.getUsername();
         String password = memberLoginRequestDto.getPassword();
 
-        Member userInfo = userService.findUser(username);
+        Member userInfo = memberService.findUser(username);
         String DbPassword = userInfo.getPassword();
         TokenInfo tokenInfo = null;
 
         if (passwordEncoder.matches(password, DbPassword)) {
-            tokenInfo = userService.login(username, DbPassword);
+            tokenInfo = memberService.login(username, DbPassword);
         }
-
         return tokenInfo;
     }
 
+    //== 회원삭제 ==//
+    @DeleteMapping("/delete/{id}")
+    public String deleteMember(@PathVariable Long id) {
+        return memberService.deleteMember(id);
+    }
+
+    //== 중복확인 ==//
+    @GetMapping("/check")
+    public String checkUsername (@RequestParam String username) {
+        System.out.println(username);
+
+        Member member = null;
+
+        try {
+            member = memberService.findUser(username);
+            return "사용불가";
+
+        } catch (IllegalStateException e) {
+            return "사용가능";
+        }
+
+    }
+
+    //== 회원 리스트 출력 ==//
+    @GetMapping("/list")
+    public List<MemberDto> getMemberList() {
+        return memberService.memberList();
+    }
+
+    //== id로 회원 찾기 ==//
+    @GetMapping("/{id}")
+    public MemberDto getMemberById(@PathVariable Long id) {
+        return memberService.findUserById(id);
+    }
+
     //== 회원정보수정 ==//
-    //== 로그아웃 ==//
+    // 1. 비밀번호 변경
+    @PutMapping("/update/password")
+    public String updatePassword(@RequestBody UpdatePasswordDto updatePassword) {
+        String username = MemberAuthorizationUtil.getLoginUsername();
+        memberService.updatePassword(username, updatePassword.getCurrentPassword(), updatePassword.getNewPassword());
 
-    //== 권한 확인 ==//
-    @GetMapping("/admin")
-    public String admin() {
-        return "ADMIN 권한이다 이자식아";
+        return "비밀번호 수정 완료";
     }
 
-    @PostMapping("/control")
-    public String control() {
-        return "CONTROL 권한이다 이자식아";
+    // 2. 권한 변경
+    @PutMapping("update/role")
+    public String updateRole(@RequestBody UpdateRoleDto updateRole) {
+        memberService.updateRole(updateRole.getUsername(), updateRole.getMemberRole());
+
+        return "권한 수정 완료";
     }
-
-    @PostMapping("/monitor")
-    public String monitor() {
-        return "MONITOR 권한이다 이자식아";
-    }
-
-    //== 정보 수정 ==//
-
-
 }

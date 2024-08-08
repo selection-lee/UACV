@@ -1,41 +1,40 @@
 // Utilities
 import { defineStore } from 'pinia'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 import axios from 'axios'
 
 export const useUserStore = defineStore('counter', () => {
 
-  const BASE_URL = 'http://localhost:8080/user'
+  const BASE_URL = '/api/member'
+  // const BASE_URL = 'http://localhost:8080/api/member'
   const router = useRouter()
+  //== token값 저장 ==//
   const token = ref(null)
 
-  //회원가입
-  const signUp = function (payload) {
-    const { username, password1, password2, memberRole } = payload
+  //== Role 저장 ==//
+  const memberRole = ref(null)
 
+  //== 계정생성 ==//
+  const signUp = function (payload) {
+    const { username, password1, password2, memberRole, rnk, m_id } = payload
     axios({
       method: 'post',
-      url: `${BASE_URL}/signup`,
+      url: `${BASE_URL}/create`,
       data: {
-        username, password1, password2, memberRole
+        username, password1, password2, memberRole, rnk, m_id
       }
     })
       .then((response) => {
-        console.log(response.data)
-        router.push(
-          {
-            path: '/login'
-          }
-        )
+        router.go(0)
       })
       .catch((error) => {
         console.log(error)
       })
   }
 
-  //로그인
+  //== 로그인 ==//
   const LogIn = function (payload) {
     const { username, password } = payload
 
@@ -47,8 +46,14 @@ export const useUserStore = defineStore('counter', () => {
       }
     })
       .then((response) => {
+        memberRole.value = response.data.memberRole
         token.value = response.data.accessToken
-        console.log(token.value)
+        //  로그인 성공시 메인 페이지로 이동
+        router.push(
+          {
+            path: '/'
+          }
+        )
       })
       .catch((error) => {
         console.log(error)
@@ -56,5 +61,52 @@ export const useUserStore = defineStore('counter', () => {
 
   }
 
-  return { signUp, LogIn, token }
-})
+  //== 로그아웃 ==//
+  const LogOut = function () {
+    token.value = null
+    router.go(0)
+  }
+
+  //== 로그인 상태 확인 ==//
+  const isLogin = computed(() => {
+    if (token.value === null) {
+      return false
+    } else {
+      return true
+    }
+  })
+
+  //== 비밀번호 변경 ==//
+  const updatePassword = function (payload) {
+    const { currentPassword, newPassword } = payload
+
+    axios({
+      method: 'put',
+      url: `${BASE_URL}/update/password`,
+      data: {
+        currentPassword, newPassword
+      },
+      headers: {
+        Authorization: `Bearer ${token.value}`
+      }
+    })
+      .then((response) => {
+        console.log(response)
+        //비밀번호 변경 성공시 메인 페이지로 이동
+        // 삭제 예정
+        router.push(
+          {
+            path: '/'
+          }
+        )
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+
+  }
+
+  return {
+    LogIn, LogOut, isLogin, updatePassword, signUp, token, memberRole
+  }
+}, { persist: true })

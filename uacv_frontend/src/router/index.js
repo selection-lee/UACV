@@ -5,6 +5,7 @@
  */
 
 // Composables
+import { useUserStore } from '@/stores/user'
 import { createRouter, createWebHistory } from 'vue-router/auto'
 import { setupLayouts } from 'virtual:generated-layouts'
 import { routes } from 'vue-router/auto-routes'
@@ -31,6 +32,17 @@ router.onError((err, to) => {
 
 router.isReady().then(() => {
   localStorage.removeItem('vuetify:dynamic-reload')
+})
+
+
+//== 로그인 페이지로 이동 ==//
+router.beforeEach((to, _, next) => {
+  const store = useUserStore()
+  if (to.fullPath !== '/login' && store.isLogin === false){
+    next('/login')
+  } else {
+    next()
+  }
 })
 
 export default router

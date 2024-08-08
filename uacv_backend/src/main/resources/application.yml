@@ -1,3 +1,6 @@
+server:
+  port: ${PORT}
+
 spring:
   config:
     import: file:.env[.properties]
@@ -30,10 +33,30 @@ spring:
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
   rabbitmq:
-    host: i11c102.p.ssafy.io
-    port: 5672
+    host: ${RABBITMQ_HOST}
+    port: ${RABBITMQ_PORT}
     username: ${RABBITMQ_USER}
     password: ${RABBITMQ_PW}
+    exchange: amq.topic
+    queues:
+      sensor:
+        name: sensor_queue
+        routing-keys:
+          - rpi.sensor
+          - orin.sensor
+      command:
+        name: command_queue
+        routing-keys:
+          - rpi.fire
+          - orin.cannon
+          - orin.throttle
+          - orin.steer
+      mapping:
+        name: mapping_queue
+        routing-keys:
+          - ros.map1
+          - ros.map2
+          - ros.map3
 
 logging:
   level:

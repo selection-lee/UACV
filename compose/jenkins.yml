@@ -1,0 +1,25 @@
+services:
+    jenkins:
+        container_name: jenkins
+        expose:
+            - 8080
+        restart: on-failure
+        image: jenkins/jenkins:latest
+        networks:
+            - caddy
+        labels:
+            caddy: i11c102.p.ssafy.io
+            caddy.handle: /jenkins*
+            caddy.handle.0_reverse_proxy: "{{upstreams 8080}}"
+        volumes:
+            - /etc/localtime:/etc/localtime:ro
+            - jenkins_data:/var/jenkins_home
+        environment:
+            - JENKINS_OPTS="--prefix=/jenkins"
+volumes:
+    jenkins_data:
+        name: jenkins_data
+        external: false
+networks:
+    caddy:
+        external: true

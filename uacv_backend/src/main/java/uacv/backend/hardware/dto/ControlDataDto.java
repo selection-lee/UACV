@@ -1,23 +1,19 @@
 package uacv.backend.hardware.dto;
 
-import java.util.Date;
-
-import org.hibernate.annotations.CreationTimestamp;
-
 import lombok.AccessLevel;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-@Getter
+@Data
 @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ControlDataDto {
-    
-    // 명령어
-    // 명령어 유지 시간
-    // 즉시 정지?
-    // 명령 생성 시간
-    @CreationTimestamp
-    private Date sendDate;
+
+    // 명령 Parameter
+    private String fire;
+    private String move;
+    private int cannon_x;
+    private int cannon_y;
+    private int steer;
 }

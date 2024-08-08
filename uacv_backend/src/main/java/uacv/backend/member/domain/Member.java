@@ -28,6 +28,12 @@ public class Member extends BasetimeEntity implements UserDetails {
     @Column(nullable = false)
     private String password;
 
+    @Column(nullable = false)
+    private String rnk;
+
+    @Column(nullable = false)
+    private String m_id;
+
     @Enumerated(EnumType.STRING)
     private MemberRole memberRole;
 
@@ -42,6 +48,16 @@ public class Member extends BasetimeEntity implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
 
         return Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + memberRole));
+    }
+
+    //== 비밀번호 변경 ==//
+    public void updatePassword(String newPassword) {
+        this.password = newPassword;
+    }
+
+    //== 권한 변경 ==//
+    public void updateRole(MemberRole newMemberRole) {
+        this.memberRole = newMemberRole;
     }
 
     @Override
@@ -74,13 +90,5 @@ public class Member extends BasetimeEntity implements UserDetails {
         return true;
     }
 
-    // 비밀번호 업데이트 메서드
-    public void updatePassword(String newPassword) {
-        this.password = newPassword;
-    }
 
-    // 사용자 이름 업데이트 메서드
-    public void updateUsername(String username) {
-        this.username = username;
-    }
 }

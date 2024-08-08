@@ -24,8 +24,8 @@ MFCC 기반 모델로 총기 소리를 판단
 
 ## 구현   사항
 
-![image.png](./image.png)
+![image.png](./assets/image.png)
 
 ## 기술   스택
 
-![image-1.png](./image-1.png)
+![image-1.png](./assets/image-1.png)

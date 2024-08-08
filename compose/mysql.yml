@@ -1,0 +1,20 @@
+services:
+    mysql:
+        container_name: mysql
+        expose:
+            - 3306
+            - 33060
+        restart: always
+        pull_policy: always
+        volumes:
+            - /etc/localtime:/etc/localtime:ro
+        image: mysql:lts
+        environment:
+            MYSQL_ROOT_PASSWORD: ssafyi11C102!!
+            MYSQL_DATABASE: uacv
+        networks:
+            - caddy
+networks:
+    caddy:
+        external: true
+        name: caddy
