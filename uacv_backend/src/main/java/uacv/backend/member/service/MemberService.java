@@ -77,6 +77,8 @@ public class MemberService {
         memberDto.setId(member.getId());
         memberDto.setUsername(member.getUsername());
         memberDto.setMemberRole(member.getMemberRole());
+        memberDto.setRnk(member.getRnk());
+        memberDto.setM_id(member.getM_id());
         memberDto.setCreatedDate(member.getCreatedDate());
         memberDto.setLastModifiedDate(member.getLastModifiedDate());
         return memberDto;

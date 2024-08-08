@@ -1,20 +1,20 @@
 <template>
   <v-main>
-  <v-container class="background">
-    <div class="login-container">
-      <div class="logo-container">
-        <img src="@/assets/logo.png" alt="Logo" class="logo">
-        <div class="logo-text">UACV</div>
-      </div>
+    <v-container class="background">
+      <div class="login-container">
+        <div class="logo-container">
+          <img src="@/assets/logo.png" alt="Logo" class="logo">
+          <div class="logo-text">UACV</div>
+        </div>
 
-      <v-form class="form-container">
-        <v-text-field v-model.trim="username" label="ID" outlined dense />
-        <v-text-field v-model.trim="password" label="Password" type="password" outlined dense />
-        <v-btn class="login-button" @click="Login">Login</v-btn>
-      </v-form>
-    </div>
-  </v-container>
-</v-main>
+        <v-form class="form-container">
+          <v-text-field v-model.trim="username" label="ID" outlined dense />
+          <v-text-field v-model.trim="password" label="Password" type="password" outlined dense />
+          <v-btn class="login-button" @click="Login">Login</v-btn>
+        </v-form>
+      </div>
+    </v-container>
+  </v-main>
 </template>
 
 <script setup>
