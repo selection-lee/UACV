@@ -7,8 +7,8 @@ import axios from "axios"
 
 export const userAdminStore = defineStore('admin', () => {
 
-  // const BASE_URL = '/api/member'
-  const BASE_URL = 'http://localhost:8080/api/member'
+  const BASE_URL = '/api/member'
+  // const BASE_URL = 'http://localhost:8080/api/member'
   const store = useUserStore()
   const router = useRouter()
 
