@@ -67,6 +67,7 @@ onMounted(async () => {
 
   await sleep(100)
   members.value = store_admin.members
+  console.log(members.value)
 })
 
 const goDetail = function (memberId) {
