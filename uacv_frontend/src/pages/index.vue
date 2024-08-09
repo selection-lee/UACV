@@ -31,13 +31,15 @@
 
             <v-col cols="3">
               <div class="cam-section">
-                <Cam camSrc="@/assets/cam.jpg" :speed="23" :distance="1.3" />
+                <!-- <Cam camSrc="@/assets/cam.jpg" :speed="23" :distance="1.3" /> -->
+                 <CameraMonitor/>
               </div>
             </v-col>
 
             <v-col cols="3">
               <div class="cam-canon-section">
-                <Cam_canon camSrc="@/assets/cam.jpg" :ammo="3" />
+                <!-- <Cam_canon camSrc="@/assets/cam.jpg" :ammo="3" /> -->
+                <CannonMonitor/>
               </div>
             </v-col>
           </v-row>
@@ -73,6 +75,8 @@
 
 <script setup>
 import Map from "@/components/Map.vue"
+import CameraMonitor from "@/components/CameraMonitor.vue"
+import CannonMonitor from "@/components/CannonMonitor.vue"
 import Cam from "@/components/Cam.vue"
 import Cam_canon from "@/components/Cam_canon.vue"
 import Log from "@/components/Log.vue"
