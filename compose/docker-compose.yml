@@ -8,7 +8,7 @@ services:
             - caddy
         labels:
             caddy: i11c102.p.ssafy.io
-            caddy.0_handle: /relay*
+            caddy.0_handle: /socket*
             caddy.0_handle.reverse_proxy: "{{upstreams 8090}}"
             caddy.1_handle: /api*
             caddy.1_handle.reverse_proxy: "{{upstreams 8090}}"

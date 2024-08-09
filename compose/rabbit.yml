@@ -6,7 +6,8 @@ services:
             - 15672
         ports:
             - 1883:1883
-            # - 5672:5672
+            - 35551:5672
+            - 15675:15675
         restart: unless-stopped
         image: rabbitmq:management-alpine
         networks:
@@ -15,9 +16,11 @@ services:
             caddy: i11c102.p.ssafy.io
             caddy.redir: /rabbit/console /rabbit/console/
             caddy.handle_path: /rabbit/console/*
-            caddy.handle_path.0_reverse_proxy: "{{upstreams 15672}}"
+            caddy.handle_path.reverse_proxy: "{{upstreams 15672}}"
             caddy_1: localhost:1883
             caddy_1.reverse_proxy: "{{upstreams 1883}}"
+            caddy_2: localhost:15675
+            caddy_2.reverse_proxy: "{{upstreams 15675}}"
         command: "/bin/bash -c \"rabbitmq-plugins enable --offline rabbitmq_mqtt rabbitmq_web_mqtt; rabbitmq-server\""
         volumes:
             - rabbitmq_data:/var/lib/rabbitmq
