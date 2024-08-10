@@ -33,7 +33,8 @@ export default {
     }
   }, 
   mounted() { // 컴포넌트 마운트될 떄 웹소켓 연결 설정
-    const socket = new SockJS('http://localhost:8081/sockjs'); 
+    // const socket = new SockJS('http://localhost:8081/sockjs'); 
+    const socket = new SockJS('http://i11c202.p.ssafy.io/socket/sound');
     // const socket = new SockJS('http://localhost:8081', null, { withCredentials: true }); // withCredentials 설정
     // const socket = new SockJS('http://localhost:8081');
     // const socket = new SockJS('http://i11c202.p.ssafy.io/ws');
@@ -42,9 +43,10 @@ export default {
 
     stompClient.connect({}, frame => {
       console.log('Connected: ' + frame);
-      stompClient.subscribe('/topic/signal', message => {
+      stompClient.subscribe('/orin/sensor', message => {
         const signalData = JSON.parse(message.body);
         this.showAlert(signalData.message);
+        // this.showAlert(sensorData.sound.type);
       });
     });
   }
