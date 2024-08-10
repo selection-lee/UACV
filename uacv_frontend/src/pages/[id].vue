@@ -64,18 +64,11 @@ const deleteMember = function () {
   store.deleteMember(id)
 }
 
-//== 비동기화 ==//
-function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms))
-}
-
 onMounted(async () => {
-  store.findMember(id)
-  await sleep(500)
-  memberInfo.value = store.memberInfo
+  memberInfo.value = await store.findMember(id)
   memberRole.value = memberInfo.value.memberRole
-
 })
+
 </script>
 
 <style scoped>

@@ -80,22 +80,25 @@ export const userAdminStore = defineStore('admin', () => {
       console.log(error)
     })
   }
+  
   //== memberList 저장 ==//
   const members = ref(null)
 
   //== 회원 리스트 출력 ==//
-  const memberList = function() {
-    axios({
-      method: 'get',
-      url: `${BASE_URL}/list`
-    })
-    .then((response) => {
-      members.value = response.data
+  const memberList = async function() {
 
-    })
-    .catch((error) => {
+    try {
+      const response = await axios ({
+        method: 'get',
+        url: `${BASE_URL}/list`
+      })
+      members.value = response.data
+    } catch (error) {
       console.log(error)
-    })
+      throw error
+    }
+
+    return members.value
   }
 
   //== members의 유뮤 ==//
@@ -113,20 +116,23 @@ export const userAdminStore = defineStore('admin', () => {
   const memberInfo = ref(null)
 
   //== 해당 회원 정보 ==//
-  const findMember = function(memberId) {
-    axios({
-      method: 'get',
-      url: `${BASE_URL}/${memberId}`,
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    })
-    .then((response) => {
+  const findMember = async function(memberId) {
+
+    try {
+      const response = await axios({
+        method: 'get',
+        url: `${BASE_URL}/${memberId}`,
+        headers: {
+          Authorization: `Bearer ${store.token}`
+        }
+      })
       memberInfo.value = response.data
-    })
-    .catch((error) => {
+    } catch (error) {
       console.log(error)
-    })
+      throw error
+    }
+  
+    return memberInfo.value
   }
 
   return { signUp, memberList, findMember, updateRole, deleteMember,

@@ -31,12 +31,11 @@
           <template v-slot:item.username="{ item }">
             <a @click="goDetail(item.id)">{{ item.username }}</a>
           </template>
-
-
         </v-data-table>
 
         <v-pagination v-model="page" :length="pages" class="mt-4">
         </v-pagination>
+
       </v-container>
     </v-main>
   </v-app>
@@ -55,19 +54,9 @@ const router = useRouter()
 const members = ref(null)
 const role = ref(null)
 
-//== 비동기화 ==//
-function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms))
-}
-
 onMounted(async () => {
-
-  store_admin.memberList()
+  members.value = await store_admin.memberList()
   role.value = store.memberRole
-
-  await sleep(100)
-  members.value = store_admin.members
-  console.log(members.value)
 })
 
 const goDetail = function (memberId) {
