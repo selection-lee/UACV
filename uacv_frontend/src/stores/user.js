@@ -23,7 +23,7 @@ export const useUserStore = defineStore('counter', () => {
     const { username, password1, password2, memberRole, rnk, m_id } = payload
     axios({
       method: 'post',
-      url: `/create`,
+      url: `/member/create`,
       data: {
         username, password1, password2, memberRole, rnk, m_id
       }
@@ -88,7 +88,7 @@ export const useUserStore = defineStore('counter', () => {
 
     axios({
       method: 'put',
-      url: `/update/password`,
+      url: `/member/update/password`,
       data: {
         newPassword
       },
