@@ -60,11 +60,6 @@ const info = ref(null)
 const password1 = ref(null)
 const password2 = ref(null)
 
-//== 비동기화 ==//
-function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms))
-}
-
 //== 비밀번호 변경 ==//
 const changePassword = function () {
   if (password1.value === password2.value) {
@@ -80,10 +75,9 @@ const changePassword = function () {
 }
 
 onMounted(async () => {
-  adminStore.findMember(userStore.memberId)
-  await sleep(500)
-  info.value = adminStore.memberInfo
+  info.value = await adminStore.findMember(userStore.memberId)
 })
+
 </script>
 
 <style scoped>

@@ -40,7 +40,7 @@ export const useUserStore = defineStore('counter', () => {
   //== 로그인 ==//
   const LogIn = function (payload) {
     const { username, password } = payload
-
+    
     axios({
       method: 'post',
       url: `${BASE_URL}/login`,
@@ -62,7 +62,6 @@ export const useUserStore = defineStore('counter', () => {
       .catch((error) => {
         console.log(error)
       })
-
   }
 
   //== 로그아웃 ==//
