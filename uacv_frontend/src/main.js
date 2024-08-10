@@ -16,7 +16,7 @@ import { createApp } from 'vue'
 
 import './styles/global.css' // 글로벌 스타일 파일 import
 
-axios.defaults.baseURL = import.meta.env.BACKEND_API_URL
+axios.defaults.baseURL = import.meta.env.VITE_BACKEND_API_URL
 
 const app = createApp(App)
 

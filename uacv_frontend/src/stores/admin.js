@@ -88,7 +88,7 @@ export const userAdminStore = defineStore('admin', () => {
     try {
       const response = await axios ({
         method: 'get',
-        url: '/list'
+        url: '/member/list'
       })
       members.value = response.data
 
@@ -120,7 +120,7 @@ export const userAdminStore = defineStore('admin', () => {
     try {
       const response = await axios({
         method: 'get',
-        url: `${memberId}`,
+        url: `/member/${memberId}`,
         headers: {
           Authorization: `Bearer ${store.token}`
         }

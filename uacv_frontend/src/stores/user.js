@@ -42,7 +42,7 @@ export const useUserStore = defineStore('counter', () => {
     
     axios({
       method: 'post',
-      url: '/login', 
+      url: '/member/login',
       data: {
         username, password
       }
