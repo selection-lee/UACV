@@ -18,7 +18,7 @@ export const userAdminStore = defineStore('admin', () => {
     const { username, password1, password2, memberRole, rnk, m_id } = payload
     axios({
       method: 'post',
-      url: `/create`,
+      url: `/member/create`,
       data: {
         username, password1, password2, memberRole, rnk, m_id
       }
@@ -39,7 +39,7 @@ export const userAdminStore = defineStore('admin', () => {
 
     axios({
       method: 'put',
-      url: `/update/role`,
+      url: `/member/update/role`,
       data:{
         username, memberRole
       },
@@ -62,7 +62,7 @@ export const userAdminStore = defineStore('admin', () => {
   const deleteMember = function(memberId) {
     axios({
       method: 'delete',
-      url: `/delete/${memberId}`,
+      url: `/member/delete/${memberId}`,
       headers:{
         Authorization: `Bearer ${token}`
       }
