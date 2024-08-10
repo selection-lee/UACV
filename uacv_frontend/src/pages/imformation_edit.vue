@@ -12,27 +12,71 @@
     </v-app-bar>
 
     <v-main>
-      <v-container>
+      <v-container style="display: flex; flex-direction: column; align-items: center;">
         <div class="d-flex justify-center align-center my-4">
-          <h3 class="text-h5 font-weight-bold mr-3">계정정보</h3>
+          <h3 class="text-h5 font-weight-bold mr-3">정보 수정</h3>
         </div>
 
-        <div class="text-center mt-5">
+        <div style="width: 600px;">
+          <div class="div-flex border-b-thin">
+            <p style="width: 200px;">username</p>
+            <p v-if="info">{{ info.username }}</p>
+          </div>
+
+          <div class="div-flex border-b-thin">
+            <p style="width: 200px;">memberRole</p>
+            <p v-if="info">{{ info.memberRole }}</p>
+          </div>
+
           <v-form>
-            <v-text-field v-model.trim="username" label="Username" />
-            <v-text-field v-model.trim="ID" label="ID" />
-            <v-text-field v-model.trim="소속" label="소속" />
-            <v-text-field v-model.trim="password1" label="Password" type="password" />
-            <v-text-field v-model.trim="password2" label="Password 확인" type="password" />
-            <v-btn class="block" @click="SignUp">등록</v-btn>
+            <div class="div-flex border-b-thin">
+              <label for="password1" style="width: 200px;">password</label>
+              <v-text-field v-model.trim="password1" label="Password" type="password" />
+            </div>
+
+            <div class="div-flex border-b-thin">
+              <label for="password2" style="width: 200px;">password 확인</label>
+              <v-text-field v-model.trim="password2" label="Password 확인" type="password" />
+            </div>
           </v-form>
         </div>
+            <v-btn @click="changePassword">비밀번호 변경</v-btn>
+          
+
       </v-container>
     </v-main>
   </v-app>
 </template>
 
 <script setup>
+import { onMounted, ref } from 'vue';
+import { userAdminStore } from '@/stores/admin';
+import { useUserStore } from '@/stores/user';
+
+const adminStore = userAdminStore()
+const userStore = useUserStore()
+const info = ref(null)
+
+const password1 = ref(null)
+const password2 = ref(null)
+
+//== 비밀번호 변경 ==//
+const changePassword = function () {
+  if (password1.value === password2.value) {
+    const payload = {
+      newPassword : password1.value
+    }
+
+    userStore.updatePassword(payload)
+
+  } else {
+    alert("비밀번호가 다릅니다")
+  }
+}
+
+onMounted(async () => {
+  info.value = await adminStore.findMember(userStore.memberId)
+})
 
 </script>
 
@@ -49,5 +93,10 @@
 
 .v-pagination {
   justify-content: center;
+}
+
+.div-flex {
+  display: flex;
+  margin: 20px;
 }
 </style>

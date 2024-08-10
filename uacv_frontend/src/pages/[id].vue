@@ -1,13 +1,39 @@
 <template>
-  <div>
+  <div style="display: flex; flex-direction: column; align-items: center;">
     <h1>회원 정보 페이지</h1>
-    <h3 v-if="memberInfo">{{ memberInfo.id }}</h3>
-    <h3 v-if="memberInfo">{{ memberInfo.username }}</h3>
-    <v-select label="Select" v-model.trim="memberRole" :items="['CONTROL', 'MONITOR']"></v-select>
-    <h3 v-if="memberInfo">{{ memberInfo.createdDate }}</h3>
-    <h3 v-if="memberInfo">{{ memberInfo.lastModifiedDate }}</h3>
-    <v-btn @click="updateRole">권한 변경</v-btn>
-    <v-btn @click="deleteMember">회원 삭제</v-btn>
+
+    <div style="width: 50%;">
+      <div class="div-flex border-b-thin">
+        <h3 style="width: 200px;">id</h3>
+        <p v-if="memberInfo">{{ memberInfo.id }}</p>
+      </div>
+
+      <div class="div-flex border-b-thin">
+        <h3 style="width: 200px;">username</h3>
+        <p v-if="memberInfo">{{ memberInfo.username }}</p>
+      </div>
+
+      <div class="div-flex border-b-thin">
+        <h3 style="width: 200px;">memberRole</h3>
+        <v-select label="Select" v-model.trim="memberRole" :items="['CONTROL', 'MONITOR']"></v-select>
+      </div>
+
+      <div class="div-flex border-b-thin">
+        <h3 style="width: 200px;">created</h3>
+        <p v-if="memberInfo">{{ memberInfo.createdDate }}</p>
+      </div>
+
+      <div class="div-flex border-b-thin">
+        <h3 style="width: 200px;">lastModified</h3>
+        <p v-if="memberInfo">{{ memberInfo.lastModifiedDate }}</p>
+      </div>
+
+      <div class="div-flex" style="flex-direction: row; justify-content: center;">
+
+        <v-btn @click="updateRole" variant="elevated" color="blue" style="margin: 20px;"> 권한 변경 </v-btn>
+        <v-btn  @click="deleteMember" variant="elevated" color="red" style="margin: 20px"> 회원 삭제 </v-btn>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -38,18 +64,16 @@ const deleteMember = function () {
   store.deleteMember(id)
 }
 
-//== 비동기화 ==//
-function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms))
-}
-
 onMounted(async () => {
-  store.findMember(id)
-  await sleep(100)
-  memberInfo.value = store.memberInfo
+  memberInfo.value = await store.findMember(id)
   memberRole.value = memberInfo.value.memberRole
-
 })
+
 </script>
 
-<style scoped></style>
+<style scoped>
+.div-flex {
+  display: flex;
+  margin: 20px;
+}
+</style>

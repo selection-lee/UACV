@@ -52,6 +52,7 @@ public class MemberService {
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
         TokenInfo tokenInfo = jwtTokenProvider.generateToken(authentication);
         tokenInfo.setMemberRole(memberRepository.findByUsername(username).get().getMemberRole());
+        tokenInfo.setMemberId(memberRepository.findByUsername(username).get().getId());
         return tokenInfo;
     }
 
@@ -98,21 +99,16 @@ public class MemberService {
 
     //== 비밀번호 변경 ==//
     @Transactional
-    public void updatePassword(String username, String currentPassword, String newPassword) {
-        Member member = validatePassword(username, currentPassword);
-
+    public void updatePassword(String username, String newPassword) {
+        Member member = validatePassword(username);
         member.updatePassword(passwordEncoder.encode(newPassword));
 
     }
 
     //== 해당 유저 확인 ==//
-    public Member validatePassword(String username, String currentPassword) {
+    public Member validatePassword(String username) {
         Member member = memberRepository.findByUsername(username)
                 .orElseThrow(() -> new IllegalStateException("User not found"));
-
-        if (!passwordEncoder.matches(currentPassword, member.getPassword())) {
-            throw new IllegalStateException("Wrong password");
-        }
 
         return member;
     }

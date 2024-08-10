@@ -7,21 +7,23 @@ import axios from 'axios'
 
 export const useUserStore = defineStore('counter', () => {
 
-  const BASE_URL = '/api/member'
-  // const BASE_URL = 'http://localhost:8080/api/member'
   const router = useRouter()
+
   //== token값 저장 ==//
   const token = ref(null)
 
   //== Role 저장 ==//
   const memberRole = ref(null)
 
+  //== id 저장 ==//
+  const memberId = ref(null)
+
   //== 계정생성 ==//
   const signUp = function (payload) {
     const { username, password1, password2, memberRole, rnk, m_id } = payload
     axios({
       method: 'post',
-      url: `${BASE_URL}/create`,
+      url: `/member/create`,
       data: {
         username, password1, password2, memberRole, rnk, m_id
       }
@@ -37,15 +39,17 @@ export const useUserStore = defineStore('counter', () => {
   //== 로그인 ==//
   const LogIn = function (payload) {
     const { username, password } = payload
-
+    
     axios({
       method: 'post',
-      url: `${BASE_URL}/login`,
+      url: '/member/login',
       data: {
         username, password
       }
+
     })
       .then((response) => {
+        memberId.value = response.data.memberId
         memberRole.value = response.data.memberRole
         token.value = response.data.accessToken
         //  로그인 성공시 메인 페이지로 이동
@@ -58,12 +62,14 @@ export const useUserStore = defineStore('counter', () => {
       .catch((error) => {
         console.log(error)
       })
-
   }
 
   //== 로그아웃 ==//
   const LogOut = function () {
     token.value = null
+    memberId.value = null
+    memberRole.value = null
+    alert("로그아웃 완료")
     router.go(0)
   }
 
@@ -78,27 +84,21 @@ export const useUserStore = defineStore('counter', () => {
 
   //== 비밀번호 변경 ==//
   const updatePassword = function (payload) {
-    const { currentPassword, newPassword } = payload
+    const { newPassword } = payload
 
     axios({
       method: 'put',
-      url: `${BASE_URL}/update/password`,
+      url: `/member/update/password`,
       data: {
-        currentPassword, newPassword
+        newPassword
       },
       headers: {
         Authorization: `Bearer ${token.value}`
       }
     })
       .then((response) => {
-        console.log(response)
-        //비밀번호 변경 성공시 메인 페이지로 이동
-        // 삭제 예정
-        router.push(
-          {
-            path: '/'
-          }
-        )
+        alert("비밀번호 변경 완료")
+        router.go(0)
       })
       .catch((error) => {
         console.log(error)
@@ -107,6 +107,7 @@ export const useUserStore = defineStore('counter', () => {
   }
 
   return {
-    LogIn, LogOut, isLogin, updatePassword, signUp, token, memberRole
+    LogIn, LogOut, isLogin, updatePassword, signUp,
+     token, memberRole, memberId
   }
 }, { persist: true })

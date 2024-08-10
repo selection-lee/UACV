@@ -86,7 +86,7 @@ public class MemberController {
     @PutMapping("/update/password")
     public String updatePassword(@RequestBody UpdatePasswordDto updatePassword) {
         String username = MemberAuthorizationUtil.getLoginUsername();
-        memberService.updatePassword(username, updatePassword.getCurrentPassword(), updatePassword.getNewPassword());
+        memberService.updatePassword(username, updatePassword.getNewPassword());
 
         return "비밀번호 수정 완료";
     }
