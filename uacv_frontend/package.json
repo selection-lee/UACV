@@ -14,8 +14,11 @@
     "mqtt": "^5.9.1",
     "pinia-plugin-persistedstate": "^3.2.1",
     "roboto-fontface": "*",
+    "sockjs": "^0.3.24",
+    "sockjs-client": "^1.6.1",
     "vue": "^3.4.31",
-    "vuetify": "^3.6.14"
+    "vuetify": "^3.6.14",
+    "webstomp-client": "^1.2.6"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.0.5",
