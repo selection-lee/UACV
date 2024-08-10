@@ -18,12 +18,10 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue';
+import { ref } from 'vue';
 import { useUserStore } from '@/stores/user';
-import { useRouter } from 'vue-router';
 
 const userStore = useUserStore()
-const router = useRouter()
 
 const username = ref(null)
 const password1 = ref(null)
