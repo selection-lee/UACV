@@ -7,9 +7,8 @@ import axios from 'axios'
 
 export const useUserStore = defineStore('counter', () => {
 
-  const BASE_URL = '/api/member'
-  // const BASE_URL = 'http://localhost:8080/api/member'
   const router = useRouter()
+
   //== token값 저장 ==//
   const token = ref(null)
 
@@ -24,7 +23,7 @@ export const useUserStore = defineStore('counter', () => {
     const { username, password1, password2, memberRole, rnk, m_id } = payload
     axios({
       method: 'post',
-      url: `${BASE_URL}/create`,
+      url: `/create`,
       data: {
         username, password1, password2, memberRole, rnk, m_id
       }
@@ -43,10 +42,11 @@ export const useUserStore = defineStore('counter', () => {
     
     axios({
       method: 'post',
-      url: `${BASE_URL}/login`,
+      url: '/login', 
       data: {
         username, password
       }
+
     })
       .then((response) => {
         memberId.value = response.data.memberId
@@ -88,7 +88,7 @@ export const useUserStore = defineStore('counter', () => {
 
     axios({
       method: 'put',
-      url: `${BASE_URL}/update/password`,
+      url: `/update/password`,
       data: {
         newPassword
       },
@@ -98,7 +98,7 @@ export const useUserStore = defineStore('counter', () => {
     })
       .then((response) => {
         alert("비밀번호 변경 완료")
-        router.push(0)
+        router.go(0)
       })
       .catch((error) => {
         console.log(error)

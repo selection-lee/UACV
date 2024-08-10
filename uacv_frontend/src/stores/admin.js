@@ -7,8 +7,6 @@ import axios from "axios"
 
 export const userAdminStore = defineStore('admin', () => {
 
-  const BASE_URL = '/api/member'
-  // const BASE_URL = 'http://localhost:8080/api/member'
   const store = useUserStore()
   const router = useRouter()
 
@@ -20,7 +18,7 @@ export const userAdminStore = defineStore('admin', () => {
     const { username, password1, password2, memberRole, rnk, m_id } = payload
     axios({
       method: 'post',
-      url: `${BASE_URL}/create`,
+      url: `/create`,
       data: {
         username, password1, password2, memberRole, rnk, m_id
       }
@@ -41,7 +39,7 @@ export const userAdminStore = defineStore('admin', () => {
 
     axios({
       method: 'put',
-      url: `${BASE_URL}/update/role`,
+      url: `/update/role`,
       data:{
         username, memberRole
       },
@@ -64,7 +62,7 @@ export const userAdminStore = defineStore('admin', () => {
   const deleteMember = function(memberId) {
     axios({
       method: 'delete',
-      url: `${BASE_URL}/delete/${memberId}`,
+      url: `/delete/${memberId}`,
       headers:{
         Authorization: `Bearer ${token}`
       }
@@ -90,9 +88,10 @@ export const userAdminStore = defineStore('admin', () => {
     try {
       const response = await axios ({
         method: 'get',
-        url: `${BASE_URL}/list`
+        url: '/list'
       })
       members.value = response.data
+
     } catch (error) {
       console.log(error)
       throw error
@@ -121,11 +120,12 @@ export const userAdminStore = defineStore('admin', () => {
     try {
       const response = await axios({
         method: 'get',
-        url: `${BASE_URL}/${memberId}`,
+        url: `${memberId}`,
         headers: {
           Authorization: `Bearer ${store.token}`
         }
       })
+
       memberInfo.value = response.data
     } catch (error) {
       console.log(error)
