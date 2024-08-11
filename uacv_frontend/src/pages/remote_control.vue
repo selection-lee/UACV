@@ -57,16 +57,12 @@
 
                   <v-btn
                     @mousedown="startLogging('forward')"
-                    @mouseup="stopLogging"
-                    @mouseleave="stopLogging"
                     @click="moveForward"
                     class="direction-btn mr-2"
                     >FORWARD</v-btn
                   >
                   <v-btn
                     @mousedown="startLogging('backward')"
-                    @mouseup="stopLogging"
-                    @mouseleave="stopLogging"
                     @click="moveBackward"
                     class="direction-btn"
                     >BACKWARD</v-btn
@@ -74,8 +70,6 @@
                   <br />
                   <v-btn
                     @mousedown="startLogging('stop')"
-                    @mouseup="stopLogging"
-                    @mouseleave="stopLogging"
                     @click="stopVehicle"
                     class="direction-btn"
                     >STOP</v-btn
@@ -91,32 +85,24 @@
                   <!--포신 버튼 -->
                   <v-btn
                     @mousedown="startLogging('right_cannon')"
-                    @mouseup="stopLogging"
-                    @mouseleave="stopLogging"
                     @click="cannonRight"
                     class="direction-btn mr-2"
                     >Right</v-btn
                   >
                   <v-btn
                     @mousedown="startLogging('left_cannon')"
-                    @mouseup="stopLogging"
-                    @mouseleave="stopLogging"
                     @click="cannonLeft"
                     class="direction-btn mr-2"
                     >Left</v-btn
                   >
                   <v-btn
                     @mousedown="startLogging('up_cannon')"
-                    @mouseup="stopLogging"
-                    @mouseleave="stopLogging"
                     @click="cannonUp"
                     class="direction-btn mr-2"
                     >UP</v-btn
                   >
                   <v-btn
                     @mousedown="startLogging('down_cannon')"
-                    @mouseup="stopLogging"
-                    @mouseleave="stopLogging"
                     @click="cannonDown"
                     class="direction-btn"
                     >DOWN</v-btn
@@ -124,8 +110,6 @@
                   <br />
                   <v-btn
                     @mousedown="startLogging('fire_cannon')"
-                    @mouseup="stopLogging"
-                    @mouseleave="stopLogging"
                     @click="sendFire"
                     class="direction-btn"
                     >FIRE</v-btn
