@@ -42,16 +42,27 @@ public class MappingWebSocketHandler extends TextWebSocketHandler {
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
         String payload = message.getPayload();
 
-        String headerJson = payload.substring(0, HEADER_SIZE).trim();
-        Map<String, Object> header = objectMapper.readValue(headerJson, new TypeReference<Map<String, Object>>() {
-        });
+        if (payload.length() >= 15 && payload.contains("header_data")) {
+            log.debug("Incomming message has data header!");
+            handleMappingData(session, message, payload);
+        } else {
+            log.debug("Incomming message does not have mapping data header: {}",
+                    objectMapper.readValue(message.getPayload(), new TypeReference<Map<String, Object>>() {}));
+        }
+    }
+
+    public void handleMappingData(WebSocketSession session, TextMessage message, String payload) throws Exception {
+        String header = payload.substring(0, HEADER_SIZE).trim();
+        Map<String, Object> headerData = objectMapper.readValue(header, new TypeReference<Map<String, Object>>() {});
+        Map<String, Object> mappingData = objectMapper.convertValue(headerData.get("header_data"),
+                new TypeReference<Map<String, Object>>() {});
 
         String chunk = payload.substring(HEADER_SIZE);
 
-        String messageId = (String) header.get("message_id");
-        String dataType = (String) header.get("data_type");
-        int chunkNumber = (int) header.get("chunk_number");
-        int totalChunks = (int) header.get("total_chunks");
+        String messageId = (String) mappingData.get("message_id");
+        String dataType = (String) mappingData.get("data_type");
+        int chunkNumber = (int) mappingData.get("chunk_number");
+        int totalChunks = (int) mappingData.get("total_chunks");
 
         dataSender.put(session, dataType);
 
