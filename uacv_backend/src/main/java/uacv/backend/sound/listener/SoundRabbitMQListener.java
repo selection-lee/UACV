@@ -9,7 +9,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import uacv.backend.sound.domain.SoundData;
-import uacv.backend.hardware.dto.SoundDataDTO;
+import uacv.backend.sound.dto.SoundDataDTO;
 import uacv.backend.sound.repository.SoundDataRepository;
 import uacv.backend.sound.service.SoundDataService;
 

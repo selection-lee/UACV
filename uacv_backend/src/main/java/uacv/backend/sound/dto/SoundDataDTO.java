@@ -1,4 +1,4 @@
-package uacv.backend.hardware.dto;
+package uacv.backend.sound.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
