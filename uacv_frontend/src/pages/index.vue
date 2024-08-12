@@ -2,14 +2,15 @@
   <v-app>
     <Navbar />
 
+    <!--
     <v-app-bar app>
       <v-toolbar-title>
         <br>
         <v-img src="@/assets/logo.png" height="100" contain></v-img>
-        <span class="ml-3">UACV</span>
       </v-toolbar-title>
       <v-spacer></v-spacer>
     </v-app-bar>
+    -->
 
     <v-main>
       <v-container class="fill-height">
@@ -26,20 +27,21 @@
             <v-col cols="6">
               <div class="map-section">
                 <Map />
+                <SoundAlert />
               </div>
             </v-col>
 
             <v-col cols="3">
               <div class="cam-section">
                 <!-- <Cam camSrc="@/assets/cam.jpg" :speed="23" :distance="1.3" /> -->
-                 <CameraMonitor/>
+                 <CameraMonitor :speed="23" :distance="1.3"/>
               </div>
             </v-col>
 
             <v-col cols="3">
               <div class="cam-canon-section">
                 <!-- <Cam_canon camSrc="@/assets/cam.jpg" :ammo="3" /> -->
-                <CannonMonitor/>
+                <CannonMonitor :ammo="3"/>
               </div>
             </v-col>
           </v-row>
@@ -51,17 +53,17 @@
               </div>
             </v-col>
 
-            <v-col cols="3">
+            <v-col cols="4">
               <div class="controls-section">
                 <Controls />
               </div>
             </v-col>
 
-            <v-col cols="3">
+            <v-col cols="2">
               <h5 class="text-h5 font-weight-bold">원격주행</h5>
               <div class="remote-control-section">
                 <router-link :to="{ path: '/remote_control' }">
-                  <v-icon>mdi-gamepad-round</v-icon>
+                  <v-icon>mdi-controller</v-icon>
                 </router-link>
                 <RemoteControl />
               </div>
@@ -82,6 +84,7 @@ import Cam_canon from "@/components/Cam_canon.vue"
 import Log from "@/components/Log.vue"
 import Controls from "@/components/Controls.vue"
 import Navbar from "@/components/navbar.vue"
+import SoundAlert from "@/components/SoundAlert.vue"
 </script>
 
 <style scoped>

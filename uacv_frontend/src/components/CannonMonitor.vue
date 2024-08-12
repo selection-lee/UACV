@@ -18,7 +18,7 @@
                     <v-img :src="camera2Src" alt="Camera 2 feed"></v-img>
                     <div class="details">
                         <!-- <p>{{ speed }} km/h</p> -->
-                        <p>잔탄 {{ distance }} / 10</p>
+                        <p>잔탄 {{ ammo }} / 10</p>
                     </div>
                 </div>
             </v-col>
@@ -29,11 +29,17 @@
 <script>
 import mqtt from 'mqtt';
 
+// export default {
+//   name: "Cam_canon",
+//   props: {
+//     ammo: Number,
+//   },
+// };
+// //
 export default {
     name: "CameraMonitor",
     props: {
-        speed: Number,
-        distance: Number,
+        ammo: Number,
     },
     data() {
         return {
