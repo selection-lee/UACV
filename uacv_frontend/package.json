@@ -11,6 +11,7 @@
     "@mdi/font": "7.4.47",
     "axios": "^1.7.3",
     "core-js": "^3.37.1",
+    "mqtt": "^5.9.1",
     "pinia-plugin-persistedstate": "^3.2.1",
     "roboto-fontface": "*",
     "vue": "^3.4.31",
