@@ -300,4 +300,5 @@ input[type="range"]::-ms-thumb {
   border-radius: 50%;
   cursor: pointer;
 }
+
 </style>
