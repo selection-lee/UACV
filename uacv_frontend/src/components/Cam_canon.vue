@@ -31,4 +31,9 @@ export default {
 .status {
   margin-top: 10px;
 }
+
+*{
+  font-family: 'Noto Sans KR', sans-serif;
+  color: #FFFFEF;
+}
 </style>

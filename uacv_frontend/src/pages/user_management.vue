@@ -60,13 +60,13 @@ onMounted(async () => {
 })
 
 const goDetail = function (memberId) {
-  console.log(memberId)
   router.push(`/${memberId}`)
 }
 
 </script>
 
 <style scoped>
+
 .v-toolbar-title span {
   font-size: 24px;
   font-weight: bold;

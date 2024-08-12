@@ -51,4 +51,9 @@ button:hover {
 .status {
   margin-top: 10px;
 }
+
+*{
+  font-family: 'Noto Sans KR', sans-serif;
+  color: #ffffef;
+}
 </style>
