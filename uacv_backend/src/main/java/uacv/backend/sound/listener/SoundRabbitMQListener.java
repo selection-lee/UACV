@@ -79,9 +79,17 @@ public class SoundRabbitMQListener {
                 soundDataRepository.save(soundData);
                 SoundData savedData = soundDataService.saveSoundData(soundData);
 
-                // EDIT: Construct a more informative message
-                String clientMessage = String.format("Sound detected: %s", soundDataDTO.getType());
-                messagingTemplate.convertAndSend("/orin/sensor", "{\"message\": \"" + clientMessage + "\"}");
+                // EDIT: Construct a message for the WebSocket
+//                String clientMessage = String.format("Sound detected: %s", soundDataDTO.getType());
+
+                // Send the message via WebSocket
+                // The destination "/" should match the subscription in the Vue component
+//                messagingTemplate.convertAndSend("/orin/sensor", "{\"message\": \"" + clientMessage + "\"}");
+                // CHANGE: Send the savedData object directly
+                messagingTemplate.convertAndSend("/orin/sensor", savedData);
+
+                // Alternatively, you could send the soundDataDTO directly
+                // messagingTemplate.convertAndSend("/orin/sensor", soundDataDTO);
             }
 
         } catch (Exception e) {
