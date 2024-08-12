@@ -1,11 +1,10 @@
 <template>
   <v-app>
-    <Navbar v-if="connect !== null"/>
-
-    <Appbar v-if="connect !== null"/>
+    <Navbar v-if="connect !== null" />
 
     <v-main v-if="connect !== null">
-      <v-container class="fill-height">
+      <Appbar v-if="connect !== null" />
+      <v-container>
         <v-responsive class="align-center fill-height mx-auto" max-width="900">
 
           <v-row>
@@ -19,14 +18,14 @@
             <v-col cols="3">
               <div class="cam-section">
                 <!-- <Cam camSrc="@/assets/cam.jpg" :speed="23" :distance="1.3" /> -->
-                 <CameraMonitor :speed="23" :distance="1.3"/>
+                <CameraMonitor :speed="23" :distance="1.3" />
               </div>
             </v-col>
 
             <v-col cols="3">
               <div class="cam-canon-section">
                 <!-- <Cam_canon camSrc="@/assets/cam.jpg" :ammo="3" /> -->
-                <CannonMonitor :ammo="3"/>
+                <CannonMonitor :ammo="3" />
               </div>
             </v-col>
           </v-row>
@@ -81,7 +80,7 @@ import Loading from "./loading.vue"
 const connect = ref(null)
 const store = useDeviceControlStore()
 
-onMounted(async() => {
+onMounted(async () => {
   connect.value = await store.connect()
 })
 </script>
