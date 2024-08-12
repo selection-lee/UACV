@@ -1,13 +1,13 @@
 <template>
   <v-app>
-    <Navbar />
+    <Navbar v-if="connect !== null"/>
 
-    <Appbar/>
-   
-    <v-main >
+    <Appbar v-if="connect !== null"/>
+
+    <v-main v-if="connect !== null">
       <v-container class="fill-height">
         <v-responsive class="align-center fill-height mx-auto" max-width="900">
- 
+
           <v-row>
             <v-col cols="6">
               <div class="map-section">
@@ -49,11 +49,15 @@
                 </router-link>
                 <RemoteControl />
               </div>
+
             </v-col>
           </v-row>
         </v-responsive>
       </v-container>
+
     </v-main>
+
+    <Loading v-else />
   </v-app>
 </template>
 
@@ -66,12 +70,20 @@ import Controls from "@/components/Controls.vue"
 import Navbar from "@/components/navbar.vue"
 import Appbar from "@/components/appbar.vue"
 
+import { onMounted, ref } from "vue"
+import { useDeviceControlStore } from "@/stores/device_control"
+import Loading from "./loading.vue"
 
+const connect = ref(null)
+const store = useDeviceControlStore()
 
+onMounted(async() => {
+  connect.value = await store.connect()
+})
 </script>
 
 <style scoped>
-*{
+* {
   font-family: 'Noto Sans KR', sans-serif;
   color: #ffffef;
 }

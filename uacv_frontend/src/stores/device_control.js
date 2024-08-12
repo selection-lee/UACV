@@ -63,14 +63,35 @@ export const useDeviceControlStore = defineStore('deviceControl', () => {
       console.error("Error sending move command :", error)
     })
   }
-  
-  
+
+  const isConnect = ref(null)
+
+  const connect = async function () {
+    try {
+      const response = await axios ({
+        method: 'post',
+        url: '/device/connect',
+        headers: {
+          "Authorization" : `Bearer ${userStore.token}`
+        }
+      })
+      isConnect.value = response.data
+
+    } catch (error) {
+      console.log(error)
+      throw error
+    }
+
+    return isConnect.value
+  }
+
   return {
     fire,
     move,
     cannon_x,
     cannon_y,
     steer,
+    connect,
     sendFireCommand,
     sendCannonCommand,
     sendSteerCommand,
