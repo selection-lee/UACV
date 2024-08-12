@@ -64,6 +64,7 @@ export const useDeviceControlStore = defineStore('deviceControl', () => {
     })
   }
   
+  
   return {
     fire,
     move,

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h5 class="text-h5 font-weight-bold">MAP</h5>
+    <h2 >MAP</h2>
     <div class="map">
       <div class="iframe-wrapper">
         <div class="iframe-container" :style="{ transform: 'scale(' + zoomLevel + ')', transformOrigin: '200px 200px' }">
@@ -77,5 +77,10 @@ export default {
 
 #zoomSlider {
   margin-left: 10px;
+}
+
+*{
+  font-family: 'Noto Sans KR', sans-serif;
+  color: #ffffef;
 }
 </style>

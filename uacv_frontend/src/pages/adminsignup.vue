@@ -45,5 +45,8 @@ const SignUp = function () {
 </script>
 
 <style scoped>
-
+*{
+  font-family: 'Noto Sans KR', sans-serif;
+  color: #ffffef;
+}
 </style>

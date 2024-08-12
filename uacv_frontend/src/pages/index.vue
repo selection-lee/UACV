@@ -2,27 +2,12 @@
   <v-app>
     <Navbar />
 
-    <!--
-    <v-app-bar app>
-      <v-toolbar-title>
-        <br>
-        <v-img src="@/assets/logo.png" height="100" contain></v-img>
-      </v-toolbar-title>
-      <v-spacer></v-spacer>
-    </v-app-bar>
-    -->
-
-    <v-main>
+    <Appbar/>
+   
+    <v-main >
       <v-container class="fill-height">
         <v-responsive class="align-center fill-height mx-auto" max-width="900">
-          <v-row align="center">
-            <v-col cols="auto">
-              <h4 class="text-h4 font-weight-bold">UACV</h4>
-            </v-col>
-          </v-row>
-          <div class="py-4" />
-
-          <!--Dashboard Components -->
+ 
           <v-row>
             <v-col cols="6">
               <div class="map-section">
@@ -79,9 +64,18 @@ import Cam_canon from "@/components/Cam_canon.vue"
 import Log from "@/components/Log.vue"
 import Controls from "@/components/Controls.vue"
 import Navbar from "@/components/navbar.vue"
+import Appbar from "@/components/appbar.vue"
+
+
+
 </script>
 
 <style scoped>
+*{
+  font-family: 'Noto Sans KR', sans-serif;
+  color: #ffffef;
+}
+
 .dashboard {
   display: grid;
   grid-template-areas:
@@ -93,7 +87,7 @@ import Navbar from "@/components/navbar.vue"
 
 .v-main {
   background-color: #093028;
-  color: #ffffef;
+  color: #FFFFEF;
 }
 
 .v-toolbar {
@@ -132,6 +126,6 @@ import Navbar from "@/components/navbar.vue"
 .remote-control-section .v-icon {
   cursor: pointer;
   font-size: 100px;
-  color: #ffffef;
+  color: #FFFFEF;
 }
 </style>
