@@ -1,6 +1,12 @@
 package uacv.backend.sound.listener;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.core.ExchangeTypes;
+import org.springframework.amqp.core.Message;
+import org.springframework.amqp.rabbit.annotation.Exchange;
+import org.springframework.amqp.rabbit.annotation.Queue;
+import org.springframework.amqp.rabbit.annotation.QueueBinding;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.support.AmqpHeaders;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +19,7 @@ import uacv.backend.sound.dto.SoundDataDTO;
 import uacv.backend.sound.repository.SoundDataRepository;
 import uacv.backend.sound.service.SoundDataService;
 
+@Slf4j
 @Component
 public class SoundRabbitMQListener {
 
@@ -29,19 +36,46 @@ public class SoundRabbitMQListener {
     private SoundDataService soundDataService;
 
     // EDIT: Use SpEL to reference the queue name from application.yml
-    @RabbitListener(queues = "#{@environment.getProperty('spring.rabbitmq.queues.sensor.name')}")
+//    @RabbitListener(queues = "#{@environment.getProperty('spring.rabbitmq.queues.sensor.name')}",bindings = )
+//    @RabbitListener(bindings = @QueueBinding(
+////            exchange = @Exchange(name = "amq.topic",type = ExchangeTypes.TOPIC),
+//            value = @Queue(name = "sensor_queue"),
+//            key = "orin.sensor"
+//    ))
+//    @RabbitListener(
+//            queues = "#{@environment.getProperty('spring.rabbitmq.queues.sensor.name')}",
+//            bindings = @QueueBinding(
+//                    value = @Queue(value = "#{@environment.getProperty('spring.rabbitmq.queues.sensor.name')}", durable = "true"),
+//                    exchange = @Exchange(value = "#{@environment.getProperty('spring.rabbitmq.exchange')}", type = ExchangeTypes.TOPIC),
+//                    key = "#{@environment.getProperty('spring.rabbitmq.queues.sensor.routing-keys')}"
+//            )
+//    )
+//    @RabbitListener(
+//            bindings = @QueueBinding(
+//                    value = @Queue(value = "#{@environment.getProperty('spring.rabbitmq.queues.sensor.name')}", durable = "true"),
+//                    exchange = @Exchange(value = "amq.topic", type = ExchangeTypes.TOPIC),
+//                    key = "orin.sensor"
+//            )
+//    )
+    @RabbitListener(queues = "sound_queue")
     @Transactional
-    public void receiveSoundData(String message, @Header(AmqpHeaders.RECEIVED_ROUTING_KEY) String routingKey) {
-        System.out.println(11111111);
+    public void receiveSoundData(Message message, @Header(AmqpHeaders.RECEIVED_ROUTING_KEY) String routingKey) {
         try {
+            // 메시지 본문을 바이트 배열로 가져옴
+            byte[] body = message.getBody();
+            // 바이트 배열을 String으로 변환
+            String messageContent = new String(body);
+
             // EDIT: Improved logging
-            System.out.println("Received message: " + message);
-            System.out.println("Received routing key: " + routingKey);
-//            logger.debug("Received message: {} with routing key: {}", message, routingKey);
+            log.debug("Received message: " , messageContent);
+            log.debug("Received routing key: " , routingKey);
+
             // EDIT: Check for specific routing key
             if ("orin.sensor".equals(routingKey)) {
-                SoundDataDTO soundDataDTO = objectMapper.readValue(message, SoundDataDTO.class);
+                SoundDataDTO soundDataDTO = objectMapper.readValue(messageContent, SoundDataDTO.class);
                 SoundData soundData = new SoundData(soundDataDTO.getType());
+                
+                // 데이터 저장
                 soundDataRepository.save(soundData);
                 SoundData savedData = soundDataService.saveSoundData(soundData);
 
@@ -52,8 +86,8 @@ public class SoundRabbitMQListener {
 
         } catch (Exception e) {
             // EDIT: Improved error logging
-            System.err.println("Error processing sound data: " + e.getMessage());
-            e.printStackTrace();
+            // 에러 로깅 개선
+            log.error("Error processing sound data: ", e);
         }
     }
 }

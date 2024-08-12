@@ -16,7 +16,7 @@ public class TestMessageController {
     private RabbitTemplate rabbitTemplate;
 
     @PostMapping("/send")
-    public String sendTestMessage(@RequestBody Map<String, Object> message) {
+    public String sendTestMessage(@RequestBody String message) {
         rabbitTemplate.convertAndSend("amq.topic", "orin.sensor", message);
         return "Message sent to RabbitMQ";
     }
