@@ -12,6 +12,7 @@
             <v-col cols="6">
               <div class="map-section">
                 <Map />
+                <SoundAlert />
               </div>
             </v-col>
 
@@ -73,6 +74,7 @@ import Log from "@/components/Log.vue"
 import Controls from "@/components/Controls.vue"
 import Navbar from "@/components/navbar.vue"
 import Appbar from "@/components/appbar.vue"
+import SoundAlert from "@/components/SoundAlert.vue"
 
 import { onMounted, ref } from "vue"
 import { useDeviceControlStore } from "@/stores/device_control"
