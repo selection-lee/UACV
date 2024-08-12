@@ -27,7 +27,6 @@
             <v-col cols="6">
               <div class="map-section">
                 <Map />
-                <SoundAlert />
               </div>
             </v-col>
 
@@ -35,7 +34,8 @@
               <div class="cam-section">
                 <!-- <Cam camSrc="@/assets/cam.jpg" :speed="23" :distance="1.3" /> -->
                  <CameraMonitor :speed="23" :distance="1.3"/>
-              </div>
+                 <SoundAlert />
+                </div>
             </v-col>
 
             <v-col cols="3">
