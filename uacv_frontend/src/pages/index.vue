@@ -12,7 +12,6 @@
             <v-col cols="6">
               <div class="map-section">
                 <Map />
-                <SoundAlert />
               </div>
             </v-col>
 
@@ -85,7 +84,6 @@ const store = useDeviceControlStore()
 onMounted(async() => {
   connect.value = await store.connect()
 })
-import SoundAlert from "@/components/SoundAlert.vue"
 </script>
 
 <style scoped>
