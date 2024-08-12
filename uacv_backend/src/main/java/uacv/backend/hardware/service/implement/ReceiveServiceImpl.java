@@ -24,7 +24,7 @@ public class ReceiveServiceImpl implements ReceiveService {
     private HardwareRepository hardwareRepository;
 
     @Override
-//    @RabbitListener(queues = "sensor_queue")
+    @RabbitListener(queues = "sensor_queue")
     public void receiveMessage(Message message) {
 
         ObjectMapper objectMapper = new ObjectMapper();
