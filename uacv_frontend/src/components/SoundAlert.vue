@@ -1,10 +1,15 @@
 <template>
   <v-container>
-    <v-alert v-if="alert" type="error" dismissible @input="alert = false">
+    <!-- <v-alert v-if="alert" type="error" dismissible @input="alert = false">
+      {{ alertMessage }}
+    </v-alert> -->
+    <!-- CHANGE: Updated v-if condition to use showAlert instead of alert for clarity -->
+    <v-alert v-if="showAlert" type="error" dismissible @input="hideAlert">
       {{ alertMessage }}
     </v-alert>
   </v-container>
 </template>
+
 
 <script>
 import SockJS from "sockjs-client";
@@ -17,18 +22,45 @@ window.global = window;
 export default {
   data() {
     return {
-      alert: false, // 알림 표시 여부
-      alertMessage: "", // 표시할 알림메시지
-      stompClient: null  // CHANGE: Added to store the STOMP client instance
+      // alert: false, // 알림 표시 여부
+      // alertMessage: "", // 표시할 알림메시지
+      // stompClient: null  // CHANGE: Added to store the STOMP client instance
+      // CHANGE: Renamed 'alert' to 'showAlert' for clarity
+      showAlert: false,
+      alertMessage: "",
+      stompClient: null,
+      // NEW: Added alertTimer to manage the auto-hide functionality
+      alertTimer: null
     };
   },
   methods: {
-    showAlert(message) {  // 일반 함수로 변경
+    // CHANGE: Renamed to 'displayAlert' to avoid naming conflict with data property
+    displayAlert(message) {  // 일반 함수로 변경
       this.alertMessage = message;
-      this.alert = true;
-      console.log("Alert status: ", this.alert);
+      this.showAlert = true;
+      console.log("Alert status: ", this.showAlert);
       console.log("Alert message: ", this.alertMessage);
+
+      // NEW: Clear any existing timer to prevent multiple timers
+      if (this.alertTimer) {
+        clearTimeout(this.alertTimer);
+      }
+
+      // NEW: Set a new timer to hide the alert after 3 seconds
+      this.alertTimer = setTimeout(() => {
+        this.hideAlert();
+      }, 3000);
     },
+    // NEW: Added method to hide the alert and clear the timer
+    hideAlert() {
+      this.showAlert = false;
+      this.alertMessage = "";
+      if (this.alertTimer) {
+        clearTimeout(this.alertTimer);
+        this.alertTimer = null;
+      }
+    },
+
   // CHANGE: New method to handle WebSocket connection
   connectWebSocket() {
       // The "/socket/sound" endpoint should match your Spring WebSocket configuration
@@ -48,11 +80,11 @@ export default {
             const soundData = JSON.parse(message.body);
             console.log("Parsed message: ", soundData);
             let alertMessage = `총기소리 인식: ${soundData.soundType}`; // (ID: ${soundData.id});
-            this.showAlert(alertMessage);
+            this.displayAlert(alertMessage);
           } catch (error) {
             console.error("Error parsing message:", error);
             console.log("Raw message body:", message.body);
-            this.showAlert(message.body);
+            this.displayAlert(message.body);
           }
         });
         console.log("Subscribed to /orin/sensor");
@@ -72,6 +104,10 @@ export default {
     if (this.stompClient !== null) {
       this.stompClient.disconnect();
       console.log("WebSocket disconnected");
+    }
+    // NEW: Added cleanup for the alert timer when component is destroyed
+    if (this.alertTimer) {
+      clearTimeout(this.alertTimer);
     }
   }
 }
