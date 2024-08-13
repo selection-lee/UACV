@@ -87,13 +87,13 @@
                     @mousedown="startLogging('right_cannon')"
                     @click="cannonRight"
                     class="direction-btn mr-2"
-                    >Right</v-btn
+                    >Left</v-btn
                   >
                   <v-btn
                     @mousedown="startLogging('left_cannon')"
                     @click="cannonLeft"
                     class="direction-btn mr-2"
-                    >Left</v-btn
+                    >Right</v-btn
                   >
                   <v-btn
                     @mousedown="startLogging('up_cannon')"
@@ -139,49 +139,78 @@ const moveState = ref(null);
 const cannonAngle = ref(90);
 const cannonElevation = ref(140);
 
+const computedSteerAngle = computed({
+  get: () => steerAngle.value,
+  set: (value) => {
+    steerAngle.value = value;
+    store.sendSteerCommand(value);
+    store.steerAngle = value; // Update the store
+  },
+});
+
+const computedMoveState = computed({
+  get: () => moveState.value,
+  set: (value) => {
+    moveState.value = value;
+    store.sendMoveCommand(value);
+    store.moveState = value; // Update the store
+  },
+});
+
+const computedCannonAngle = computed({
+  get: () => cannonAngle.value,
+  set: (value) => {
+    cannonAngle.value = value;
+    store.sendCannonCommand(value, cannonElevation.value);
+    store.cannonAngle = value; // Update the store
+  },
+});
+
+const computedCannonElevation = computed({
+  get: () => cannonElevation.value,
+  set: (value) => {
+    cannonElevation.value = value;
+    store.sendCannonCommand(cannonAngle.value, value);
+    store.cannonElevation = value; // Update the store
+  },
+});
+
 onMounted(() => {
-  store.sendSteerCommand(steerAngle.value);
-  store.sendMoveCommand(moveState.value);
-  store.sendCannonCommand(cannonAngle.value, cannonElevation.value);
+  store.sendSteerCommand(computedSteerAngle.value);
+  store.sendMoveCommand(computedMoveState.value);
+  store.sendCannonCommand(computedCannonAngle.value, computedCannonElevation.value);
 });
 
 const updateSteerAngle = () => {
-  store.sendSteerCommand(steerAngle.value);
+  computedSteerAngle.value = steerAngle.value;
 };
 
 const moveForward = () => {
-  moveState.value = "forward";
-  store.sendMoveCommand(moveState.value);
+  computedMoveState.value = "forward";
 };
 
 const moveBackward = () => {
-  moveState.value = "backward";
-  store.sendMoveCommand(moveState.value);
+  computedMoveState.value = "backward";
 };
 
 const stopVehicle = () => {
-  moveState.value = "stop";
-  store.sendMoveCommand(moveState.value);
-};
-
-const cannonRight = () => {
-  if (cannonAngle.value > 10) cannonAngle.value -= 5;
-  store.sendCannonCommand(cannonAngle.value, cannonElevation.value);
+  computedMoveState.value = "stop";
 };
 
 const cannonLeft = () => {
-  if (cannonAngle.value < 170) cannonAngle.value += 5;
-  store.sendCannonCommand(cannonAngle.value, cannonElevation.value);
+  if (computedCannonAngle.value > 10) computedCannonAngle.value -= 5;
+};
+
+const cannonRight = () => {
+  if (computedCannonAngle.value < 170) computedCannonAngle.value += 5;
 };
 
 const cannonUp = () => {
-  if (cannonElevation.value > 70) cannonElevation.value -= 5;
-  store.sendCannonCommand(cannonAngle.value, cannonElevation.value);
+  if (computedCannonElevation.value > 70) computedCannonElevation.value -= 5;
 };
 
 const cannonDown = () => {
-  if (cannonElevation.value < 140) cannonElevation.value += 5;
-  store.sendCannonCommand(cannonAngle.value, cannonElevation.value);
+  if (computedCannonElevation.value < 140) computedCannonElevation.value += 5;
 };
 
 const sendFire = () => {
