@@ -2,22 +2,74 @@
   <h5 class="text-h5 font-weight-bold">LOG</h5>
   <div class="log">
     <ul>
-      <li v-for="log in logs" :key="log.id">
+      <!-- Changed: Using displayedLogs instead of logs to show only the latest two entries -->
+      <li v-for="log in displayedLogs" :key="log.id">
         {{ log.time }} - {{ log.message }}
       </li>
     </ul>
   </div>
 </template>
 
+
 <script>
+// Added: Importing necessary functions from Vue for Composition API
+import { ref, onMounted, computed } from 'vue';
+
 export default {
   name: "Log",
-  data() {
+  // Changed: Using setup() for Composition API
+  setup() {
+    // Added: ref for reactive logs array
+    const logs = ref([]);
+    // Added: ref for WebSocket connection
+    const socket = ref(null);
+
+    // Added: Computed property to display only the last two logs
+    const displayedLogs = computed(() => {
+      return logs.value.slice(-2);
+    });
+
+    // Added: Function to add new log entries
+    const addLog = (newLog) => {
+      logs.value.push(newLog);
+    };
+
+    // Added: Function to fetch initial logs from API
+    const fetchInitialLogs = async () => {
+      try {
+        const response = await fetch(`${import.meta.env.VITE_BACKEND_API_URL}/sound-logs`);
+        const data = await response.json();
+        logs.value = data.map(log => ({
+          id: log.id,
+          time: new Date(log.receivedAt).toLocaleString('ko-KR'),
+          message: `총 소리 인식 (${log.soundType}로 추정)`,
+        }));
+      } catch (error) {
+        console.error('Error fetching initial logs:', error);
+      }
+    };
+
+    // Added: Lifecycle hook to set up WebSocket and fetch initial logs
+    onMounted(() => {
+      fetchInitialLogs();
+
+      // Added: WebSocket connection setup
+      socket.value = new WebSocket(`${import.meta.env.VITE_WEBSOCKET_URL}/ws/sound-logs`);
+
+      // Added: WebSocket message handler
+      socket.value.onmessage = (event) => {
+        const newLog = JSON.parse(event.data);
+        addLog({
+          id: newLog.id,
+          time: new Date(newLog.receivedAt).toLocaleString('ko-KR'),
+          message: `총 소리 인식 (${newLog.soundType}로 추정)`,
+        });
+      };
+    });
+
+    // Changed: Returning only displayedLogs for use in the template
     return {
-      logs: [
-        { id: 1, time: "11:08:25", message: "총소리 인식 (AKM으로 추정됨)" },
-        { id: 2, time: "10:58:48", message: "포 1발 발사" },
-      ],
+      displayedLogs,
     };
   },
 };
@@ -29,11 +81,11 @@ export default {
 }
 
 ul {
-  /* 리스트 스타일 */
+  list-style-type: none;
+  padding: 0;
 }
 
 li {
-  /* 리스트 아이템 스타일 */
+  margin-bottom: 5px;
 }
-
 </style>

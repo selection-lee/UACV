@@ -6,38 +6,58 @@
 
     <v-main v-if="connect !== null">
       <v-container class="fill-height">
-        <v-responsive class="align-center fill-height mx-auto" max-width="1200px">
-          <div style="display: flex; flex-direction: row; justify-content: center; align-items: center">
-            <div style="justify-content: center; align-items: center;">
-              <div
-                style="background-color: #2c4d41; justify-content: center; align-items: center; border-radius: 10%; margin-left: 10px; padding: 10px;">
-                <div class="map-section" style="padding: 5px;">
-                  <Map />
-                </div>
-              </div>
-              <SoundAlert />
-            </div>
+        <v-responsive class="align-center fill-height mx-auto" max-width="900">
 
-            <div>
-              <div style="display: flex; flex-direction: row; justify-content: center; align-items: center;">
-                <div cols="6"
-                  style="width: 330px; background-color: #2c4d41; border-radius: 10%; margin-left: 10px; margin-bottom: 10px; flex: 1; padding: 10px;">
-                  <CameraMonitor />
-                </div>
+          <v-row>
+            <v-col cols="6">
+              <div class="map-section">
+                <Map />
+                <SoundAlert />
+              </div>
+            </v-col>
 
-                <div cols="6"
-                  style="width: 330px; background-color: #2c4d41; border-radius: 10%; margin: 0px 10px 10px; flex: 1; padding: 10px;">
-                  <CannonMonitor />
-                </div>
+            <v-col cols="3">
+              <div class="cam-section">
+                <!-- <Cam camSrc="@/assets/cam.jpg" :speed="23" :distance="1.3" /> -->
+                <CameraMonitor :speed="23" :distance="1.3" />
+              </div>
+            </v-col>
+
+            <v-col cols="3">
+              <div class="cam-canon-section">
+                <!-- <Cam_canon camSrc="@/assets/cam.jpg" :ammo="3" /> -->
+                <CannonMonitor :ammo="3" />
+              </div>
+            </v-col>
+          </v-row>
+
+          <v-row>
+            <v-col cols="6">
+              <div class="log-section">
+                <Log />
+                <!-- <Log_1Copy/> -->
+                <!-- Use key to force re-render when logs update -->
+                <!-- <Log_1Copy :key="logUpdateTrigger" /> -->
+              </div>
+            </v-col>
+
+            <v-col cols="4">
+              <div class="controls-section">
+                <Controls />
+              </div>
+            </v-col>
+
+            <v-col cols="2">
+              <h5 class="text-h5 font-weight-bold">원격주행</h5>
+              <div class="remote-control-section">
+                <router-link :to="{ path: '/remote_control' }">
+                  <v-icon>mdi-controller</v-icon>
+                </router-link>
+                <RemoteControl />
               </div>
 
-              <div style="background-color: #2c4d41; border-radius: 10px; margin: 15px; padding: 10px; padding-left: 20px;">
-                <div class="log-section">
-                    <Log />
-                  </div>
-              </div>
-            </div>
-          </div>
+            </v-col>
+          </v-row>
         </v-responsive>
       </v-container>
 
@@ -47,14 +67,17 @@
   </v-app>
 </template>
 
+
 <script setup>
 import Map from "@/components/Map.vue"
 import CameraMonitor from "@/components/CameraMonitor.vue"
 import CannonMonitor from "@/components/CannonMonitor.vue"
 import Log from "@/components/Log.vue"
+import Controls from "@/components/Controls.vue"
 import Navbar from "@/components/navbar.vue"
 import Appbar from "@/components/appbar.vue"
 import SoundAlert from "@/components/SoundAlert.vue"
+import Log_1Copy from "@/components/Log_1 copy.vue"
 
 import { onMounted, ref } from "vue"
 import { useDeviceControlStore } from "@/stores/device_control"
@@ -62,9 +85,25 @@ import Loading from "./loading.vue"
 
 const connect = ref(null)
 const store = useDeviceControlStore()
+const logUpdateTrigger = ref(0)
+const socket = ref(null)
 
 onMounted(async () => {
   connect.value = await store.connect()
+  // Set up WebSocket for log updates
+  // URL이 뭐더라 ;;;
+  socket.value = new WebSocket(`${import.meta.env.VITE_SOUND_SOCKET_URL}`);
+
+  socket.value.onmessage = () => {
+    // Increment trigger to force Log component re-render
+    logUpdateTrigger.value++
+  }
+})
+
+onUnmounted(() => {
+  if (socket.value) {
+    socket.value.close()
+  }
 })
 </script>
 
