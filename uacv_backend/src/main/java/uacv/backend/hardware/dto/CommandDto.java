@@ -10,6 +10,6 @@ import uacv.backend.hardware.domain.enums.CommandType;
 @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CommandDto {
-    private CommandType commandType;
+    private CommandType command;
     private ControlDataDto data;
 }

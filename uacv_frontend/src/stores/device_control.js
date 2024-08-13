@@ -14,7 +14,12 @@ export const useDeviceControlStore = defineStore('deviceControl', () => {
     axios({
       method: 'post',
       url: '/device/control/fire',
-      data: { fire: 'on' },
+      data: {
+        command: 'fire',
+        data: {
+          fire: 'on'
+        }
+      },
       headers: { "Authorization": `Bearer ${sessionStorage.getItem("token")}` }
     }).then((response) => {
       console.log(`Sent fire command with status code ${response.status}`)
@@ -22,12 +27,18 @@ export const useDeviceControlStore = defineStore('deviceControl', () => {
       console.error("Error sending fire command: ", error)
     })
   }
-  
+
   const sendCannonCommand = function (cannon_x, cannon_y) {
     axios({
       method: 'post',
       url: '/device/control/cannon',
-      data: { cannon_x, cannon_y },
+      data: {
+        command: 'cannon',
+        data: {
+          cannon_x: cannon_x,
+          cannon_y: cannon_y
+        }
+      },
       headers: { "Authorization": `Bearer ${sessionStorage.getItem("token")}` }
     }).then((response) => {
       console.log(`Sent cannon command with status code ${response.status}`)
@@ -35,12 +46,15 @@ export const useDeviceControlStore = defineStore('deviceControl', () => {
       console.error("Error sending cannon command :", error)
     })
   }
-  
+
   const sendSteerCommand = function (steer) {
     axios({
       method: 'post',
       url: '/device/control/steer',
-      data: { steer },
+      data: {
+        command: 'steer',
+        data: { steer }
+      },
       headers: { "Authorization": `Bearer ${sessionStorage.getItem("token")}` }
     }).then((response) => {
       console.log(`Sent steer command with status code ${response.status}`)
@@ -48,12 +62,15 @@ export const useDeviceControlStore = defineStore('deviceControl', () => {
       console.error("Error sending steer command: ", error)
     })
   }
-  
+
   const sendMoveCommand = function (move) {
     axios({
       method: 'post',
       url: '/device/control/move',
-      data: { move },
+      data: {
+        command: 'move',
+        data: { move }
+      },
       headers: { "Authorization": `Bearer ${sessionStorage.getItem("token")}` }
     }).then((response) => {
       console.log(`Sent steer command with status code ${response.status}`)
@@ -66,11 +83,11 @@ export const useDeviceControlStore = defineStore('deviceControl', () => {
 
   const connect = async function () {
     try {
-      const response = await axios ({
+      const response = await axios({
         method: 'post',
         url: '/device/connect',
         headers: {
-          "Authorization" : `Bearer ${sessionStorage.getItem("token")}`
+          "Authorization": `Bearer ${sessionStorage.getItem("token")}`
         }
       })
       isConnect.value = response.data
