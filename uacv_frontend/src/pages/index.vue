@@ -12,8 +12,7 @@
               style="display: flex; flex-direction: column; justify-content: space-around; align-items: center; padding: 10px;">
 
               <!-- Map Section -->
-              <v-row
-                style="background-color: #2c4d41; border-radius: 15px; padding: 10px; flex: 1;">
+              <v-row style="background-color: #2c4d41; border-radius: 15px; padding: 10px; flex: 1;">
                 <div class="map-section" style="margin: 10px;">
                   <Map />
                   <!-- <SoundAlert /> -->
@@ -21,8 +20,7 @@
               </v-row>
 
               <!-- Log Section -->
-              <v-row
-                style="background-color: #2c4d41; border-radius: 15px; padding: 10px; margin-top: 20px; flex: 1;">
+              <v-row style="background-color: #2c4d41; border-radius: 15px; padding: 10px; margin-top: 20px; flex: 1;">
                 <div class="log-section" style="width: 350px; margin: 10px;">
                   <Log />
                 </div>
@@ -30,9 +28,10 @@
 
             </v-col>
 
-            <v-col cols="6" style="display: flex; flex-direction: column; justify-content: space-around; align-items: center; padding: 10px;">
+            <v-col cols="6"
+              style="display: flex; flex-direction: column; justify-content: space-around; align-items: center; padding: 10px;">
               <v-row style="background-color: #2c4d41; border-radius: 15px; padding: 10px; flex: 1;">
-                <CameraMonitor/>
+                <CameraMonitor />
               </v-row>
 
             </v-col>
