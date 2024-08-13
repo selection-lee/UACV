@@ -4,10 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uacv.backend.sound.domain.SoundData;
+import uacv.backend.sound.dto.SoundLogDTO;
 import uacv.backend.sound.repository.SoundDataRepository;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class SoundDataService {
@@ -28,5 +31,21 @@ public class SoundDataService {
         soundData.setReceivedAt(LocalDateTime.now());
 
         soundDataRepository.save(soundData);
+    }
+
+    // New method
+    public List<SoundLogDTO> getAllSoundLogs() {
+        return soundDataRepository.findAll().stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+    }
+
+    // New method
+    private SoundLogDTO convertToDTO(SoundData soundData) {
+        SoundLogDTO dto = new SoundLogDTO();
+        dto.setId(soundData.getId());
+        dto.setSoundType(soundData.getSoundType());
+        dto.setReceivedAt(soundData.getReceivedAt());
+        return dto;
     }
 }

@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import uacv.backend.sound.domain.SoundData;
 import uacv.backend.sound.dto.SoundDataDTO;
+import uacv.backend.sound.dto.SoundLogDTO;
 import uacv.backend.sound.repository.SoundDataRepository;
 import uacv.backend.sound.service.SoundDataService;
 
@@ -90,6 +91,10 @@ public class SoundRabbitMQListener {
 
                 // Alternatively, you could send the soundDataDTO directly
                 // messagingTemplate.convertAndSend("/orin/sensor", soundDataDTO);
+
+                // 로그 페이지로 로그 보내기
+                // Send log update to logging page
+                messagingTemplate.convertAndSend("/orin/sound-logs", convertToSoundLogDTO(savedData));
             }
 
         } catch (Exception e) {
@@ -97,6 +102,15 @@ public class SoundRabbitMQListener {
             // 에러 로깅 개선
             log.error("Error processing sound data: ", e);
         }
+    }
+
+    // New method
+    private SoundLogDTO convertToSoundLogDTO(SoundData soundData) {
+        SoundLogDTO dto = new SoundLogDTO();
+        dto.setId(soundData.getId());
+        dto.setSoundType(soundData.getSoundType());
+        dto.setReceivedAt(soundData.getReceivedAt());
+        return dto;
     }
 }
 
