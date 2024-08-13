@@ -42,21 +42,18 @@
 </template>
 
 <script setup>
-
 import { userAdminStore } from '@/stores/admin';
-import { useUserStore } from '@/stores/user';
 import { useRouter } from 'vue-router';
 import { ref, onMounted } from 'vue';
 
 const store_admin = userAdminStore()
-const store = useUserStore()
 const router = useRouter()
 const members = ref(null)
 const role = ref(null)
 
 onMounted(async () => {
   members.value = await store_admin.memberList()
-  role.value = store.memberRole
+  role.value = sessionStorage.getItem("memberRole")
 })
 
 const goDetail = function (memberId) {
