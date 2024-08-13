@@ -10,6 +10,7 @@ import uacv.backend.hardware.domain.ControlData;
 import uacv.backend.hardware.domain.enums.CommandType;
 import uacv.backend.hardware.domain.enums.EventType;
 import uacv.backend.hardware.domain.enums.LogType;
+import uacv.backend.hardware.dto.CommandDto;
 import uacv.backend.hardware.dto.ControlDataDto;
 import uacv.backend.hardware.repository.CommandRepository;
 import uacv.backend.hardware.service.SendService;
@@ -33,9 +34,9 @@ public class SendServiceImpl implements SendService {
     }
 
     @Override
-    public void sendCommand(String routingKey, ControlDataDto controlDataDto) {
-        // System.out.println(routingKey + " " + controlDataDto);
-        rabbitTemplate.convertAndSend(topicExchange.getName(), routingKey, controlDataDto);
+    public void sendCommand(String routingKey, CommandDto commandDto) {
+         System.out.println(routingKey + " " + commandDto);
+        rabbitTemplate.convertAndSend(topicExchange.getName(), routingKey, commandDto);
     }
 
     @Override
