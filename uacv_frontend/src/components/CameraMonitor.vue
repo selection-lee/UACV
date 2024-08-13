@@ -1,9 +1,9 @@
 <template>
     <v-container class="pa-0"
-        style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 300px; margin: 0px;">
+        style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
         <h5 class="text-h5 font-weight-bold">Chassis Cam</h5>
         <div class="cam">
-            <v-img :src="chassisCam" alt="Chassis feed"></v-img>
+            <v-img :src="chassisCam" alt="Chassis feed" style="width: 290px;"></v-img>
         </div>
     </v-container>
 </template>

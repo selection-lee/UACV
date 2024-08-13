@@ -2,14 +2,7 @@
   <v-app>
     <Navbar />
 
-    <v-app-bar app>
-      <v-toolbar-title>
-        <br />
-        <v-img src="@/assets/logo.png" height="100" contain></v-img>
-        <span class="ml-3">UACV</span>
-      </v-toolbar-title>
-      <v-spacer></v-spacer>
-    </v-app-bar>
+    <Appbar/>
 
     <v-main>
       <v-container class="fill-height">
@@ -24,13 +17,13 @@
           <v-row>
             <v-col cols="6">
               <div class="cam-section">
-                <CameraMonitor :speed="23" :distance="1.3"/>
+                <CameraMonitor />
               </div>
             </v-col>
 
             <v-col cols="6">
               <div class="cam-canon-section">
-                <CannonMonitor :ammo="3"/>
+                <CannonMonitor/>
               </div>
             </v-col>
           </v-row>
@@ -123,6 +116,7 @@ import Navbar from "@/components/navbar.vue";
 
 import { ref, onMounted, watch } from "vue";
 import { useDeviceControlStore } from "@/stores/device_control";
+import Appbar from "@/components/appbar.vue";
 
 const store = useDeviceControlStore();
 
