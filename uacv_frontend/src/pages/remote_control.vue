@@ -24,14 +24,12 @@
           <v-row>
             <v-col cols="6">
               <div class="cam-section">
-                <!-- <Cam camSrc="@/assets/cam.jpg" :speed="23" :distance="1.3" /> -->
                 <CameraMonitor :speed="23" :distance="1.3"/>
               </div>
             </v-col>
 
             <v-col cols="6">
               <div class="cam-canon-section">
-                <!-- <Cam_canon camSrc="@/assets/cam.jpg" :ammo="3" /> -->
                 <CannonMonitor :ammo="3"/>
               </div>
             </v-col>
@@ -61,21 +59,18 @@
                     @mousedown="startLogging('forward')"
                     @click="moveForward"
                     class="direction-btn mr-2"
-                    >FORWARD</v-btn
-                  >
+                  >FORWARD</v-btn>
                   <v-btn
                     @mousedown="startLogging('backward')"
                     @click="moveBackward"
                     class="direction-btn"
-                    >BACKWARD</v-btn
-                  >
+                  >BACKWARD</v-btn>
                   <br />
                   <v-btn
                     @mousedown="startLogging('stop')"
                     @click="stopVehicle"
                     class="direction-btn"
-                    >STOP</v-btn
-                  >
+                  >STOP</v-btn>
                 </div>
               </v-form>
             </v-col>
@@ -89,33 +84,28 @@
                     @mousedown="startLogging('right_cannon')"
                     @click="cannonRight"
                     class="direction-btn mr-2"
-                    >Right</v-btn
-                  >
+                  >Right</v-btn>
                   <v-btn
                     @mousedown="startLogging('left_cannon')"
                     @click="cannonLeft"
                     class="direction-btn mr-2"
-                    >Left</v-btn
-                  >
+                  >Left</v-btn>
                   <v-btn
                     @mousedown="startLogging('up_cannon')"
                     @click="cannonUp"
                     class="direction-btn mr-2"
-                    >UP</v-btn
-                  >
+                  >UP</v-btn>
                   <v-btn
                     @mousedown="startLogging('down_cannon')"
                     @click="cannonDown"
                     class="direction-btn"
-                    >DOWN</v-btn
-                  >
+                  >DOWN</v-btn>
                   <br />
                   <v-btn
                     @mousedown="startLogging('fire_cannon')"
                     @click="sendFire"
                     class="direction-btn"
-                    >FIRE</v-btn
-                  >
+                  >FIRE</v-btn>
                 </div>
               </v-form>
             </v-col>
@@ -127,68 +117,84 @@
 </template>
 
 <script setup>
-import CameraMonitor from "@/components/CameraMonitor.vue"
-import CannonMonitor from "@/components/CannonMonitor.vue"
-import Navbar from "@/components/navbar.vue"
+import CameraMonitor from "@/components/CameraMonitor.vue";
+import CannonMonitor from "@/components/CannonMonitor.vue";
+import Navbar from "@/components/navbar.vue";
 
-import { ref, onMounted  } from "vue"
+import { ref, onMounted, watch } from "vue";
 import { useDeviceControlStore } from "@/stores/device_control";
 
 const store = useDeviceControlStore();
 
 // 상태 값
-const steerAngle = ref(90);
-const moveState = ref(null);
-const cannonAngle = ref(90);
-const cannonElevation = ref(140);
+const steerAngle = ref(store.steerAngle || 90);
+const moveState = ref(store.moveState || null);
+const cannonAngle = ref(store.cannonAngle || 90);
+const cannonElevation = ref(store.cannonElevation || 140);
 
 onMounted(() => {
   store.sendSteerCommand(steerAngle.value);
-  store.sendMoveCommand(moveState.value);
+  store.sendMoveCommand(moveState.value, steerAngle.value);
   store.sendCannonCommand(cannonAngle.value, cannonElevation.value);
 });
 
-const updateSteerAngle = () => {
-  store.sendSteerCommand(steerAngle.value);
-};
+watch(steerAngle, (newValue) => {
+  store.steerAngle = newValue;
+  store.sendSteerCommand(newValue);
+});
+
+watch(moveState, (newValue) => {
+  store.sendMoveCommand(newValue, steerAngle.value);
+});
+
+watch(cannonAngle, (newValue) => {
+  store.cannonAngle = newValue;
+  store.sendCannonCommand(newValue, cannonElevation.value);
+});
+
+watch(cannonElevation, (newValue) => {
+  store.cannonElevation = newValue;
+  store.sendCannonCommand(cannonAngle.value, newValue);
+});
 
 const moveForward = () => {
   moveState.value = "forward";
-  store.sendMoveCommand(moveState.value);
+  store.sendMoveCommand("forward", steerAngle.value);
 };
 
 const moveBackward = () => {
   moveState.value = "backward";
-  store.sendMoveCommand(moveState.value);
+  store.sendMoveCommand("backward", steerAngle.value);
 };
 
 const stopVehicle = () => {
   moveState.value = "stop";
-  store.sendMoveCommand(moveState.value);
+  store.sendMoveCommand("stop", steerAngle.value);
 };
 
 const cannonRight = () => {
   if (cannonAngle.value > 10) cannonAngle.value -= 10;
-  store.sendCannonCommand(cannonAngle.value, cannonElevation.value);
 };
 
 const cannonLeft = () => {
   if (cannonAngle.value < 170) cannonAngle.value += 10;
-  store.sendCannonCommand(cannonAngle.value, cannonElevation.value);
 };
 
 const cannonUp = () => {
   if (cannonElevation.value > 70) cannonElevation.value -= 5;
-  store.sendCannonCommand(cannonAngle.value, cannonElevation.value);
 };
 
 const cannonDown = () => {
   if (cannonElevation.value < 140) cannonElevation.value += 5;
-  store.sendCannonCommand(cannonAngle.value, cannonElevation.value);
 };
 
 const sendFire = () => {
   store.sendFireCommand();
+};
+
+const updateSteerAngle = () => {
+  store.steerAngle = steerAngle.value;
+  store.sendSteerCommand(steerAngle.value);
 };
 
 const startLogging = (message) => {

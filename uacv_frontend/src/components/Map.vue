@@ -1,19 +1,15 @@
 <template>
-  <div>
-    <h2 >MAP</h2>
+  <div style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
+    <h2>MAP</h2>
     <div class="map">
       <div class="canvas-wrapper">
-        <div class="canvas-container"
-          :style="{ transform: 'scale(' + zoomLevel + ')', transformOrigin: '200px 200px' }">
-            <canvas id="mapCanvas"></canvas>
+        <div class="canvas-container" :style="{ transform: 'scale(' + zoomLevel + ')' }">
+          <canvas id="mapCanvas"></canvas>
         </div>
-      </div>
-      <div class="status">
-        <p>배터리: 60%</p>
       </div>
       <div class="zoom-controls">
         <label for="zoomSlider">Zoom Level:</label>
-        <input id="zoomSlider" type="range" min="1" max="2.5" step="0.1" v-model="zoomLevel" />
+        <input @mouseleave="resetZoom" id="zoomSlider" type="range" min="0" max="2" step="0.1" v-model="zoomLevel" />
         <span>{{ zoomLevel }}</span>
       </div>
     </div>
@@ -27,8 +23,12 @@ import ROSLIB from 'roslib';
 const zoomLevel = ref(1)
 const SOCKET_API_URL = import.meta.env.VITE_MAPPING_SOCKET_URL
 
+const resetZoom = function () {
+  zoomLevel.value = 1
+}
+
 onMounted(() => {
-  var ros = new ROSLIB.Ros({
+  const ros = new ROSLIB.Ros({
     url: `${SOCKET_API_URL}/mapping`
   });
 
@@ -40,20 +40,20 @@ onMounted(() => {
     console.log('Error connecting to websocket server:', error);
   });
 
-  var mapListener = new ROSLIB.Topic({
+  const mapListener = new ROSLIB.Topic({
     ros: ros,
     name: '/map',
     messageType: 'nav_msgs/OccupancyGrid'
   });
 
-  var scanListener = new ROSLIB.Topic({
+  const scanListener = new ROSLIB.Topic({
     ros: ros,
     name: '/scan',
     messageType: 'sensor_msgs/LaserScan'
   });
 
-  var canvas = document.getElementById('mapCanvas');
-  var ctx = canvas.getContext('2d');
+  const canvas = document.getElementById('mapCanvas');
+  const ctx = canvas.getContext('2d');
 
   var mapData = null;
   var scanData = null;
@@ -63,20 +63,20 @@ onMounted(() => {
   var offsetX = 0; // 스캔 X 축으로 이동할 픽셀 수
   var scanOffsetY = 0; // 스캔 Y 축으로 이동할 픽셀 수
 
-  canvas.width = 400;
-  canvas.height = 400;
+  canvas.width = 350;
+  canvas.height = 350;
 
   mapListener.subscribe(function (message) {
-    console.log("map: ", message)
-    mapData = message;
-    drawMap();
-  });
+    // console.log("map: ", message)
+    mapData = message
+    drawMap()
+  })
 
   scanListener.subscribe(function (message) {
-    console.log("scan: ", message)
-    scanData = message;
-    drawMap(); // Scan 데이터가 업데이트될 때마다 지도 그리기
-  });
+    // console.log("scan: ", message)
+    scanData = message
+    drawMap()
+  })
 
   async function drawMap() {
     if (!mapData) return;
@@ -168,21 +168,14 @@ onMounted(() => {
   position: relative;
   width: 100%;
   max-width: 600px;
-  height: 400px;
+  height: 350px;
   overflow: hidden;
 }
 
 .canvas-container {
   width: 100%;
   height: 100%;
-  /* 확대/축소 기준점 수정 */
   transform-origin: 200px 200px;
-}
-
-.map-iframe {
-  width: 100%;
-  height: 100%;
-  border: none;
 }
 
 .status {
@@ -197,7 +190,7 @@ onMounted(() => {
   margin-left: 10px;
 }
 
-*{
+* {
   font-family: 'Noto Sans KR', sans-serif;
   color: #ffffef;
 }

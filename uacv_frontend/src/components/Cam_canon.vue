@@ -3,7 +3,7 @@
   <div class="cam-canon">
     <img src="@/assets/cam.jpg" alt="카메라 피드" />
     <div class="details">
-      <p>잔탄 {{ ammo }} / 10</p>
+      <!-- <p>잔탄 {{ ammo }} / 10</p> -->
     </div>
   </div>
 </template>
