@@ -1,10 +1,6 @@
-package uacv.backend.stream.config;
+package uacv.backend.sound.config;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.sql.DataSource;
-
+import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,15 +14,17 @@ import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.transaction.PlatformTransactionManager;
 
-import com.zaxxer.hikari.HikariDataSource;
+import javax.sql.DataSource;
+import java.util.HashMap;
+import java.util.Map;
 
 @Configuration
 @EnableJpaRepositories(
-    basePackages = "uacv.backend.stream.repository",
-    entityManagerFactoryRef = "streamEntityManagerFactory",
-    transactionManagerRef = "streamTransactionManager"
+    basePackages = "uacv.backend.sound.repository",
+    entityManagerFactoryRef = "soundEntityManagerFactory",
+    transactionManagerRef = "soundTransactionManager"
 )
-public class StreamConfig {
+public class SoundConfig {
 
     @Autowired
     private Environment env;
@@ -45,7 +43,7 @@ public class StreamConfig {
 
     // Database 선택
     @Bean
-    public DataSource streamDataSource() {
+    public DataSource soundDataSource() {
         return DataSourceBuilder.create()
                 .type(HikariDataSource.class)
                 .driverClassName(driverClassName)
@@ -57,9 +55,9 @@ public class StreamConfig {
 
     // EntityManagerFactory
     @Bean
-    public LocalContainerEntityManagerFactoryBean streamEntityManagerFactory(
+    public LocalContainerEntityManagerFactoryBean soundEntityManagerFactory(
             EntityManagerFactoryBuilder builder,
-            @Qualifier("streamDataSource") DataSource dataSource) {
+            @Qualifier("soundDataSource") DataSource dataSource) {
 
         Map<String, Object> properties = new HashMap<>();
         properties.put("hibernate.hbm2ddl.auto", env.getProperty("spring.jpa.hibernate.ddl-auto"));
@@ -68,15 +66,15 @@ public class StreamConfig {
 
         return builder
                 .dataSource(dataSource)
-                .packages("uacv.backend.stream.domain")
-                .persistenceUnit("stream")
+                .packages("uacv.backend.sound.domain")
+                .persistenceUnit("sound")
                 .properties(properties)
                 .build();
     }
 
     @Bean
-    public PlatformTransactionManager streamTransactionManager(
-            @Qualifier("streamEntityManagerFactory") LocalContainerEntityManagerFactoryBean entityManagerFactory) {
+    public PlatformTransactionManager soundTransactionManager(
+            @Qualifier("soundEntityManagerFactory") LocalContainerEntityManagerFactoryBean entityManagerFactory) {
         return new JpaTransactionManager(entityManagerFactory.getObject());
     }
 
