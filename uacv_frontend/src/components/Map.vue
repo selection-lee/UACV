@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
     <h2>MAP</h2>
     <div class="map">
       <div class="canvas-wrapper">
@@ -63,8 +63,8 @@ onMounted(() => {
   var offsetX = 0; // 스캔 X 축으로 이동할 픽셀 수
   var scanOffsetY = 0; // 스캔 Y 축으로 이동할 픽셀 수
 
-  canvas.width = 410;
-  canvas.height = 410;
+  canvas.width = 350;
+  canvas.height = 350;
 
   mapListener.subscribe(function (message) {
     // console.log("map: ", message)
@@ -167,8 +167,9 @@ onMounted(() => {
 .canvas-wrapper {
   position: relative;
   width: 100%;
-  height: 100%;
-  overflow: hidden
+  max-width: 600px;
+  height: 350px;
+  overflow: hidden;
 }
 
 .canvas-container {
