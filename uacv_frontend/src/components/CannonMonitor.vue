@@ -1,5 +1,6 @@
 <template>
-    <v-container class="pa-0">
+    <v-container class="pa-0"
+        style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
         <h5 class="text-h5 font-weight-bold">Turret Cam</h5>
         <div class="cam">
             <v-img :src="cannonCam" alt="Turret feed"></v-img>

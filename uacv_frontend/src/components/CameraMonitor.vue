@@ -1,5 +1,6 @@
 <template>
-    <v-container class="pa-0">
+    <v-container class="pa-0"
+        style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 300px; margin: 0px;">
         <h5 class="text-h5 font-weight-bold">Chassis Cam</h5>
         <div class="cam">
             <v-img :src="chassisCam" alt="Chassis feed"></v-img>
