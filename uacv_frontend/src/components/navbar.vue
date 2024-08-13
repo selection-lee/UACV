@@ -34,7 +34,7 @@ const store = useUserStore()
 const role = ref(null)
 
 onMounted(() => {
-    role.value = store.memberRole
+    role.value = sessionStorage.getItem("memberRole")
 })
 </script>
 

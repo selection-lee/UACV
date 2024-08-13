@@ -78,7 +78,7 @@ const changePassword = function () {
 }
 
 onMounted(async () => {
-  info.value = await adminStore.findMember(userStore.memberId)
+  info.value = await adminStore.findMember(sessionStorage.getItem("memberId"))
 })
 
 </script>

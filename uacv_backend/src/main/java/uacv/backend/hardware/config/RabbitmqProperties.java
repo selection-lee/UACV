@@ -12,29 +12,26 @@ import lombok.Data;
 
 @Data
 @Component
-@ConfigurationProperties(prefix = "rabbitmq")
+@ConfigurationProperties(prefix = "spring.rabbitmq")
 public class RabbitmqProperties {
 
-    @Value("${RABBITMQ_HOST}")
+    // spring 에서  yml 꺼를 자동 mapping
     private String host;
 
-    @Value("${RABBITMQ_PORT}")
     private int port;
 
-    @Value("${RABBITMQ_USERNAME}")
     private String username;
 
-    @Value("${RABBITMQ_PASSWORD}")
     private String password;
 
-    @Value("${spring.rabbitmq.exchange}")
-    private String exchangeName;
+//    @Value("${spring.rabbitmq.exchange}")
+    private String exchange;
 
     private Map<String, QueueConfig> queues = new HashMap<>();
 
     @Data
     public static class QueueConfig {
-        private String queueName;
+        private String name;
         private List<String> routingKeys;
     }
 }

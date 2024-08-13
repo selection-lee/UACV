@@ -10,8 +10,8 @@ export const userAdminStore = defineStore('admin', () => {
   const store = useUserStore()
   const router = useRouter()
 
-  //== token 저장 ==//
-  const token = store.token
+  // //== token 저장 ==//
+  // const token = store.token
   
   //== 계정생성 ==//
   const signUp = function (payload) {
@@ -44,7 +44,7 @@ export const userAdminStore = defineStore('admin', () => {
         username, memberRole
       },
       headers:{
-        Authorization: `Bearer ${token}`
+        Authorization: `Bearer ${sessionStorage.getItem("token")}`
       }
     })
     .then((response) => {
@@ -64,7 +64,7 @@ export const userAdminStore = defineStore('admin', () => {
       method: 'delete',
       url: `/member/delete/${memberId}`,
       headers:{
-        Authorization: `Bearer ${token}`
+        Authorization: `Bearer ${sessionStorage.getItem("token")}`
       }
     })
     .then((response) => {
@@ -122,7 +122,7 @@ export const userAdminStore = defineStore('admin', () => {
         method: 'get',
         url: `/member/${memberId}`,
         headers: {
-          Authorization: `Bearer ${store.token}`
+          Authorization: `Bearer ${sessionStorage.getItem("token")}`
         }
       })
 

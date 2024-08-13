@@ -1,5 +1,6 @@
 <template>
   <h5 class="text-h5 font-weight-bold">자율주행</h5>
+  <br>
   <div class="controls">
     <div style="display: flex; gap: 10px">
       <button @click="emergencyStop">긴급정지</button>
