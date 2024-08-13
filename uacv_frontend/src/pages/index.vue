@@ -17,14 +17,12 @@
 
             <v-col cols="3">
               <div class="cam-section">
-                <!-- <Cam camSrc="@/assets/cam.jpg" :speed="23" :distance="1.3" /> -->
                 <CameraMonitor :speed="23" :distance="1.3" />
               </div>
             </v-col>
 
             <v-col cols="3">
               <div class="cam-canon-section">
-                <!-- <Cam_canon camSrc="@/assets/cam.jpg" :ammo="3" /> -->
                 <CannonMonitor :ammo="3" />
               </div>
             </v-col>
