@@ -1,4 +1,6 @@
 <template>
+  <Navbar />
+  
   <div style="display: flex; flex-direction: column; align-items: center;">
     <h1>회원 정보 페이지</h1>
 

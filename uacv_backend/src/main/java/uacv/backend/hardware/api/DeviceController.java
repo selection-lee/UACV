@@ -20,6 +20,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeUnit;
+
 @RestController
 @RequestMapping("/api/device")
 public class DeviceController {
@@ -73,7 +76,20 @@ public class DeviceController {
             }
         } else {
             System.out.println("Request Data not inserted: " + controlDataDto);
-        };
+        }
+        ;
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+
+    @PostMapping("/connect")
+    public CompletableFuture<String> hihi() {
+        return CompletableFuture.supplyAsync(() -> {
+            try {
+                TimeUnit.SECONDS.sleep(1); // 30초 대기
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            return "안냥";
+        });
     }
 }

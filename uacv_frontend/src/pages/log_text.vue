@@ -199,4 +199,5 @@ export default {
   top: 30%;
   left: 85%;
 }
+
 </style>

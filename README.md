@@ -16,7 +16,7 @@
 
 ## 기술 / 환경
 
-![오린카.jpg](./오린카.jpg)
+![오린카.jpg](./assets/오린카.jpg)
 
 #### 기술1 - 자율주행
 LIDAR SLAM 기반 MAPPING 자율 주행
@@ -31,16 +31,17 @@ MFCC 기반 모델로 총기 소리를 판단
 대시보드 에서 모니터링 및 컨트롤 페이지에서 제어
 
 
-#### 젯슨 오린 나노 HW결선
-![젯슨오린나노 회로도.png](./젯슨오린나노 회로도.png)
+## Nvidia Jetson Orin Nano 회로도
+![젯슨오린나노 회로도.png](./assets/젯슨오린나노_회로도.png)
 
-#### 젯슨 오린 나노 HW결선
-![라즈베리파이_HW결선.png](./라즈베리파이_HW결선.png)
+## Raspberry Pi 5 HW결선
+![라즈베리파이_HW결선.png](./assets/라즈베리파이_HW결선.png)
 
 ## 구현   사항
-
+### 통신 개요도
 ![image.png](./assets/image.png)
-![아키텍처.png](./아키텍처.png)
+### 아키텍처 구조도
+![아키텍처.png](./assets/아키텍처.png)
 
 ## 기술   스택
 
