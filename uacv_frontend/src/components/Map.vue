@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
     <h2 >MAP</h2>
     <div class="map">
       <div class="canvas-wrapper">
@@ -8,10 +8,7 @@
             <canvas id="mapCanvas"></canvas>
         </div>
       </div>
-      <div class="status">
-        <p>배터리: 60%</p>
-      </div>
-      <div class="zoom-controls">
+      <div class="zoom-controls" >
         <label for="zoomSlider">Zoom Level:</label>
         <input id="zoomSlider" type="range" min="1" max="2.5" step="0.1" v-model="zoomLevel" />
         <span>{{ zoomLevel }}</span>
@@ -63,8 +60,8 @@ onMounted(() => {
   var offsetX = 0; // 스캔 X 축으로 이동할 픽셀 수
   var scanOffsetY = 0; // 스캔 Y 축으로 이동할 픽셀 수
 
-  canvas.width = 400;
-  canvas.height = 400;
+  canvas.width = 350;
+  canvas.height = 350;
 
   mapListener.subscribe(function (message) {
     console.log("map: ", message)
@@ -168,8 +165,9 @@ onMounted(() => {
   position: relative;
   width: 100%;
   max-width: 600px;
-  height: 400px;
+  height: 350px;
   overflow: hidden;
+  border: solid white;
 }
 
 .canvas-container {
@@ -177,6 +175,7 @@ onMounted(() => {
   height: 100%;
   /* 확대/축소 기준점 수정 */
   transform-origin: 200px 200px;
+  border: solid red;
 }
 
 .map-iframe {

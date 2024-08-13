@@ -1,10 +1,8 @@
 import { defineStore } from "pinia"
 import { ref } from "vue"
 import axios from "axios"
-import { useUserStore } from "./user"
 
 export const useDeviceControlStore = defineStore('deviceControl', () => {
-  const userStore = useUserStore()
 
   const fire = ref('off')
   const move = ref(null)
@@ -17,7 +15,7 @@ export const useDeviceControlStore = defineStore('deviceControl', () => {
       method: 'post',
       url: '/device/control/fire',
       data: { fire: 'on' },
-      headers: { "Authorization": `Bearer ${userStore.token}` }
+      headers: { "Authorization": `Bearer ${sessionStorage.getItem("token")}` }
     }).then((response) => {
       console.log(`Sent fire command with status code ${response.status}`)
     }).catch((error) => {
@@ -30,7 +28,7 @@ export const useDeviceControlStore = defineStore('deviceControl', () => {
       method: 'post',
       url: '/device/control/cannon',
       data: { cannon_x, cannon_y },
-      headers: { "Authorization": `Bearer ${userStore.token}` }
+      headers: { "Authorization": `Bearer ${sessionStorage.getItem("token")}` }
     }).then((response) => {
       console.log(`Sent cannon command with status code ${response.status}`)
     }).catch((error) => {
@@ -43,7 +41,7 @@ export const useDeviceControlStore = defineStore('deviceControl', () => {
       method: 'post',
       url: '/device/control/steer',
       data: { steer },
-      headers: { "Authorization": `Bearer ${userStore.token}` }
+      headers: { "Authorization": `Bearer ${sessionStorage.getItem("token")}` }
     }).then((response) => {
       console.log(`Sent steer command with status code ${response.status}`)
     }).catch((error) => {
@@ -56,7 +54,7 @@ export const useDeviceControlStore = defineStore('deviceControl', () => {
       method: 'post',
       url: '/device/control/move',
       data: { move },
-      headers: { "Authorization": `Bearer ${userStore.token}` }
+      headers: { "Authorization": `Bearer ${sessionStorage.getItem("token")}` }
     }).then((response) => {
       console.log(`Sent steer command with status code ${response.status}`)
     }).catch((error) => {
@@ -72,7 +70,7 @@ export const useDeviceControlStore = defineStore('deviceControl', () => {
         method: 'post',
         url: '/device/connect',
         headers: {
-          "Authorization" : `Bearer ${userStore.token}`
+          "Authorization" : `Bearer ${sessionStorage.getItem("token")}`
         }
       })
       isConnect.value = response.data
