@@ -1,47 +1,29 @@
 <template>
-    <v-container class="pa-0" style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
-
-        <h5 class="text-h5 font-weight-bold">CAM2</h5>
+    <v-container class="pa-0"
+        style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
+        <h5 class="text-h5 font-weight-bold">Turret Cam</h5>
         <div class="cam">
-            <!-- <v-img :src="camera2Src" alt="Camera 2 feed" style="width: 290px;"></v-img> -->
-
-            <!-- 임시 -->
-            <img src="@/assets/cam.jpg" alt="카메라 피드" style="width: 290px;"/>
+            <v-img :src="cannonCam" alt="Turret feed"></v-img>
         </div>
-
     </v-container>
 </template>
 
 <script>
 import mqtt from 'mqtt';
 
-// export default {
-//   name: "Cam_canon",
-//   props: {
-//     ammo: Number,
-//   },
-// };
-// //
 export default {
     name: "CameraMonitor",
-    props: {
-        ammo: Number,
-    },
     data() {
         return {
-            camera1Src: '',
-            camera2Src: ''
+            cannonCam: ''
         };
     },
     mounted() {
-        const chassisTopic = 'rpi/cam/chassis';
         const cannonTopic = 'rpi/cam/cannon';
 
-        // const client = mqtt.connect('ws://192.168.100.104:9001');
         const client = mqtt.connect({
-            protocol: 'ws',
+            protocol: 'wss',
             host: "i11c102.p.ssafy.io",
-            port: 15675,
             path: "/ws",
             username: 'vue',
             password: 'ssafyi11C102!!'
@@ -49,22 +31,12 @@ export default {
 
         client.on('connect', () => {
             console.log('Connected to MQTT Broker');
-            client.subscribe(chassisTopic);
             client.subscribe(cannonTopic);
         });
 
         client.on('message', (topic, message) => {
-            // console.log(typeof message);
             const payload = message.toString();
-            // console.log(typeof payload);
-
-            if (topic === chassisTopic) {
-                this.camera1Src = 'data:image/jpeg;base64,' + payload;
-                // console.log(this.camera1Src)
-                // console.log(payload)
-            } else if (topic === cannonTopic) {
-                this.camera2Src = 'data:image/jpeg;base64,' + payload;
-            }
+            this.cannonCam = 'data:image/jpeg;base64,' + payload;
         });
     }
 };
@@ -75,10 +47,7 @@ export default {
 h1 {
     text-align: center;
 }
-</style>
 
-
-<style scoped>
 .cam {
     text-align: center;
 }
