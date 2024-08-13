@@ -35,14 +35,17 @@ spring:
   rabbitmq:
     host: ${RABBITMQ_HOST}
     port: ${RABBITMQ_PORT}
-    username: ${RABBITMQ_USER}
-    password: ${RABBITMQ_PW}
+    username: ${RABBITMQ_USERNAME}
+    password: ${RABBITMQ_PASSWORD}
     exchange: amq.topic
     queues:
       sensor:
         name: sensor_queue
         routing-keys:
           - rpi.sensor
+      sound:
+        name: sound_queue
+        routing-keys:
           - orin.sensor
       command:
         name: command_queue
@@ -69,3 +72,10 @@ jwt:
     header: Authorization
   refresh:
     header: Authorization-refresh
+
+websocket:
+  stomp:
+    endpoint: /socket/sound
+    allowed-origins: "*"
+    broker:
+      prefix: /orin  # 클라이언트가 구독할 경로로 설정 (이 경우 /orin/sensor)

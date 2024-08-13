@@ -46,7 +46,10 @@ export default defineConfig({
       vueTemplate: true,
     }),
   ],
-  define: { 'process.env': {} },
+  define: { 
+    'process.env': {},
+    global:'window',
+   },
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))

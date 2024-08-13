@@ -24,7 +24,7 @@ public class RabbitmqConfig {
 
     @Bean
     public TopicExchange topicExchange() {
-        return new TopicExchange(rabbitmqProperties.getExchangeName());
+        return new TopicExchange(rabbitmqProperties.getExchange());
     }
 
     @Bean
@@ -33,18 +33,18 @@ public class RabbitmqConfig {
         for (Map.Entry<String, RabbitmqProperties.QueueConfig> entry : rabbitmqProperties.getQueues().entrySet()) {
             String queueName = entry.getKey();
             RabbitmqProperties.QueueConfig config = entry.getValue();
-            queues.put(queueName, new Queue(config.getQueueName()));
+            queues.put(queueName, new Queue(config.getName()));
         }
         return queues;
     }
 
     @Bean
-    public Map<String, Binding> bindings(TopicExchange exchange, Map<String, Queue> queues) {
+    public Map<String, Binding> bindings(TopicExchange exchange) {
         Map<String, Binding> bindings = new HashMap<>();
         for (Map.Entry<String, RabbitmqProperties.QueueConfig> entry : rabbitmqProperties.getQueues().entrySet()) {
             String queueName = entry.getKey();
             RabbitmqProperties.QueueConfig config = entry.getValue();
-            Queue queue = queues.get(queueName);
+            Queue queue = queues().get(queueName);
             for (String routingKey : config.getRoutingKeys()) {
                 String bindingKey = queueName + "." + routingKey;
                 bindings.put(bindingKey, BindingBuilder.bind(queue).to(exchange).with(routingKey));
