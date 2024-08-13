@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import lombok.extern.slf4j.Slf4j;
 import uacv.backend.hardware.domain.enums.CommandType;
 import uacv.backend.hardware.domain.enums.EventType;
 import uacv.backend.hardware.domain.enums.LogType;
@@ -15,7 +16,6 @@ import uacv.backend.hardware.dto.ControlDataDto;
 import uacv.backend.hardware.service.ReceiveService;
 import uacv.backend.hardware.service.SendService;
 
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/device")
 public class DeviceController {
@@ -55,77 +56,34 @@ public class DeviceController {
     /*
      * 조종 명령 수신
      */
-//    @RequestMapping(value = "/control/{command}", method = RequestMethod.POST)
-//    public ResponseEntity<?> sendCommand(
-//            @PathVariable("command") CommandType command,
-//            @RequestBody ControlDataDto controlDataDto) {
-//
-//
-//        if (sendService.saveCommand(command, controlDataDto)) {
-//            try {
-//                if (command.toString() == "cannon") {
-//                    sendService.sendCommand("orin.cannon", controlDataDto);
-//                } else if (command.toString() == "steer") {
-//                    sendService.sendCommand("orin.steer", controlDataDto);
-//                } else if (command.toString() == "move") {
-//                    sendService.sendCommand("orin.throttle", controlDataDto);
-//                } else if (command.toString() == "fire") {
-//                    sendService.sendCommand("rpi.fire", controlDataDto);
-//                }
-//                return new ResponseEntity<>(HttpStatus.OK);
-//            } catch (Exception e) {
-//                System.out.println(e);
-//            }
-//        } else {
-//            System.out.println("Request Data not inserted: " + controlDataDto);
-//        }
-//        ;
-//        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-//    }
-
     @RequestMapping(value = "/control/{command}", method = RequestMethod.POST)
     public ResponseEntity<?> sendCommand(
             @PathVariable("command") CommandType command,
             @RequestBody CommandDto commandDto) {
 
-        // CommandType과 ControlDataDto를 추출
         ControlDataDto controlDataDto = commandDto.getData();
 
-        // 데이터를 저장 시도
-        if (!sendService.saveCommand(command, controlDataDto)) {
-            System.out.println("Request Data not inserted: " + controlDataDto);
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-
-        try {
-            // command에 따라 topic을 결정
-            String topic = null;
-            if (command.toString().equals("cannon")) {
-                topic = "orin.cannon";
-            } else if (command.toString().equals("steer")) {
-                topic = "orin.steer";
-            } else if (command.toString().equals("move")) {
-                topic = "orin.throttle";
-            } else if (command.toString().equals("fire")) {
-                topic = "rpi.fire";
-            }
-
-            commandDto.setCommandType(command);
-
-            // topic이 결정되었다면 명령을 전송
-            if (topic != null) {
-                sendService.sendCommand(topic, commandDto);
+        if (sendService.saveCommand(command, controlDataDto)) {
+            try {
+                if (command.toString() == "cannon") {
+                    sendService.sendCommand("orin.cannon", commandDto);
+                } else if (command.toString() == "steer") {
+                    sendService.sendCommand("orin.steer", commandDto);
+                } else if (command.toString() == "move") {
+                    sendService.sendCommand("orin.throttle", commandDto);
+                } else if (command.toString() == "fire") {
+                    sendService.sendCommand("rpi.fire", commandDto);
+                }
                 return new ResponseEntity<>(HttpStatus.OK);
-            } else {
-                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            } catch (Exception e) {
+                log.error("Error sending command: {}", e.getMessage());
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
-        } catch (Exception e) {
-            // 예외 발생 시 로그 출력 후 서버 오류 상태 반환
-            System.out.println("Error sending command: " + e.getMessage());
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        } else {
+            log.error("Request Data not inserted: {}", controlDataDto);
         }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
-
 
     @PostMapping("/connect")
     public CompletableFuture<String> hihi() {
