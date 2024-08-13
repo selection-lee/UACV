@@ -6,38 +6,38 @@
 
     <v-main v-if="connect !== null">
       <v-container class="fill-height">
-        <v-responsive class="align-center fill-height mx-auto" max-width="1000px">
-          <v-row>
-            <v-col cols="6"
-              style="display: flex; flex-direction: column; justify-content: space-around; align-items: center; padding: 10px;">
-
-              <!-- Map Section -->
-              <v-row
-                style="background-color: #2c4d41; border-radius: 15px; padding: 10px; flex: 1;">
-                <div class="map-section" style="margin: 10px;">
+        <v-responsive class="align-center fill-height mx-auto" max-width="1200px">
+          <div style="display: flex; flex-direction: row; justify-content: center; align-items: center">
+            <div style="justify-content: center; align-items: center;">
+              <div
+                style="background-color: #2c4d41; justify-content: center; align-items: center; border-radius: 10%; margin-left: 10px; padding: 10px;">
+                <div class="map-section" style="padding: 5px;">
                   <Map />
-                  <!-- <SoundAlert /> -->
                 </div>
-              </v-row>
+              </div>
+              <SoundAlert />
+            </div>
 
-              <!-- Log Section -->
-              <v-row
-                style="background-color: #2c4d41; border-radius: 15px; padding: 10px; margin-top: 20px; flex: 1;">
-                <div class="log-section" style="width: 350px; margin: 10px;">
-                  <Log />
+            <div>
+              <div style="display: flex; flex-direction: row; justify-content: center; align-items: center;">
+                <div cols="6"
+                  style="width: 330px; background-color: #2c4d41; border-radius: 10%; margin-left: 10px; margin-bottom: 10px; flex: 1; padding: 10px;">
+                  <CameraMonitor />
                 </div>
-              </v-row>
 
-            </v-col>
+                <div cols="6"
+                  style="width: 330px; background-color: #2c4d41; border-radius: 10%; margin: 0px 10px 10px; flex: 1; padding: 10px;">
+                  <CannonMonitor />
+                </div>
+              </div>
 
-            <v-col cols="6" style="display: flex; flex-direction: column; justify-content: space-around; align-items: center; padding: 10px;">
-              <v-row style="background-color: #2c4d41; border-radius: 15px; padding: 10px; flex: 1;">
-                <CameraMonitor/>
-              </v-row>
-
-            </v-col>
-
-          </v-row>
+              <div style="background-color: #2c4d41; border-radius: 10px; margin: 15px; padding: 10px; padding-left: 20px;">
+                <div class="log-section">
+                    <Log />
+                  </div>
+              </div>
+            </div>
+          </div>
         </v-responsive>
       </v-container>
 
@@ -52,7 +52,6 @@ import Map from "@/components/Map.vue"
 import CameraMonitor from "@/components/CameraMonitor.vue"
 import CannonMonitor from "@/components/CannonMonitor.vue"
 import Log from "@/components/Log.vue"
-import Controls from "@/components/Controls.vue"
 import Navbar from "@/components/navbar.vue"
 import Appbar from "@/components/appbar.vue"
 import SoundAlert from "@/components/SoundAlert.vue"

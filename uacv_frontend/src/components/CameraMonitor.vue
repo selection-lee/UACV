@@ -1,13 +1,14 @@
 <template>
-    <v-container class="pa-0">
+    <v-container class="pa-0" style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 300px; margin: 0px;">
         <h5 class="text-h5 font-weight-bold">CAM1</h5>
         <div class="cam">
             <!-- <v-img :src="camera1Src" alt="Camera 1 feed" width="640" height="480"></v-img> -->
-            <v-img :src="camera1Src" alt="Camera 1 feed"></v-img>
-            <div class="details">
-                <!-- <p>{{ speed }} km/h</p>
-                        <p>{{ distance }} km</p> -->
-            </div>
+            <!-- <v-img :src="camera1Src" alt="Camera 1 feed"></v-img> -->
+            <img src="@/assets/cam.jpg" alt="카메라 피드" style="width: 290px;"/>
+            <!-- <div class="details">
+                <p>{{ speed }} km/h</p>
+                <p>{{ distance }} km</p>
+            </div> -->
         </div>
     </v-container>
 </template>
