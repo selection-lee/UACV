@@ -54,12 +54,6 @@ spring:
           - orin.cannon
           - orin.throttle
           - orin.steer
-      mapping:
-        name: mapping_queue
-        routing-keys:
-          - ros.map1
-          - ros.map2
-          - ros.map3
 
 logging:
   level:
