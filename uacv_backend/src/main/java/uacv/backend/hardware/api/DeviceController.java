@@ -13,7 +13,6 @@ import uacv.backend.hardware.domain.enums.EventType;
 import uacv.backend.hardware.domain.enums.LogType;
 import uacv.backend.hardware.dto.CommandDto;
 import uacv.backend.hardware.dto.ControlDataDto;
-import uacv.backend.hardware.service.ReceiveService;
 import uacv.backend.hardware.service.SendService;
 
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,16 +29,7 @@ import java.util.concurrent.TimeUnit;
 public class DeviceController {
 
     @Autowired
-    private ReceiveService receiveService;
-
-    @Autowired
     private SendService sendService;
-
-    // 센서 정보 수신?
-    // @PostMapping("/receive")
-    // public String postMethodName(@RequestBody String entity) {
-    // return entity;
-    // }
 
     // 로그 기록 조회
     // 소리, 발사, 센서

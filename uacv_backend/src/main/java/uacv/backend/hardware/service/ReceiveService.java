@@ -1,8 +1,8 @@
 package uacv.backend.hardware.service;
 
-import org.springframework.amqp.core.Message;
+import uacv.backend.hardware.dto.SensorDataDto;
 
 public interface ReceiveService {
 
-    void receiveMessage(Message message);
+    void receiveMessage(SensorDataDto sensorDataDto) throws Exception;
 }

@@ -5,7 +5,10 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.mongodb.MongoWriteException;
+
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import uacv.backend.hardware.domain.ControlData;
 import uacv.backend.hardware.domain.enums.CommandType;
 import uacv.backend.hardware.domain.enums.EventType;
@@ -16,6 +19,7 @@ import uacv.backend.hardware.repository.CommandRepository;
 import uacv.backend.hardware.service.SendService;
 
 // 송신 서비스 구현체
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class SendServiceImpl implements SendService {
@@ -35,7 +39,7 @@ public class SendServiceImpl implements SendService {
 
     @Override
     public void sendCommand(String routingKey, CommandDto commandDto) {
-         System.out.println(routingKey + " " + commandDto);
+        log.debug("Routing Key: {}, Command Data: {}", routingKey, commandDto);
         rabbitTemplate.convertAndSend(topicExchange.getName(), routingKey, commandDto);
     }
 
@@ -47,16 +51,16 @@ public class SendServiceImpl implements SendService {
     public Boolean insertControlData(CommandType commandType, ControlDataDto controlDataDto) {
         try {
             commandRepository.insert(ControlData.builder()
-                                        .command(commandType)
-                                        .fire(controlDataDto.getFire())
-                                        .cannon_x(controlDataDto.getCannon_x())
-                                        .cannon_y(controlDataDto.getCannon_y())
-                                        .steer(controlDataDto.getSteer())
-                                        .move(controlDataDto.getMove())
-                                        .build());
+                    .command(commandType)
+                    .fire(controlDataDto.getFire())
+                    .cannon_x(controlDataDto.getCannon_x())
+                    .cannon_y(controlDataDto.getCannon_y())
+                    .steer(controlDataDto.getSteer())
+                    .move(controlDataDto.getMove())
+                    .build());
             return true;
-        } catch (Exception e) {
-            System.out.println(e);
+        } catch (MongoWriteException e) {
+            log.error("Error inserting Control Data: {}", e.getMessage());
             return false;
         }
     }
