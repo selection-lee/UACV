@@ -1,44 +1,32 @@
 <template>
   <v-app>
-    <Navbar />
+    <Navbar v-if="connect !== null"/>
 
-    <!--
-    <v-app-bar app>
-      <v-toolbar-title>
-        <br>
-        <v-img src="@/assets/logo.png" height="100" contain></v-img>
-      </v-toolbar-title>
-      <v-spacer></v-spacer>
-    </v-app-bar>
-    -->
+    <Appbar v-if="connect !== null"/>
 
-    <v-main>
+    <v-main v-if="connect !== null">
       <v-container class="fill-height">
         <v-responsive class="align-center fill-height mx-auto" max-width="900">
-          <v-row align="center">
-            <v-col cols="auto">
-              <h4 class="text-h4 font-weight-bold">UACV</h4>
-            </v-col>
-          </v-row>
-          <div class="py-4" />
 
-          <!--Dashboard Components -->
           <v-row>
             <v-col cols="6">
               <div class="map-section">
                 <Map />
+                <SoundAlert />
               </div>
             </v-col>
 
             <v-col cols="3">
               <div class="cam-section">
-                <Cam camSrc="@/assets/cam.jpg" :speed="23" :distance="1.3" />
+                <!-- <Cam camSrc="@/assets/cam.jpg" :speed="23" :distance="1.3" /> -->
+                 <CameraMonitor :speed="23" :distance="1.3"/>
               </div>
             </v-col>
 
             <v-col cols="3">
               <div class="cam-canon-section">
-                <Cam_canon camSrc="@/assets/cam.jpg" :ammo="3" />
+                <!-- <Cam_canon camSrc="@/assets/cam.jpg" :ammo="3" /> -->
+                <CannonMonitor :ammo="3"/>
               </div>
             </v-col>
           </v-row>
@@ -64,24 +52,46 @@
                 </router-link>
                 <RemoteControl />
               </div>
+
             </v-col>
           </v-row>
         </v-responsive>
       </v-container>
+
     </v-main>
+
+    <Loading v-else />
   </v-app>
 </template>
 
 <script setup>
 import Map from "@/components/Map.vue"
-import Cam from "@/components/Cam.vue"
-import Cam_canon from "@/components/Cam_canon.vue"
+import CameraMonitor from "@/components/CameraMonitor.vue"
+import CannonMonitor from "@/components/CannonMonitor.vue"
 import Log from "@/components/Log.vue"
 import Controls from "@/components/Controls.vue"
 import Navbar from "@/components/navbar.vue"
+import Appbar from "@/components/appbar.vue"
+import SoundAlert from "@/components/SoundAlert.vue"
+
+import { onMounted, ref } from "vue"
+import { useDeviceControlStore } from "@/stores/device_control"
+import Loading from "./loading.vue"
+
+const connect = ref(null)
+const store = useDeviceControlStore()
+
+onMounted(async() => {
+  connect.value = await store.connect()
+})
 </script>
 
 <style scoped>
+* {
+  font-family: 'Noto Sans KR', sans-serif;
+  color: #ffffef;
+}
+
 .dashboard {
   display: grid;
   grid-template-areas:
@@ -93,7 +103,7 @@ import Navbar from "@/components/navbar.vue"
 
 .v-main {
   background-color: #093028;
-  color: #ffffef;
+  color: #FFFFEF;
 }
 
 .v-toolbar {
@@ -132,6 +142,6 @@ import Navbar from "@/components/navbar.vue"
 .remote-control-section .v-icon {
   cursor: pointer;
   font-size: 100px;
-  color: #ffffef;
+  color: #FFFFEF;
 }
 </style>

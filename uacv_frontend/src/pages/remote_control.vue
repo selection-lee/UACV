@@ -24,13 +24,15 @@
           <v-row>
             <v-col cols="6">
               <div class="cam-section">
-                <Cam camSrc="@/assets/cam.jpg" :speed="23" :distance="1.3" />
+                <!-- <Cam camSrc="@/assets/cam.jpg" :speed="23" :distance="1.3" /> -->
+                <CameraMonitor :speed="23" :distance="1.3"/>
               </div>
             </v-col>
 
             <v-col cols="6">
               <div class="cam-canon-section">
-                <Cam_canon camSrc="@/assets/cam.jpg" :ammo="3" />
+                <!-- <Cam_canon camSrc="@/assets/cam.jpg" :ammo="3" /> -->
+                <CannonMonitor :ammo="3"/>
               </div>
             </v-col>
           </v-row>
@@ -125,10 +127,11 @@
 </template>
 
 <script setup>
-import { ref, onMounted  } from "vue";
-import Cam from "@/components/Cam.vue";
-import Cam_canon from "@/components/Cam_canon.vue";
-import Navbar from "@/components/navbar.vue";
+import CameraMonitor from "@/components/CameraMonitor.vue"
+import CannonMonitor from "@/components/CannonMonitor.vue"
+import Navbar from "@/components/navbar.vue"
+
+import { ref, onMounted  } from "vue"
 import { useDeviceControlStore } from "@/stores/device_control";
 
 const store = useDeviceControlStore();
@@ -165,12 +168,12 @@ const stopVehicle = () => {
 };
 
 const cannonRight = () => {
-  if (cannonAngle.value > 10) cannonAngle.value -= 5;
+  if (cannonAngle.value > 10) cannonAngle.value -= 10;
   store.sendCannonCommand(cannonAngle.value, cannonElevation.value);
 };
 
 const cannonLeft = () => {
-  if (cannonAngle.value < 170) cannonAngle.value += 5;
+  if (cannonAngle.value < 170) cannonAngle.value += 10;
   store.sendCannonCommand(cannonAngle.value, cannonElevation.value);
 };
 
@@ -300,4 +303,5 @@ input[type="range"]::-ms-thumb {
   border-radius: 50%;
   cursor: pointer;
 }
+
 </style>

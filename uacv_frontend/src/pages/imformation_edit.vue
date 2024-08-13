@@ -2,6 +2,8 @@
   <v-app>
     <Navbar />
 
+    <!-- <Appbar/> -->
+
     <v-app-bar app>
       <v-toolbar-title>
         <br>
@@ -52,6 +54,7 @@
 import { onMounted, ref } from 'vue';
 import { userAdminStore } from '@/stores/admin';
 import { useUserStore } from '@/stores/user';
+import Appbar from '@/components/appbar.vue';
 
 const adminStore = userAdminStore()
 const userStore = useUserStore()
@@ -75,7 +78,7 @@ const changePassword = function () {
 }
 
 onMounted(async () => {
-  info.value = await adminStore.findMember(userStore.memberId)
+  info.value = await adminStore.findMember(sessionStorage.getItem("memberId"))
 })
 
 </script>
@@ -99,4 +102,5 @@ onMounted(async () => {
   display: flex;
   margin: 20px;
 }
+
 </style>
