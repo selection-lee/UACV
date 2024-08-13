@@ -1,7 +1,7 @@
 <template>
     <v-container class="pa-0">
-        <v-row>
-            <!-- <v-col cols="12">
+
+        <!-- <v-col cols="12">
                 <h5 class="text-h5 font-weight-bold">CAM1</h5>
                 <div class="cam">
                     <v-img :src="camera1Src" alt="Camera 1 feed" width="640" height="480"></v-img>
@@ -11,21 +11,20 @@
                     </div>
                 </div>
             </v-col> -->
-            <v-col cols="12">
-                <h5 class="text-h5 font-weight-bold">CAM2</h5>
-                <div class="cam">
-                    <!-- <v-img :src="camera2Src" alt="Camera 2 feed" width="640" height="480"></v-img> -->
-                    <v-img :src="camera2Src" alt="Camera 2 feed"></v-img>
-                    <div class="details">
-                        <!-- <p>{{ speed }} km/h</p> -->
-                        <p>잔탄 {{ ammo }} / 10</p>
-                    </div>
-                </div>
-            </v-col>
-        </v-row>
+
+        <h5 class="text-h5 font-weight-bold">CAM2</h5>
+        <div class="cam">
+            <!-- <v-img :src="camera2Src" alt="Camera 2 feed" width="640" height="480"></v-img> -->
+            <v-img :src="camera2Src" alt="Camera 2 feed"></v-img>
+            <div class="details">
+                <!-- <p>{{ speed }} km/h</p> -->
+                <!-- <p>잔탄 {{ ammo }} / 10</p> -->
+            </div>
+        </div>
+
     </v-container>
 </template>
-  
+
 <script>
 import mqtt from 'mqtt';
 
@@ -56,7 +55,7 @@ export default {
             protocol: 'ws',
             host: "i11c102.p.ssafy.io",
             port: 15675,
-            path:"/ws",
+            path: "/ws",
             username: 'vue',
             password: 'ssafyi11C102!!'
         });
@@ -84,7 +83,7 @@ export default {
 };
 </script>
 
-  
+
 <style scoped>
 h1 {
     text-align: center;

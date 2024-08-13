@@ -2,57 +2,41 @@
   <v-app>
     <Navbar v-if="connect !== null" />
 
+    <Appbar v-if="connect !== null" />
+
     <v-main v-if="connect !== null">
-      <Appbar v-if="connect !== null" />
-      <v-container>
-        <v-responsive class="align-center fill-height mx-auto" max-width="900">
-
+      <v-container class="fill-height">
+        <v-responsive class="align-center fill-height mx-auto" max-width="1000px">
           <v-row>
-            <v-col cols="6">
-              <div class="map-section">
-                <Map />
-                <SoundAlert />
-              </div>
-            </v-col>
+            <v-col cols="6"
+              style="display: flex; flex-direction: column; justify-content: space-around; align-items: center; padding: 10px;">
 
-            <v-col cols="3">
-              <div class="cam-section">
-                <!-- <Cam camSrc="@/assets/cam.jpg" :speed="23" :distance="1.3" /> -->
-                <CameraMonitor :speed="23" :distance="1.3" />
-              </div>
-            </v-col>
+              <!-- Map Section -->
+              <v-row
+                style="background-color: #2c4d41; border-radius: 15px; padding: 10px; flex: 1;">
+                <div class="map-section" style="margin: 10px;">
+                  <Map />
+                  <!-- <SoundAlert /> -->
+                </div>
+              </v-row>
 
-            <v-col cols="3">
-              <div class="cam-canon-section">
-                <!-- <Cam_canon camSrc="@/assets/cam.jpg" :ammo="3" /> -->
-                <CannonMonitor :ammo="3" />
-              </div>
-            </v-col>
-          </v-row>
-
-          <v-row>
-            <v-col cols="6">
-              <div class="log-section">
-                <Log />
-              </div>
-            </v-col>
-
-            <v-col cols="4">
-              <div class="controls-section">
-                <Controls />
-              </div>
-            </v-col>
-
-            <v-col cols="2">
-              <h5 class="text-h5 font-weight-bold">원격주행</h5>
-              <div class="remote-control-section">
-                <router-link :to="{ path: '/remote_control' }">
-                  <v-icon>mdi-controller</v-icon>
-                </router-link>
-                <RemoteControl />
-              </div>
+              <!-- Log Section -->
+              <v-row
+                style="background-color: #2c4d41; border-radius: 15px; padding: 10px; margin-top: 20px; flex: 1;">
+                <div class="log-section" style="width: 350px; margin: 10px;">
+                  <Log />
+                </div>
+              </v-row>
 
             </v-col>
+
+            <v-col cols="6" style="display: flex; flex-direction: column; justify-content: space-around; align-items: center; padding: 10px;">
+              <v-row style="background-color: #2c4d41; border-radius: 15px; padding: 10px; flex: 1;">
+                <CameraMonitor/>
+              </v-row>
+
+            </v-col>
+
           </v-row>
         </v-responsive>
       </v-container>

@@ -3,8 +3,8 @@
   <div class="cam">
     <img src="@/assets/cam.jpg" alt="카메라 피드" />
     <div class="details">
-      <p>{{ speed }} km/h</p>
-      <p>{{ distance }} km</p>
+      <!-- <p>{{ speed }} km/h</p>
+      <p>{{ distance }} km</p> -->
     </div>
   </div>
 </template>
