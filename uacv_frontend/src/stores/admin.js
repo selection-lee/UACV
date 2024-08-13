@@ -7,20 +7,18 @@ import axios from "axios"
 
 export const userAdminStore = defineStore('admin', () => {
 
-  const BASE_URL = '/api/member'
-  // const BASE_URL = 'http://localhost:8080/api/member'
   const store = useUserStore()
   const router = useRouter()
 
-  //== token 저장 ==//
-  const token = store.token
+  // //== token 저장 ==//
+  // const token = store.token
   
   //== 계정생성 ==//
   const signUp = function (payload) {
     const { username, password1, password2, memberRole, rnk, m_id } = payload
     axios({
       method: 'post',
-      url: `${BASE_URL}/create`,
+      url: '/member/create',
       data: {
         username, password1, password2, memberRole, rnk, m_id
       }
@@ -41,12 +39,12 @@ export const userAdminStore = defineStore('admin', () => {
 
     axios({
       method: 'put',
-      url: `${BASE_URL}/update/role`,
+      url: '/member/update/role',
       data:{
         username, memberRole
       },
       headers:{
-        Authorization: `Bearer ${token}`
+        Authorization: `Bearer ${sessionStorage.getItem("token")}`
       }
     })
     .then((response) => {
@@ -64,9 +62,9 @@ export const userAdminStore = defineStore('admin', () => {
   const deleteMember = function(memberId) {
     axios({
       method: 'delete',
-      url: `${BASE_URL}/delete/${memberId}`,
+      url: `/member/delete/${memberId}`,
       headers:{
-        Authorization: `Bearer ${token}`
+        Authorization: `Bearer ${sessionStorage.getItem("token")}`
       }
     })
     .then((response) => {
@@ -80,22 +78,26 @@ export const userAdminStore = defineStore('admin', () => {
       console.log(error)
     })
   }
+  
   //== memberList 저장 ==//
   const members = ref(null)
 
   //== 회원 리스트 출력 ==//
-  const memberList = function() {
-    axios({
-      method: 'get',
-      url: `${BASE_URL}/list`
-    })
-    .then((response) => {
+  const memberList = async function() {
+
+    try {
+      const response = await axios ({
+        method: 'get',
+        url: '/member/list'
+      })
       members.value = response.data
 
-    })
-    .catch((error) => {
+    } catch (error) {
       console.log(error)
-    })
+      throw error
+    }
+
+    return members.value
   }
 
   //== members의 유뮤 ==//
@@ -113,20 +115,24 @@ export const userAdminStore = defineStore('admin', () => {
   const memberInfo = ref(null)
 
   //== 해당 회원 정보 ==//
-  const findMember = function(memberId) {
-    axios({
-      method: 'get',
-      url: `${BASE_URL}/${memberId}`,
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    })
-    .then((response) => {
+  const findMember = async function(memberId) {
+
+    try {
+      const response = await axios({
+        method: 'get',
+        url: `/member/${memberId}`,
+        headers: {
+          Authorization: `Bearer ${sessionStorage.getItem("token")}`
+        }
+      })
+
       memberInfo.value = response.data
-    })
-    .catch((error) => {
+    } catch (error) {
       console.log(error)
-    })
+      throw error
+    }
+  
+    return memberInfo.value
   }
 
   return { signUp, memberList, findMember, updateRole, deleteMember,

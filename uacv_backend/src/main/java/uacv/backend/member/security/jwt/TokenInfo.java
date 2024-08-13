@@ -10,6 +10,7 @@ import uacv.backend.member.domain.MemberRole;
 @AllArgsConstructor
 public class TokenInfo {
     //== 토큰 출력시 사용 ==//
+    private Long memberId;
     private MemberRole memberRole;
     private String grantType;
     private String accessToken;

@@ -4,7 +4,7 @@
 
     <v-app-bar app>
       <v-toolbar-title>
-        <br>
+        <br />
         <v-img src="@/assets/logo.png" height="100" contain></v-img>
         <span class="ml-3">UACV</span>
       </v-toolbar-title>
@@ -24,13 +24,15 @@
           <v-row>
             <v-col cols="6">
               <div class="cam-section">
-                <Cam camSrc="@/assets/cam.jpg" :speed="23" :distance="1.3" />
+                <!-- <Cam camSrc="@/assets/cam.jpg" :speed="23" :distance="1.3" /> -->
+                <CameraMonitor :speed="23" :distance="1.3"/>
               </div>
             </v-col>
 
             <v-col cols="6">
               <div class="cam-canon-section">
-                <Cam_canon camSrc="@/assets/cam.jpg" :ammo="3" />
+                <!-- <Cam_canon camSrc="@/assets/cam.jpg" :ammo="3" /> -->
+                <CannonMonitor :ammo="3"/>
               </div>
             </v-col>
           </v-row>
@@ -40,17 +42,40 @@
               <v-form>
                 <div class="mt-4">
                   <h3>원격주행</h3>
-                  <!-- Joystick -->
-                  <!--<joy @move="handleJoystickMove" />-->
-                  <!-- Button -->
-                  <v-btn @mousedown="startLogging('right')" @mouseup="stopLogging" @mouseleave="stopLogging"
-                    class="direction-btn mr-2">Right</v-btn>
-                  <v-btn @mousedown="startLogging('left')" @mouseup="stopLogging" @mouseleave="stopLogging"
-                    class="direction-btn mr-2">Left</v-btn>
-                  <v-btn @mousedown="startLogging('up')" @mouseup="stopLogging" @mouseleave="stopLogging"
-                    class="direction-btn mr-2">UP</v-btn>
-                  <v-btn @mousedown="startLogging('down')" @mouseup="stopLogging" @mouseleave="stopLogging"
-                    class="direction-btn">DOWN</v-btn>
+                  <!--주행 슬라이더, 버튼 -->
+                  <div class="angle-controls">
+                    <label for="angleSlider">angle : </label>
+                    <input
+                      id="angle"
+                      type="range"
+                      min="45"
+                      max="135"
+                      step="5"
+                      v-model="steerAngle"
+                      @input="updateSteerAngle"
+                    />
+                    <span>{{ steerAngle }}</span>
+                  </div>
+
+                  <v-btn
+                    @mousedown="startLogging('forward')"
+                    @click="moveForward"
+                    class="direction-btn mr-2"
+                    >FORWARD</v-btn
+                  >
+                  <v-btn
+                    @mousedown="startLogging('backward')"
+                    @click="moveBackward"
+                    class="direction-btn"
+                    >BACKWARD</v-btn
+                  >
+                  <br />
+                  <v-btn
+                    @mousedown="startLogging('stop')"
+                    @click="stopVehicle"
+                    class="direction-btn"
+                    >STOP</v-btn
+                  >
                 </div>
               </v-form>
             </v-col>
@@ -59,15 +84,38 @@
               <v-form>
                 <div class="mt-4">
                   <h5>포신방향</h5>
-                  <!-- Button -->
-                  <v-btn @mousedown="startLogging('right_cannon')" @mouseup="stopLogging" @mouseleave="stopLogging"
-                    class="direction-btn mr-2">Right</v-btn>
-                  <v-btn @mousedown="startLogging('left_cannon')" @mouseup="stopLogging" @mouseleave="stopLogging"
-                    class="direction-btn mr-2">Left</v-btn>
-                  <v-btn @mousedown="startLogging('up_cannon')" @mouseup="stopLogging" @mouseleave="stopLogging"
-                    class="direction-btn mr-2">UP</v-btn>
-                  <v-btn @mousedown="startLogging('down_cannon')" @mouseup="stopLogging" @mouseleave="stopLogging"
-                    class="direction-btn">DOWN</v-btn>
+                  <!--포신 버튼 -->
+                  <v-btn
+                    @mousedown="startLogging('right_cannon')"
+                    @click="cannonRight"
+                    class="direction-btn mr-2"
+                    >Right</v-btn
+                  >
+                  <v-btn
+                    @mousedown="startLogging('left_cannon')"
+                    @click="cannonLeft"
+                    class="direction-btn mr-2"
+                    >Left</v-btn
+                  >
+                  <v-btn
+                    @mousedown="startLogging('up_cannon')"
+                    @click="cannonUp"
+                    class="direction-btn mr-2"
+                    >UP</v-btn
+                  >
+                  <v-btn
+                    @mousedown="startLogging('down_cannon')"
+                    @click="cannonDown"
+                    class="direction-btn"
+                    >DOWN</v-btn
+                  >
+                  <br />
+                  <v-btn
+                    @mousedown="startLogging('fire_cannon')"
+                    @click="sendFire"
+                    class="direction-btn"
+                    >FIRE</v-btn
+                  >
                 </div>
               </v-form>
             </v-col>
@@ -79,62 +127,73 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
-import Cam from "@/components/Cam.vue";
-import Cam_canon from "@/components/Cam_canon.vue";
-import Navbar from "@/components/navbar.vue";
+import CameraMonitor from "@/components/CameraMonitor.vue"
+import CannonMonitor from "@/components/CannonMonitor.vue"
+import Navbar from "@/components/navbar.vue"
 
-const joystickX = ref(0);
-const joystickY = ref(0);
-const angle = ref(0);
-const distance = ref(0);
+import { ref, onMounted  } from "vue"
+import { useDeviceControlStore } from "@/stores/device_control";
 
-const counts = ref({
-  right: 0,
-  left: 0,
-  up: 0,
-  down: 0,
+const store = useDeviceControlStore();
+
+// 상태 값
+const steerAngle = ref(90);
+const moveState = ref(null);
+const cannonAngle = ref(90);
+const cannonElevation = ref(140);
+
+onMounted(() => {
+  store.sendSteerCommand(steerAngle.value);
+  store.sendMoveCommand(moveState.value);
+  store.sendCannonCommand(cannonAngle.value, cannonElevation.value);
 });
 
-const calculateAngleAndDistance = (x, y) => {
-  const distance = Math.sqrt(x * x + y * y);
-  const angle = Math.atan2(y, x) * (180 / Math.PI);
-  return { angle, distance };
+const updateSteerAngle = () => {
+  store.sendSteerCommand(steerAngle.value);
 };
 
-const handleJoystickMove = (joystickData) => {
-  joystickX.value = joystickData.x;
-  joystickY.value = joystickData.y;
-
-  const { angle: newAngle, distance: newDistance } = calculateAngleAndDistance(
-    joystickX.value,
-    joystickY.value
-  );
-  angle.value = newAngle;
-  distance.value = newDistance;
-  console.log(
-    `Angle: ${angle.value.toFixed(
-      2
-    )} degrees, Distance: ${distance.value.toFixed(2)}`
-  );
+const moveForward = () => {
+  moveState.value = "forward";
+  store.sendMoveCommand(moveState.value);
 };
 
-const logInterval = ref(null);
-
-const startLogging = (direction) => {
-  logInterval.value = setInterval(() => {
-    console.log(direction);
-  }, 100);
+const moveBackward = () => {
+  moveState.value = "backward";
+  store.sendMoveCommand(moveState.value);
 };
 
-const stopLogging = () => {
-  if (logInterval.value) {
-    clearInterval(logInterval.value);
-    logInterval.value = null;
-  }
+const stopVehicle = () => {
+  moveState.value = "stop";
+  store.sendMoveCommand(moveState.value);
 };
 
+const cannonRight = () => {
+  if (cannonAngle.value > 10) cannonAngle.value -= 10;
+  store.sendCannonCommand(cannonAngle.value, cannonElevation.value);
+};
 
+const cannonLeft = () => {
+  if (cannonAngle.value < 170) cannonAngle.value += 10;
+  store.sendCannonCommand(cannonAngle.value, cannonElevation.value);
+};
+
+const cannonUp = () => {
+  if (cannonElevation.value > 70) cannonElevation.value -= 5;
+  store.sendCannonCommand(cannonAngle.value, cannonElevation.value);
+};
+
+const cannonDown = () => {
+  if (cannonElevation.value < 140) cannonElevation.value += 5;
+  store.sendCannonCommand(cannonAngle.value, cannonElevation.value);
+};
+
+const sendFire = () => {
+  store.sendFireCommand();
+};
+
+const startLogging = (message) => {
+  console.log(message);
+};
 </script>
 
 <style scoped>
@@ -145,7 +204,9 @@ const stopLogging = () => {
     "joy-div direction-btn";
   grid-gap: 20px;
 }
-
+.angle-controls {
+  margin-top: 10px;
+}
 .mr-2 {
   margin-right: 8px;
 }
@@ -174,14 +235,73 @@ const stopLogging = () => {
   display: flex;
   justify-content: space-around;
 }
-
-.joy-div {
-  width: 200px;
-  height: 200px;
-  margin: 0 auto;
-}
-
 .direction-btn {
   margin: 4px;
 }
+input[type="range"] {
+  -webkit-appearance: none; /* 크롬, 사파리, 오페라 */
+  appearance: none;
+  background: transparent; /* 기본 게이지 배경을 투명하게 설정 */
+}
+
+input[type="range"]::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 8px; /* 슬라이더 트랙의 높이를 원하는 크기로 설정 */
+  background: #ddd; /* 슬라이더 트랙의 색상 */
+  border-radius: 5px;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  background: #007bff; /* 슬라이더 핸들의 색상 */
+  border-radius: 50%;
+  cursor: pointer;
+  margin-top: -4px; /* 슬라이더 트랙의 중앙에 맞추기 위해 조정 */
+}
+
+input[type="range"]::-moz-range-track {
+  width: 100%;
+  height: 8px;
+  background: #ddd;
+  border-radius: 5px;
+}
+
+input[type="range"]::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  background: #007bff;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+/* IE 및 Edge의 경우 */
+input[type="range"]::-ms-track {
+  width: 100%;
+  height: 8px;
+  background: transparent;
+  border-color: transparent;
+  color: transparent;
+}
+
+input[type="range"]::-ms-fill-lower {
+  background: #ddd;
+  border-radius: 5px;
+}
+
+input[type="range"]::-ms-fill-upper {
+  background: #ddd;
+  border-radius: 5px;
+}
+
+input[type="range"]::-ms-thumb {
+  width: 16px;
+  height: 16px;
+  background: #007bff;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
 </style>

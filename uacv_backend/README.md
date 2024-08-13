@@ -16,5 +16,6 @@
   RABBITMQ_USERNAME=아이디
   RABBITMQ_PASSWORD=비밀번호
   JWT_SECRET_KEY=JWT_키
+  LOG_LEVEL=로그 레벨 (기본 값: INFO)
   ```
 - 필요한 환경 변수는 `@Value` Annotation 사용하여 접근 가능

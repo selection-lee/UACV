@@ -92,4 +92,5 @@ const firingRecords = [
   background-color: #093028;
   color: #fff;
 }
+
 </style>

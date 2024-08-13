@@ -31,52 +31,39 @@
           <template v-slot:item.username="{ item }">
             <a @click="goDetail(item.id)">{{ item.username }}</a>
           </template>
-
-
         </v-data-table>
 
         <v-pagination v-model="page" :length="pages" class="mt-4">
         </v-pagination>
+
       </v-container>
     </v-main>
   </v-app>
 </template>
 
 <script setup>
-
 import { userAdminStore } from '@/stores/admin';
-import { useUserStore } from '@/stores/user';
 import { useRouter } from 'vue-router';
 import { ref, onMounted } from 'vue';
 
 const store_admin = userAdminStore()
-const store = useUserStore()
 const router = useRouter()
 const members = ref(null)
 const role = ref(null)
 
-//== 비동기화 ==//
-function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms))
-}
-
 onMounted(async () => {
-
-  store_admin.memberList()
-  role.value = store.memberRole
-
-  await sleep(100)
-  members.value = store_admin.members
+  members.value = await store_admin.memberList()
+  role.value = sessionStorage.getItem("memberRole")
 })
 
 const goDetail = function (memberId) {
-  console.log(memberId)
   router.push(`/${memberId}`)
 }
 
 </script>
 
 <style scoped>
+
 .v-toolbar-title span {
   font-size: 24px;
   font-weight: bold;
