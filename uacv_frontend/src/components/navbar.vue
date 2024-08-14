@@ -9,6 +9,7 @@
         <v-list density="compact" nav>
             <v-list-item prepend-icon="mdi-home" title="Home" :to="{ path: '/' }"></v-list-item>
             <v-list-item prepend-icon="mdi-text-box" title="Log" :to="{ path: '/log_text' }"></v-list-item>
+            <v-list-item prepend-icon="mdi-controller" title="원격주행" :to="{ path: '/remote_control' }"></v-list-item>
             <v-list-item prepend-icon="mdi-pencil" title="정보 수정" :to="{ path: '/imformation_edit' }"></v-list-item>
             <v-list-item prepend-icon="mdi-security" title="사용자 관리" :to="{ path: '/user_management' }"
                 v-if="role === 'ADMIN'">
