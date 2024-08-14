@@ -54,6 +54,7 @@ spring:
           - orin.cannon
           - orin.throttle
           - orin.steer
+          - orin.move
 
 logging:
   level:

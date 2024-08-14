@@ -15,6 +15,7 @@ import uacv.backend.hardware.domain.enums.EventType;
 import uacv.backend.hardware.domain.enums.LogType;
 import uacv.backend.hardware.dto.CommandDto;
 import uacv.backend.hardware.dto.ControlDataDto;
+import uacv.backend.hardware.dto.CoordinateDto;
 import uacv.backend.hardware.repository.CommandRepository;
 import uacv.backend.hardware.service.SendService;
 
@@ -63,5 +64,13 @@ public class SendServiceImpl implements SendService {
             log.error("Error inserting Control Data: {}", e.getMessage());
             return false;
         }
+    }
+
+    @Override
+    public void sendCoordinate(CoordinateDto coordinateDto) {
+        // Why: RabbitMQ를 통해 좌표 데이터 전송
+        // What: 'amq.topic' 교환기, 'orin.move' 라우팅 키로 메시지 전송
+        log.debug("Sending coordinate: {}", coordinateDto);
+        rabbitTemplate.convertAndSend(topicExchange.getName(), "orin.move", coordinateDto);
     }
 }
