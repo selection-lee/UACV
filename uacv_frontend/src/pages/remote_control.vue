@@ -2,107 +2,75 @@
   <v-app>
     <Navbar />
 
-    <Appbar/>
+    <Appbar />
 
     <v-main>
       <v-container class="fill-height">
         <v-responsive class="align-center fill-height mx-auto" max-width="900">
-          <v-row align="center">
-            <v-col cols="auto">
-              <h4 class="text-h4 font-weight-bold">원격주행</h4>
-            </v-col>
-          </v-row>
-
-          <!-- Components -->
-          <v-row>
-            <v-col cols="6">
-              <div class="cam-section">
+          <div style="display: flex; flex-direction: row; justify-content: center; align-items: center;">
+            <!-- 카메라 1 -->
+            <div style="background-color: #2c4d41; border-radius: 10%; margin-left: 10px; padding: 20px; height: 432px;
+             display: flex; flex-direction: column; justify-content: center; align-items: center;">
+              <!-- 카메라 화면 -->
+              <div>
                 <CameraMonitor />
               </div>
-            </v-col>
-
-            <v-col cols="6">
-              <div class="cam-canon-section">
-                <CannonMonitor/>
-              </div>
-            </v-col>
-          </v-row>
-
-          <v-row>
-            <v-col cols="6" class="text-center">
-              <v-form>
-                <div class="mt-4">
-                  <h3>원격주행</h3>
-                  <!--주행 슬라이더, 버튼 -->
+              <!-- 조종 -->
+              <div>
+                <!-- 슬라이더 -->
+                <div>
                   <div class="angle-controls">
                     <label for="angleSlider">angle : </label>
-                    <input
-                      id="angle"
-                      type="range"
-                      min="45"
-                      max="135"
-                      step="5"
-                      v-model="steerAngle"
-                      @input="updateSteerAngle"
-                    />
+                    <input id="angle" type="range" min="45" max="135" step="5" v-model="steerAngle"
+                      @input="updateSteerAngle" />
                     <span>{{ steerAngle }}</span>
                   </div>
-
-                  <v-btn
-                    @mousedown="startLogging('forward')"
-                    @click="moveForward"
-                    class="direction-btn mr-2"
-                  >FORWARD</v-btn>
-                  <v-btn
-                    @mousedown="startLogging('backward')"
-                    @click="moveBackward"
-                    class="direction-btn"
-                  >BACKWARD</v-btn>
-                  <br />
-                  <v-btn
-                    @mousedown="startLogging('stop')"
-                    @click="stopVehicle"
-                    class="direction-btn"
-                  >STOP</v-btn>
                 </div>
-              </v-form>
-            </v-col>
+                <!-- 버튼 -->
+                <div>
+                  <div>
+                    <v-btn @mousedown="startLogging('forward')" @click="moveForward"
+                      class="direction-btn mr-2">FORWARD</v-btn>
+                    <v-btn @mousedown="startLogging('backward')" @click="moveBackward"
+                      class="direction-btn">BACKWARD</v-btn>
+                  </div>
+                  <div style="display: flex; flex-direction: row; justify-content: center; align-items: center;">
+                    <v-btn @mousedown="startLogging('stop')" @click="stopVehicle" class="direction-btn">STOP</v-btn>
 
-            <v-col cols="6" class="text-center">
-              <v-form>
-                <div class="mt-4">
-                  <h5>포신방향</h5>
-                  <!--포신 버튼 -->
-                  <v-btn
-                    @mousedown="startLogging('right_cannon')"
-                    @click="cannonRight"
-                    class="direction-btn mr-2"
-                  >Right</v-btn>
-                  <v-btn
-                    @mousedown="startLogging('left_cannon')"
-                    @click="cannonLeft"
-                    class="direction-btn mr-2"
-                  >Left</v-btn>
-                  <v-btn
-                    @mousedown="startLogging('up_cannon')"
-                    @click="cannonUp"
-                    class="direction-btn mr-2"
-                  >UP</v-btn>
-                  <v-btn
-                    @mousedown="startLogging('down_cannon')"
-                    @click="cannonDown"
-                    class="direction-btn"
-                  >DOWN</v-btn>
-                  <br />
-                  <v-btn
-                    @mousedown="startLogging('fire_cannon')"
-                    @click="sendFire"
-                    class="direction-btn"
-                  >FIRE</v-btn>
+                  </div>
                 </div>
-              </v-form>
-            </v-col>
-          </v-row>
+              </div>
+            </div>
+            <!-- 카메라 2 -->
+            <div style="background-color: #2c4d41; border-radius: 10%; margin-left: 50px; padding: 20px; height: 432px;
+             display: flex; flex-direction: column; justify-content: center; align-items: center;">
+              <!-- 카메라 화면 -->
+              <div>
+                <CannonMonitor />
+              </div>
+              <!-- 조종 -->
+              <div style="margin-top: 10px;">
+                <div style="display: flex; flex-direction: row; justify-content: center; align-items: center">
+                  <v-btn @mousedown="startLogging('up_cannon')" @click="cannonUp" class="direction-btn mr-2">
+                    UP
+                  </v-btn>
+                </div>
+                <div>
+                  <v-btn @mousedown="startLogging('left_cannon')" @click="cannonLeft"
+                  class="direction-btn mr-2">Left</v-btn>
+                
+                  <v-btn @mousedown="startLogging('fire_cannon')" @click="sendFire" class="direction-btn">FIRE</v-btn>
+                
+                  <v-btn @mousedown="startLogging('right_cannon')" @click="cannonRight"
+                  class="direction-btn mr-2">Right</v-btn>
+                </div>
+
+                <div style="display: flex; flex-direction: row; justify-content: center; align-items: center">
+                <v-btn @mousedown="startLogging('down_cannon')" @click="cannonDown" class="direction-btn">DOWN</v-btn>
+              </div>
+              </div>
+            </div>
+          </div>
         </v-responsive>
       </v-container>
     </v-main>
@@ -204,9 +172,11 @@ const startLogging = (message) => {
     "joy-div direction-btn";
   grid-gap: 20px;
 }
+
 .angle-controls {
   margin-top: 10px;
 }
+
 .mr-2 {
   margin-right: 8px;
 }
@@ -235,19 +205,25 @@ const startLogging = (message) => {
   display: flex;
   justify-content: space-around;
 }
+
 .direction-btn {
   margin: 4px;
 }
+
 input[type="range"] {
-  -webkit-appearance: none; /* 크롬, 사파리, 오페라 */
+  -webkit-appearance: none;
+  /* 크롬, 사파리, 오페라 */
   appearance: none;
-  background: transparent; /* 기본 게이지 배경을 투명하게 설정 */
+  background: transparent;
+  /* 기본 게이지 배경을 투명하게 설정 */
 }
 
 input[type="range"]::-webkit-slider-runnable-track {
   width: 100%;
-  height: 8px; /* 슬라이더 트랙의 높이를 원하는 크기로 설정 */
-  background: #ddd; /* 슬라이더 트랙의 색상 */
+  height: 8px;
+  /* 슬라이더 트랙의 높이를 원하는 크기로 설정 */
+  background: #ddd;
+  /* 슬라이더 트랙의 색상 */
   border-radius: 5px;
 }
 
@@ -256,10 +232,12 @@ input[type="range"]::-webkit-slider-thumb {
   appearance: none;
   width: 16px;
   height: 16px;
-  background: #007bff; /* 슬라이더 핸들의 색상 */
+  background: #007bff;
+  /* 슬라이더 핸들의 색상 */
   border-radius: 50%;
   cursor: pointer;
-  margin-top: -4px; /* 슬라이더 트랙의 중앙에 맞추기 위해 조정 */
+  margin-top: -4px;
+  /* 슬라이더 트랙의 중앙에 맞추기 위해 조정 */
 }
 
 input[type="range"]::-moz-range-track {
@@ -303,5 +281,4 @@ input[type="range"]::-ms-thumb {
   border-radius: 50%;
   cursor: pointer;
 }
-
 </style>

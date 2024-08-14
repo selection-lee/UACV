@@ -1,0 +1,308 @@
+<template>
+    <v-app>
+      <Navbar />
+  
+      <Appbar/>
+  
+      <v-main>
+        <v-container class="fill-height">
+          <v-responsive class="align-center fill-height mx-auto" max-width="900">
+            <v-row align="center">
+              <v-col cols="auto">
+                <h4 class="text-h4 font-weight-bold">원격주행</h4>
+              </v-col>
+            </v-row>
+  
+            <!-- Components -->
+            <v-row>
+              <v-col cols="6">
+                <div class="cam-section">
+                  <CameraMonitor />
+                </div>
+              </v-col>
+  
+              <v-col cols="6">
+                <div class="cam-canon-section">
+                  <CannonMonitor/>
+                </div>
+              </v-col>
+            </v-row>
+  
+            <v-row>
+              <v-col cols="6" class="text-center">
+                <v-form>
+                  <div class="mt-4">
+                    <h3>원격주행</h3>
+                    <!--주행 슬라이더, 버튼 -->
+                    <div class="angle-controls">
+                      <label for="angleSlider">angle : </label>
+                      <input
+                        id="angle"
+                        type="range"
+                        min="45"
+                        max="135"
+                        step="5"
+                        v-model="steerAngle"
+                        @input="updateSteerAngle"
+                      />
+                      <span>{{ steerAngle }}</span>
+                    </div>
+  
+                    <v-btn
+                      @mousedown="startLogging('forward')"
+                      @click="moveForward"
+                      class="direction-btn mr-2"
+                    >FORWARD</v-btn>
+                    <v-btn
+                      @mousedown="startLogging('backward')"
+                      @click="moveBackward"
+                      class="direction-btn"
+                    >BACKWARD</v-btn>
+                    <br />
+                    <v-btn
+                      @mousedown="startLogging('stop')"
+                      @click="stopVehicle"
+                      class="direction-btn"
+                    >STOP</v-btn>
+                  </div>
+                </v-form>
+              </v-col>
+  
+              <v-col cols="6" class="text-center">
+                <v-form>
+                  <div class="mt-4">
+                    <h5>포신방향</h5>
+                    <!--포신 버튼 -->
+                    <v-btn
+                      @mousedown="startLogging('right_cannon')"
+                      @click="cannonRight"
+                      class="direction-btn mr-2"
+                    >Right</v-btn>
+                    <v-btn
+                      @mousedown="startLogging('left_cannon')"
+                      @click="cannonLeft"
+                      class="direction-btn mr-2"
+                    >Left</v-btn>
+                    <v-btn
+                      @mousedown="startLogging('up_cannon')"
+                      @click="cannonUp"
+                      class="direction-btn mr-2"
+                    >UP</v-btn>
+                    <v-btn
+                      @mousedown="startLogging('down_cannon')"
+                      @click="cannonDown"
+                      class="direction-btn"
+                    >DOWN</v-btn>
+                    <br />
+                    <v-btn
+                      @mousedown="startLogging('fire_cannon')"
+                      @click="sendFire"
+                      class="direction-btn"
+                    >FIRE</v-btn>
+                  </div>
+                </v-form>
+              </v-col>
+            </v-row>
+          </v-responsive>
+        </v-container>
+      </v-main>
+    </v-app>
+  </template>
+  
+  <script setup>
+  import CameraMonitor from "@/components/CameraMonitor.vue";
+  import CannonMonitor from "@/components/CannonMonitor.vue";
+  import Navbar from "@/components/navbar.vue";
+  
+  import { ref, onMounted, watch } from "vue";
+  import { useDeviceControlStore } from "@/stores/device_control";
+  import Appbar from "@/components/appbar.vue";
+  
+  const store = useDeviceControlStore();
+  
+  // 상태 값
+  const steerAngle = ref(store.steerAngle || 90);
+  const moveState = ref(store.moveState || null);
+  const cannonAngle = ref(store.cannonAngle || 90);
+  const cannonElevation = ref(store.cannonElevation || 140);
+  
+  onMounted(() => {
+    store.sendSteerCommand(steerAngle.value);
+    store.sendMoveCommand(moveState.value, steerAngle.value);
+    store.sendCannonCommand(cannonAngle.value, cannonElevation.value);
+  });
+  
+  watch(steerAngle, (newValue) => {
+    store.steerAngle = newValue;
+    store.sendSteerCommand(newValue);
+  });
+  
+  watch(moveState, (newValue) => {
+    store.sendMoveCommand(newValue, steerAngle.value);
+  });
+  
+  watch(cannonAngle, (newValue) => {
+    store.cannonAngle = newValue;
+    store.sendCannonCommand(newValue, cannonElevation.value);
+  });
+  
+  watch(cannonElevation, (newValue) => {
+    store.cannonElevation = newValue;
+    store.sendCannonCommand(cannonAngle.value, newValue);
+  });
+  
+  const moveForward = () => {
+    moveState.value = "forward";
+    store.sendMoveCommand("forward", steerAngle.value);
+  };
+  
+  const moveBackward = () => {
+    moveState.value = "backward";
+    store.sendMoveCommand("backward", steerAngle.value);
+  };
+  
+  const stopVehicle = () => {
+    moveState.value = "stop";
+    store.sendMoveCommand("stop", steerAngle.value);
+  };
+  
+  const cannonRight = () => {
+    if (cannonAngle.value > 10) cannonAngle.value -= 10;
+  };
+  
+  const cannonLeft = () => {
+    if (cannonAngle.value < 170) cannonAngle.value += 10;
+  };
+  
+  const cannonUp = () => {
+    if (cannonElevation.value > 70) cannonElevation.value -= 5;
+  };
+  
+  const cannonDown = () => {
+    if (cannonElevation.value < 140) cannonElevation.value += 5;
+  };
+  
+  const sendFire = () => {
+    store.sendFireCommand();
+  };
+  
+  const updateSteerAngle = () => {
+    store.steerAngle = steerAngle.value;
+    store.sendSteerCommand(steerAngle.value);
+  };
+  
+  const startLogging = (message) => {
+    console.log(message);
+  };
+  </script>
+  
+  <style scoped>
+  .cam_view {
+    display: grid;
+    grid-template-areas:
+      "cams-section cam-canon-section"
+      "joy-div direction-btn";
+    grid-gap: 20px;
+  }
+  .angle-controls {
+    margin-top: 10px;
+  }
+  .mr-2 {
+    margin-right: 8px;
+  }
+  
+  .text-center {
+    text-align: center;
+  }
+  
+  .v-main {
+    background-color: #093028;
+    color: #ffffef;
+  }
+  
+  .v-toolbar {
+    background-color: #004d40;
+  }
+  
+  .cams-section {
+    grid-area: cams-section;
+    display: flex;
+    justify-content: space-around;
+  }
+  
+  .cams-canon-section {
+    grid-area: cams-canon-section;
+    display: flex;
+    justify-content: space-around;
+  }
+  .direction-btn {
+    margin: 4px;
+  }
+  input[type="range"] {
+    -webkit-appearance: none; /* 크롬, 사파리, 오페라 */
+    appearance: none;
+    background: transparent; /* 기본 게이지 배경을 투명하게 설정 */
+  }
+  
+  input[type="range"]::-webkit-slider-runnable-track {
+    width: 100%;
+    height: 8px; /* 슬라이더 트랙의 높이를 원하는 크기로 설정 */
+    background: #ddd; /* 슬라이더 트랙의 색상 */
+    border-radius: 5px;
+  }
+  
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    background: #007bff; /* 슬라이더 핸들의 색상 */
+    border-radius: 50%;
+    cursor: pointer;
+    margin-top: -4px; /* 슬라이더 트랙의 중앙에 맞추기 위해 조정 */
+  }
+  
+  input[type="range"]::-moz-range-track {
+    width: 100%;
+    height: 8px;
+    background: #ddd;
+    border-radius: 5px;
+  }
+  
+  input[type="range"]::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    background: #007bff;
+    border-radius: 50%;
+    cursor: pointer;
+  }
+  
+  /* IE 및 Edge의 경우 */
+  input[type="range"]::-ms-track {
+    width: 100%;
+    height: 8px;
+    background: transparent;
+    border-color: transparent;
+    color: transparent;
+  }
+  
+  input[type="range"]::-ms-fill-lower {
+    background: #ddd;
+    border-radius: 5px;
+  }
+  
+  input[type="range"]::-ms-fill-upper {
+    background: #ddd;
+    border-radius: 5px;
+  }
+  
+  input[type="range"]::-ms-thumb {
+    width: 16px;
+    height: 16px;
+    background: #007bff;
+    border-radius: 50%;
+    cursor: pointer;
+  }
+  
+  </style>
+  
