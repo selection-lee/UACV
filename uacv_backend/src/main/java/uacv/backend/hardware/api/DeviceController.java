@@ -91,8 +91,6 @@ public class DeviceController {
     @PostMapping("/coordinate")
     public ResponseEntity<?> sendCoordinate(@RequestBody CoordinateDto coordinateDto) {
         try {
-            // Why: 좌표 데이터를 RabbitMQ로 전송
-            // What: 'orin/move' 토픽으로 좌표 데이터 전송
             sendService.sendCoordinate(coordinateDto);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {

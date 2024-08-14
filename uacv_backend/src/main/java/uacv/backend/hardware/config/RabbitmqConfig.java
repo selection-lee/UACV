@@ -75,16 +75,4 @@ public class RabbitmqConfig {
         rabbitTemplate.setMessageConverter(messageConverter);
         return rabbitTemplate;
     }
-
-    // map 목적지 
-    @Bean
-    public Queue commandQueue() {
-        return new Queue("command_queue", true);
-    }
-
-    @Bean
-    public Binding bindingCommand(TopicExchange exchange, Queue commandQueue) {
-        return BindingBuilder.bind(commandQueue).to(exchange).with("orin.move");
-    }
-
 }
