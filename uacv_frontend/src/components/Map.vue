@@ -17,8 +17,8 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue';
-import ROSLIB from 'roslib';
+import { onMounted, ref } from 'vue'
+import ROSLIB from 'roslib'
 
 const zoomLevel = ref(1)
 const SOCKET_API_URL = import.meta.env.VITE_MAPPING_SOCKET_URL
@@ -33,7 +33,6 @@ onMounted(() => {
   });
 
   ros.on('connection', function () {
-    console.log('Connected to websocket server.');
   });
 
   ros.on('error', function (error) {
@@ -67,13 +66,11 @@ onMounted(() => {
   canvas.height = 350;
 
   mapListener.subscribe(function (message) {
-    // console.log("map: ", message)
     mapData = message
     drawMap()
   })
 
   scanListener.subscribe(function (message) {
-    // console.log("scan: ", message)
     scanData = message
     drawMap()
   })

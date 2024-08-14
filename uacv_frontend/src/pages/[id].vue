@@ -1,6 +1,6 @@
 <template>
   <Navbar />
-  
+
   <div style="display: flex; flex-direction: column; align-items: center;">
     <h1>회원 정보 페이지</h1>
 
@@ -33,7 +33,7 @@
       <div class="div-flex" style="flex-direction: row; justify-content: center;">
 
         <v-btn @click="updateRole" variant="elevated" color="blue" style="margin: 20px;"> 권한 변경 </v-btn>
-        <v-btn  @click="deleteMember" variant="elevated" color="red" style="margin: 20px"> 회원 삭제 </v-btn>
+        <v-btn @click="deleteMember" variant="elevated" color="red" style="margin: 20px"> 회원 삭제 </v-btn>
       </div>
     </div>
   </div>
@@ -56,9 +56,7 @@ const updateRole = function () {
     username: memberInfo.value.username,
     memberRole: memberRole.value
   }
-
-  store.updateRole(id, payload)
-
+  store.updateRole(payload)
 }
 
 //== 회원 삭제 =//

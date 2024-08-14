@@ -1,17 +1,8 @@
 <template>
   <v-app>
-    <Navbar />
+    <Navbar/>
 
-    <!-- <Appbar/> -->
-
-    <v-app-bar app>
-      <v-toolbar-title>
-        <br>
-        <v-img src="@/assets/logo.png" height="100" contain></v-img>
-        <span class="ml-3">UACV</span>
-      </v-toolbar-title>
-      <v-spacer></v-spacer>
-    </v-app-bar>
+    <Appbar/>
 
     <v-main>
       <v-container style="display: flex; flex-direction: column; align-items: center;">
@@ -44,7 +35,6 @@
         </div>
             <v-btn @click="changePassword">비밀번호 변경</v-btn>
           
-
       </v-container>
     </v-main>
   </v-app>

@@ -1,8 +1,7 @@
 <template>
   <h5 class="text-h5 font-weight-bold">LOG</h5>
-  <div class="log">
+  <div>
     <ul>
-      <!-- Changed: Using displayedLogs instead of logs to show only the latest two entries -->
       <li v-for="log in displayedLogs" :key="log.id">
         {{ log.time }} - {{ log.message }}
       </li>
@@ -12,51 +11,42 @@
 
 
 <script>
-// Added: Importing necessary functions from Vue for Composition API
+
 import { ref, onMounted, computed } from 'vue';
 
 export default {
   name: "Log",
-  // Changed: Using setup() for Composition API
   setup() {
-    // Added: ref for reactive logs array
     const logs = ref([]);
-    // Added: ref for WebSocket connection
     const socket = ref(null);
 
-    // Added: Computed property to display only the last two logs
     const displayedLogs = computed(() => {
       return logs.value.slice(-2);
     });
 
-    // Added: Function to add new log entries
     const addLog = (newLog) => {
       logs.value.push(newLog);
     };
 
-    // Added: Function to fetch initial logs from API
     const fetchInitialLogs = async () => {
       try {
         const response = await fetch(`${import.meta.env.VITE_BACKEND_API_URL}/sound-logs`);
         const data = await response.json();
+
         logs.value = data.map(log => ({
           id: log.id,
           time: new Date(log.receivedAt).toLocaleString('ko-KR'),
           message: `총 소리 인식 (${log.soundType}로 추정)`,
         }));
+
       } catch (error) {
         console.error('Error fetching initial logs:', error);
       }
     };
 
-    // Added: Lifecycle hook to set up WebSocket and fetch initial logs
     onMounted(() => {
       fetchInitialLogs();
-
-      // Added: WebSocket connection setup
       socket.value = new WebSocket(`${import.meta.env.VITE_WEBSOCKET_URL}/ws/sound-logs`);
-
-      // Added: WebSocket message handler
       socket.value.onmessage = (event) => {
         const newLog = JSON.parse(event.data);
         addLog({
@@ -67,7 +57,6 @@ export default {
       };
     });
 
-    // Changed: Returning only displayedLogs for use in the template
     return {
       displayedLogs,
     };
@@ -76,10 +65,6 @@ export default {
 </script>
 
 <style scoped>
-.log {
-  /* 로그 컴포넌트 스타일 */
-}
-
 ul {
   list-style-type: none;
   padding: 0;
