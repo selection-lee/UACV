@@ -44,7 +44,7 @@ public class SecurityConfig implements WebMvcConfigurer {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/api/member/create", "/api/member/login", "/api/member/check",
-                                "/api/member/list", "/api/device/**", "/socket/**", "/api/test/send", "api/sound-logs").permitAll()
+                                "/api/member/list", "/api/device/**", "/socket/**", "/api/test/send", "/api/sound-logs", "/api/coordinate").permitAll()
                         .requestMatchers("/api/member/delete/{id}",
                                 "/api/member/update/role").hasRole("ADMIN")
                         .requestMatchers("/api/member/update/password", "/api/member/{id}", "api/device/connect").authenticated()

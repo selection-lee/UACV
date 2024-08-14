@@ -13,6 +13,7 @@ import uacv.backend.hardware.domain.enums.EventType;
 import uacv.backend.hardware.domain.enums.LogType;
 import uacv.backend.hardware.dto.CommandDto;
 import uacv.backend.hardware.dto.ControlDataDto;
+import uacv.backend.hardware.dto.CoordinateDto;
 import uacv.backend.hardware.service.SendService;
 
 import org.springframework.web.bind.annotation.PathVariable;
@@ -85,5 +86,18 @@ public class DeviceController {
             }
             return "안냥";
         });
+    }
+
+    @PostMapping("/coordinate")
+    public ResponseEntity<?> sendCoordinate(@RequestBody CoordinateDto coordinateDto) {
+        try {
+            // Why: 좌표 데이터를 RabbitMQ로 전송
+            // What: 'orin/move' 토픽으로 좌표 데이터 전송
+            sendService.sendCoordinate(coordinateDto);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (Exception e) {
+            log.error("Error sending coordinate: {}", e.getMessage());
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }
