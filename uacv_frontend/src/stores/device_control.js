@@ -22,7 +22,7 @@ export const useDeviceControlStore = defineStore('deviceControl', () => {
       },
       headers: { "Authorization": `Bearer ${sessionStorage.getItem("token")}` }
     }).then((response) => {
-      console.log(`Sent fire command with status code ${response.status}`)
+      // console.log(`Sent fire command with status code ${response.status}`)
     }).catch((error) => {
       console.error("Error sending fire command: ", error)
     })
@@ -41,7 +41,7 @@ export const useDeviceControlStore = defineStore('deviceControl', () => {
       },
       headers: { "Authorization": `Bearer ${sessionStorage.getItem("token")}` }
     }).then((response) => {
-      console.log(`Sent cannon command with status code ${response.status}`)
+      // console.log(`Sent cannon command with status code ${response.status}`)
     }).catch((error) => {
       console.error("Error sending cannon command :", error)
     })
@@ -57,7 +57,7 @@ export const useDeviceControlStore = defineStore('deviceControl', () => {
       },
       headers: { "Authorization": `Bearer ${sessionStorage.getItem("token")}` }
     }).then((response) => {
-      console.log(`Sent steer command with status code ${response.status}`)
+      // console.log(`Sent steer command with status code ${response.status}`)
     }).catch((error) => {
       console.error("Error sending steer command: ", error)
     })
@@ -73,7 +73,7 @@ export const useDeviceControlStore = defineStore('deviceControl', () => {
       },
       headers: { "Authorization": `Bearer ${sessionStorage.getItem("token")}` }
     }).then((response) => {
-      console.log(`Sent steer command with status code ${response.status}`)
+      // console.log(`Sent steer command with status code ${response.status}`)
     }).catch((error) => {
       console.error("Error sending move command :", error)
     })

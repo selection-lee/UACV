@@ -2,14 +2,23 @@
   <div style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
     <h2>MAP</h2>
     <div class="map">
+      <div v-if="connectionError" 
+      style="width: 350px; height: 350px;
+      display: flex; flex-direction: row; justify-content: center; align-items: center;
+      ">
+        <!-- <v-icon style="margin: 5px;">mdi-alert</v-icon> -->
+         <v-icon style="margin: 5px;">mdi-truck-alert</v-icon>
+        <p>연결에 실패했습니다.</p>
+        <v-icon style="margin: 5px;">mdi-email-alert</v-icon>
+      </div>
 
-      <div class="canvas-wrapper">
+      <div v-else class="canvas-wrapper">
         <div class="canvas-container" :style="{ transform: 'scale(' + zoomLevel + ')' }">
           <canvas id="mapCanvas"></canvas>
         </div>
       </div>
 
-      <div class="zoom-controls">
+      <div class="zoom-controls" v-if="!connectionError">
         <label for="zoomSlider">Zoom Level:</label>
         <input @mouseleave="resetZoom" id="zoomSlider" type="range" min="0" max="2" step="0.1" v-model="zoomLevel" />
         <span>{{ zoomLevel }}</span>
@@ -23,6 +32,9 @@ import { onMounted, ref } from 'vue'
 import ROSLIB from 'roslib'
 
 const zoomLevel = ref(1)
+const connectionError = ref(false)
+const mapDataReceived = ref(false)
+const scanDataReceived = ref(false)
 const SOCKET_API_URL = import.meta.env.VITE_SOCKET_URL
 
 const resetZoom = function () {
@@ -36,6 +48,7 @@ onMounted(() => {
 
   ros.on('error', function (error) {
     console.log('Error connecting to websocket server:', error);
+    connectionError.value = true; // 연결 오류 상태 설정
   });
 
   const mapListener = new ROSLIB.Topic({
@@ -55,24 +68,34 @@ onMounted(() => {
 
   var mapData = null;
   var scanData = null;
-  var mapScale = 3; // 지도 확대 배율
-  var scanScale = 60; // 스캔 확대 배율
-  var offsetY = -30; // 지도 Y 축으로 이동할 픽셀 수
-  var offsetX = 0; // 스캔 X 축으로 이동할 픽셀 수
-  var scanOffsetY = 0; // 스캔 Y 축으로 이동할 픽셀 수
+  var mapScale = 3;
+  var scanScale = 60;
+  var offsetY = -30;
+  var offsetX = 0;
+  var scanOffsetY = 0;
 
   canvas.width = 350;
   canvas.height = 350;
 
   mapListener.subscribe(function (message) {
-    mapData = message
-    drawMap()
-  })
+    mapData = message;
+    mapDataReceived.value = true;
+    connectionError.value = false; // 데이터 수신 시 오류 상태 해제
+    drawMap();
+  });
 
   scanListener.subscribe(function (message) {
-    scanData = message
-    drawMap()
-  })
+    scanData = message;
+    scanDataReceived.value = true;
+    connectionError.value = false; // 데이터 수신 시 오류 상태 해제
+    drawMap();
+  });
+
+  setTimeout(() => {
+    if (!mapDataReceived.value && !scanDataReceived.value) {
+      connectionError.value = true; // 일정 시간 내에 데이터가 들어오지 않으면 오류 상태 설정
+    }
+  }, 5000); // 5초 내에 데이터가 들어오지 않으면 오류로 간주
 
   async function drawMap() {
     if (!mapData) return;
@@ -95,7 +118,7 @@ onMounted(() => {
             imageData.data[index] = color;
             imageData.data[index + 1] = color;
             imageData.data[index + 2] = color;
-            imageData.data[index + 3] = 255; // Alpha
+            imageData.data[index + 3] = 255;
           }
         }
       }
@@ -103,20 +126,18 @@ onMounted(() => {
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // 지도 회전 변환
     const imageBitmap = await createImageBitmap(imageData);
     ctx.save();
     ctx.translate(canvas.width / 2, canvas.height / 2);
-    ctx.rotate(Math.PI / 2); // 90도 회전
+    ctx.rotate(Math.PI / 2);
     ctx.translate(-imageData.height / 2, -imageData.width / 2);
     ctx.drawImage(imageBitmap, 0, 0);
     ctx.restore();
 
-    drawScan(); // 맵을 그린 후 스캔 데이터 그리기
+    drawScan();
   }
 
   function drawScan() {
-    console.log(scanData)
     if (!scanData) return;
 
     var width = canvas.width;
@@ -125,8 +146,8 @@ onMounted(() => {
     var angle_increment = scanData.angle_increment;
     var range_max = scanData.range_max;
 
-    ctx.save(); // 현재 상태 저장
-    ctx.globalCompositeOperation = 'source-over'; // 기존 맵 데이터 위에 그리기
+    ctx.save();
+    ctx.globalCompositeOperation = 'source-over';
 
     ctx.fillStyle = 'red';
 
@@ -136,11 +157,9 @@ onMounted(() => {
         const x = (range * Math.cos(angle)) * scanScale;
         const y = (range * Math.sin(angle)) * scanScale;
 
-        // 90도 회전
         const rotatedX = -y;
         const rotatedY = x;
 
-        // 상하 반전 추가
         const flippedX = rotatedX;
         const flippedY = -rotatedY;
 
@@ -150,7 +169,7 @@ onMounted(() => {
       }
     });
 
-    ctx.restore(); // 저장된 상태 복원
+    ctx.restore();
   }
 })
 </script>
@@ -183,9 +202,16 @@ onMounted(() => {
   margin-top: 10px;
 }
 
-#zoomSlider {
+#errorSlider {
   margin-left: 10px;
 }
+
+/* .error-message {
+  font-size: 20px;
+  color: red;
+  text-align: center;
+  margin-top: 20px;
+} */
 
 * {
   font-family: 'Noto Sans KR', sans-serif;

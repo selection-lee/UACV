@@ -9,9 +9,6 @@ export const userAdminStore = defineStore('admin', () => {
 
   const store = useUserStore()
   const router = useRouter()
-
-  // //== token 저장 ==//
-  // const token = store.token
   
   //== 계정생성 ==//
   const signUp = function (payload) {
@@ -33,7 +30,7 @@ export const userAdminStore = defineStore('admin', () => {
   }
 
   //== 권한 변경 ==//
-  const updateRole = function (memberId, payload) {
+  const updateRole = function (payload) {
 
     const { username, memberRole } = payload
 
@@ -48,8 +45,6 @@ export const userAdminStore = defineStore('admin', () => {
       }
     })
     .then((response) => {
-      // 권한 변경 성공 시 메인페이지로 이동
-      // 삭제 예정
       router.go(0)
       alert("권한이 변경되었습니다.")
     })

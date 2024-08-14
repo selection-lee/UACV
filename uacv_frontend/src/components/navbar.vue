@@ -1,5 +1,5 @@
 <template>
-    <v-navigation-drawer expand-on-hover rail style="background-color: #ffef;">
+    <v-navigation-drawer expand-on-hover rail style="background-color: #ffffee;">
         <v-list>
             <v-list-item prepend-icon="mdi-tank" title="UACV"></v-list-item>
         </v-list>
@@ -9,7 +9,8 @@
         <v-list density="compact" nav>
             <v-list-item prepend-icon="mdi-home" title="Home" :to="{ path: '/' }"></v-list-item>
             <v-list-item prepend-icon="mdi-text-box" title="Log" :to="{ path: '/log_text' }"></v-list-item>
-            <v-list-item prepend-icon="mdi-pencil" title="정보 수정" :to="{ path: '/imformation_edit' }"></v-list-item>
+            <v-list-item prepend-icon="mdi-controller" title="원격주행" :to="{ path: '/remote_control' }"></v-list-item>
+            <v-list-item prepend-icon="mdi-account" title="계정 정보" :to="{ path: '/information_edit' }"></v-list-item>
             <v-list-item prepend-icon="mdi-security" title="사용자 관리" :to="{ path: '/user_management' }"
                 v-if="role === 'ADMIN'">
             </v-list-item>
@@ -38,5 +39,4 @@ onMounted(() => {
 })
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

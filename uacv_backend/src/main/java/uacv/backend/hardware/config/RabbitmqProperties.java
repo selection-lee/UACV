@@ -15,7 +15,6 @@ import lombok.Data;
 @ConfigurationProperties(prefix = "spring.rabbitmq")
 public class RabbitmqProperties {
 
-    // spring 에서  yml 꺼를 자동 mapping
     private String host;
 
     private int port;
@@ -24,7 +23,7 @@ public class RabbitmqProperties {
 
     private String password;
 
-//    @Value("${spring.rabbitmq.exchange}")
+   @Value("${spring.rabbitmq.exchange}")
     private String exchange;
 
     private Map<String, QueueConfig> queues = new HashMap<>();

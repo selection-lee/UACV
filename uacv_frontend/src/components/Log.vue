@@ -1,39 +1,76 @@
 <template>
   <h5 class="text-h5 font-weight-bold">LOG</h5>
-  <div class="log">
+  <div>
     <ul>
-      <li v-for="log in logs" :key="log.id">
+      <li v-for="log in displayedLogs" :key="log.id">
         {{ log.time }} - {{ log.message }}
       </li>
     </ul>
   </div>
 </template>
 
+
 <script>
+
+import { ref, onMounted, computed } from 'vue';
+
 export default {
   name: "Log",
-  data() {
+  setup() {
+    const logs = ref([]);
+    const socket = ref(null);
+
+    const displayedLogs = computed(() => {
+      return logs.value.slice(-2);
+    });
+
+    const addLog = (newLog) => {
+      logs.value.push(newLog);
+    };
+
+    const fetchInitialLogs = async () => {
+      try {
+        const response = await fetch(`${import.meta.env.VITE_BACKEND_API_URL}/sound-logs`);
+        const data = await response.json();
+
+        logs.value = data.map(log => ({
+          id: log.id,
+          time: new Date(log.receivedAt).toLocaleString('ko-KR'),
+          message: `총 소리 인식 (${log.soundType}로 추정)`,
+        }));
+
+      } catch (error) {
+        console.error('Error fetching initial logs:', error);
+      }
+    };
+
+    onMounted(() => {
+      fetchInitialLogs();
+      socket.value = new WebSocket(`${import.meta.env.VITE_WEBSOCKET_URL}/sound`);
+      socket.value.onmessage = (event) => {
+        const newLog = JSON.parse(event.data);
+        addLog({
+          id: newLog.id,
+          time: new Date(newLog.receivedAt).toLocaleString('ko-KR'),
+          message: `총 소리 인식 (${newLog.soundType}로 추정)`,
+        });
+      };
+    });
+
     return {
-      logs: [
-        { id: 1, time: "11:08:25", message: "총소리 인식 (AKM으로 추정됨)" },
-        { id: 2, time: "10:58:48", message: "포 1발 발사" },
-      ],
+      displayedLogs,
     };
   },
 };
 </script>
 
 <style scoped>
-.log {
-  /* 로그 컴포넌트 스타일 */
-}
-
 ul {
-  /* 리스트 스타일 */
+  list-style-type: none;
+  padding: 0;
 }
 
 li {
-  /* 리스트 아이템 스타일 */
+  margin-bottom: 5px;
 }
-
 </style>

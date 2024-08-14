@@ -2,25 +2,12 @@
   <v-app>
     <Navbar />
 
-    <v-app-bar app>
-      <v-toolbar-title>
-        <br>
-        <v-img src="@/assets/logo.png" height="100" contain />
-        <span class="ml-3">UACV</span>
-      </v-toolbar-title>
-      <v-spacer />
-    </v-app-bar>
+    <Appbar />
 
     <v-main>
       <v-container>
         <div class="d-flex justify-center align-center my-4">
-          <h3 class="text-h5 font-weight-bold mr-3">기록보기</h3>
-          <!-- <v-btn icon :to="{ path: '/log_text' }">
-            <v-icon>mdi-text</v-icon>
-          </v-btn> -->
-          <!-- <v-btn icon :to="{ path: '/log_cam' }">
-            <v-icon>mdi-video</v-icon>
-          </v-btn> -->
+          <h3 class="text-h5 font-weight-bold mr-3">LOG</h3>
         </div>
 
         <v-data-table :headers="headers" :items="filteredItems" class="elevation-1">
@@ -46,14 +33,15 @@
           </template>
         </v-data-table>
 
-        <!-- <v-pagination v-model="page" :length="pages" class="mt-4" /> -->
       </v-container>
     </v-main>
   </v-app>
 </template>
 
 <script>
+import Appbar from '@/components/appbar.vue';
 import Navbar from '@/components/navbar.vue';
+
 import { useUserStore } from '@/stores/user';
 
 const store = useUserStore()
@@ -61,15 +49,7 @@ const store = useUserStore()
 export default {
   data() {
     return {
-      store,
-      drawer: true,
-      mini: true,
-      miniWidth: 56,
-      drawerWidth: 56,
-      page: 1,
-      pages: 5,
-      menu: false,
-      filterOption: null,
+
       headers: [
         { text: "시간", value: "time" },
         { text: "구분", value: "type" },
@@ -93,6 +73,7 @@ export default {
         //   content: "총 소리 인식 (M762으로 추정됨)",
         // },
       ],
+
     };
   },
 
@@ -106,21 +87,18 @@ export default {
   },
 
   methods: {
-    // api url
     async fetchSoundLogs() {
       try {
         const response = await fetch(`${import.meta.env.VITE_BACKEND_API_URL}/sound-logs`);
         const data = await response.json();
         console.log('DB 전체:', data);
         
-        // Process and set the items
         this.items = data.map(log => ({
-          time: new Date(log.receivedAt).toLocaleString('ko-KR'), // Format date for Korean locale
-          type: "소리인식", // Set all types to "소리인식"
-          content: `총 소리 인식 (${log.soundType}로 추정)`, // Use soundType as content
+          time: new Date(log.receivedAt).toLocaleString('ko-KR'),
+          type: "소리인식",
+          content: `총 소리 인식 (${log.soundType}로 추정)`,
         }));
 
-        console.log('Processed items:', this.items);
       } catch (error) {
         console.error('Error fetching sound logs:', error);
       }
@@ -146,8 +124,6 @@ export default {
     applyFilter(option) {
       this.filterOption = option;
       this.menu = false;
-      // Note: This method is now less useful since we only have one filter option
-      // You might want to consider removing it or repurposing it in the future
     },
   },
   mounted() {
@@ -185,7 +161,8 @@ export default {
 }
 
 .v-toolbar {
-  background-color: #004d40;
+  background-color: #ffffee;
+  text-align: center;
 }
 
 .v-pagination {

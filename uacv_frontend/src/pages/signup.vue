@@ -19,21 +19,9 @@
       <div class="text-center mt-5">
         <v-form>
           <v-text-field v-model.trim="username" label="Username" />
-          <v-text-field
-            v-model.trim="password1"
-            label="Password"
-            type="password"
-          />
-          <v-text-field
-            v-model.trim="password2"
-            label="Password 확인"
-            type="password"
-          />
-          <v-select
-            label="Select"
-            v-model.trim="userRole"
-            :items="['CONTROL', 'MONITOR']"
-          ></v-select>
+          <v-text-field v-model.trim="password1" label="Password" type="password" />
+          <v-text-field v-model.trim="password2" label="Password 확인" type="password" />
+          <v-select label="Select" v-model.trim="userRole" :items="['CONTROL', 'MONITOR']"></v-select>
           <v-text-field v-model.trim="rnk" label="소속계급" />
           <v-text-field v-model.trim="m_id" label="군번" />
           <v-btn class="block" @click="SignUp">등록</v-btn>

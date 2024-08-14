@@ -1,6 +1,7 @@
 package uacv.backend.hardware.dto;
 
-import java.time.LocalDateTime;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import lombok.Data;
 import lombok.ToString;
 
@@ -8,18 +9,22 @@ import lombok.ToString;
 @ToString
 public class SensorDataDto {
 
-    // private Long deviceId;
-    private LocalDateTime receivedDate;
+    @JsonProperty("Heading")
+    private float heading;
+    @JsonProperty("Direction")
+    private String direction;
+    @JsonProperty("Accelerometer")
+    private AxisData accelerometer;
+    @JsonProperty("Gyroscope")
+    private AxisData gyroscope;
 
-    // 차체 방향
-    private Float chassisDir;
-    // 포신 방향
-    private Float cannonDir;
-    // DC 모터 제어값
-    private Float throttleValue;
-    // 온습도
-    private Float temperature;
-    // TODO
-    // 라이다 / 맵핑 데이터
-
+    @Data
+    public static class AxisData {
+        @JsonProperty("X")
+        private float x;
+        @JsonProperty("Y")
+        private float y;
+        @JsonProperty("Z")
+        private float z;
+    }
 }

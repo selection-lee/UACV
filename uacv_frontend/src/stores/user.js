@@ -32,7 +32,6 @@ export const useUserStore = defineStore('counter', () => {
   //== 로그인 ==//
   const LogIn = function (payload) {
     const { username, password } = payload
-    
     axios({
       method: 'post',
       url: '/member/login',
@@ -42,11 +41,10 @@ export const useUserStore = defineStore('counter', () => {
 
     })
       .then((response) => {
+        console.log(response)
         sessionStorage.setItem("memberId", response.data.memberId)
         sessionStorage.setItem("memberRole", response.data.memberRole)
         sessionStorage.setItem("token", response.data.accessToken)
-
-        //  로그인 성공시 메인 페이지로 이동
 
         router.push(
           {
@@ -56,6 +54,8 @@ export const useUserStore = defineStore('counter', () => {
       })
       .catch((error) => {
         console.log(error)
+        alert("아이디 또는 비밀번호 오류")
+        router.go(0)
       })
   }
 
@@ -77,7 +77,7 @@ sessionStorage.setItem = function(key, value) {
 
   //== 로그인 상태 확인 ==//
   const isLogin = computed(() => {
-    if (token.value === null) {
+    if (token.value == null) {
       return false
     } else {
       return true

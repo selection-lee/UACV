@@ -13,7 +13,7 @@ import uacv.backend.hardware.domain.enums.EventType;
 import uacv.backend.hardware.domain.enums.LogType;
 import uacv.backend.hardware.dto.CommandDto;
 import uacv.backend.hardware.dto.ControlDataDto;
-import uacv.backend.hardware.service.ReceiveService;
+import uacv.backend.hardware.dto.CoordinateDto;
 import uacv.backend.hardware.service.SendService;
 
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,16 +30,7 @@ import java.util.concurrent.TimeUnit;
 public class DeviceController {
 
     @Autowired
-    private ReceiveService receiveService;
-
-    @Autowired
     private SendService sendService;
-
-    // 센서 정보 수신?
-    // @PostMapping("/receive")
-    // public String postMethodName(@RequestBody String entity) {
-    // return entity;
-    // }
 
     // 로그 기록 조회
     // 소리, 발사, 센서
@@ -89,11 +80,22 @@ public class DeviceController {
     public CompletableFuture<String> hihi() {
         return CompletableFuture.supplyAsync(() -> {
             try {
-                TimeUnit.SECONDS.sleep(1); // 30초 대기
+                TimeUnit.SECONDS.sleep(3);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
             return "안냥";
         });
+    }
+
+    @PostMapping("/coordinate")
+    public ResponseEntity<?> sendCoordinate(@RequestBody CoordinateDto coordinateDto) {
+        try {
+            sendService.sendCoordinate(coordinateDto);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (Exception e) {
+            log.error("Error sending coordinate: {}", e.getMessage());
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }
