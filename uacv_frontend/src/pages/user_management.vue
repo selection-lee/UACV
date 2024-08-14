@@ -65,6 +65,7 @@ const goDetail = function (memberId) {
 
 .v-toolbar {
   background-color: #004d40;
+  text-align: center;
 }
 
 .v-pagination {
