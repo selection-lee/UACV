@@ -5,6 +5,16 @@
         <div class="cam">
             <v-img :src="chassisCam" alt="Chassis feed" style="width: 290px;"></v-img>
         </div>
+
+        <div v-if="!chassisCam" 
+      style="width: 300px; height: 250px;
+      display: flex; flex-direction: row; justify-content: center; align-items: center;
+      ">
+        <!-- <v-icon style="margin: 5px;">mdi-alert</v-icon> -->
+         <v-icon style="margin: 5px;">mdi-bus-alert</v-icon>
+        <p>연결에 실패했습니다.</p>
+        <v-icon style="margin: 5px;">mdi-cookie-alert</v-icon>
+      </div>
     </v-container>
 </template>
 

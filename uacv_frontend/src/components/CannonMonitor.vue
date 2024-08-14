@@ -5,6 +5,16 @@
         <div class="cam">
             <v-img :src="cannonCam" alt="Turret feed" style="width: 290px;"></v-img>
         </div>
+
+        <div v-if="!cannonCam" 
+      style="width: 300px; height: 250px;
+      display: flex; flex-direction: row; justify-content: center; align-items: center;
+      ">
+        <!-- <v-icon style="margin: 5px;">mdi-alert</v-icon> -->
+         <v-icon style="margin: 5px;">mdi-fire-alert</v-icon>
+        <p>연결에 실패했습니다.</p>
+        <v-icon style="margin: 5px;">mdi-cloud-alert</v-icon>
+      </div>
     </v-container>
 </template>
 

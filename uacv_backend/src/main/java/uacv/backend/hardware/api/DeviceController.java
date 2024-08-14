@@ -80,7 +80,7 @@ public class DeviceController {
     public CompletableFuture<String> hihi() {
         return CompletableFuture.supplyAsync(() -> {
             try {
-                TimeUnit.SECONDS.sleep(1); // 30초 대기
+                TimeUnit.SECONDS.sleep(3);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

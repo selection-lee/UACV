@@ -13,7 +13,8 @@
               <div
                 style="background-color: #2c4d41; justify-content: center; align-items: center; border-radius: 10%; margin-left: 10px; padding: 10px;">
                 <div class="map-section" style="padding: 5px;">
-                  <Map />
+                  <!-- <Map /> -->
+                   <mapTest/>
                 </div>
               </div>
               <SoundAlert />
@@ -61,7 +62,7 @@ import Log from "@/components/Log.vue"
 import Navbar from "@/components/navbar.vue"
 import Appbar from "@/components/appbar.vue"
 import SoundAlert from "@/components/SoundAlert.vue"
-
+import mapTest from "@/components/mapTest.vue"
 import { onUnmounted, onMounted, ref } from "vue"
 import { useDeviceControlStore } from "@/stores/device_control"
 import Loading from "./loading.vue"
