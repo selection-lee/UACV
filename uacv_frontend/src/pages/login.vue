@@ -7,11 +7,12 @@
           <div class="logo-text">UACV</div>
         </div>
 
-        <v-form class="form-container">
+        <v-form class="form-container" @keydown.enter="Login">
           <v-text-field v-model.trim="username" label="ID" outlined dense />
           <v-text-field v-model.trim="password" label="Password" type="password" outlined dense />
-          <v-btn class="login-button" @click="Login">Login</v-btn>
+          <v-btn class="login-button">Login</v-btn>
         </v-form>
+
       </div>
     </v-container>
   </v-main>
