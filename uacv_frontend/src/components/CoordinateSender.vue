@@ -48,7 +48,6 @@
         y: parseFloat(y.value),
         z: 0 // Always send 0 for z coordinate
       });
-      console.log('Coordinates sent successfully:', response.data);
     } catch (error) {
       console.error('Error sending coordinates:', error);
     }
