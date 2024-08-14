@@ -41,6 +41,7 @@
 <script>
 import Appbar from '@/components/appbar.vue';
 import Navbar from '@/components/navbar.vue';
+
 import { useUserStore } from '@/stores/user';
 
 const store = useUserStore()
@@ -48,15 +49,7 @@ const store = useUserStore()
 export default {
   data() {
     return {
-      store,
-      drawer: true,
-      mini: true,
-      miniWidth: 56,
-      drawerWidth: 56,
-      page: 1,
-      pages: 5,
-      menu: false,
-      filterOption: null,
+
       headers: [
         { text: "시간", value: "time" },
         { text: "구분", value: "type" },
@@ -80,7 +73,7 @@ export default {
       try {
         const response = await fetch(`${import.meta.env.VITE_BACKEND_API_URL}/sound-logs`);
         const data = await response.json();
-        
+
         this.items = data.map(log => ({
           time: new Date(log.receivedAt).toLocaleString('ko-KR'),
           type: "소리인식",
@@ -149,8 +142,8 @@ export default {
 }
 
 .v-toolbar {
-      background-color: #ffffee;
-      text-align: center;
+  background-color: #ffffee;
+  text-align: center;
 }
 
 .v-pagination {

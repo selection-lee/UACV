@@ -52,21 +52,27 @@
               <div style="margin-top: 10px;">
                 <div style="display: flex; flex-direction: row; justify-content: center; align-items: center">
                   <v-btn @mousedown="startLogging('up_cannon')" @click="cannonUp" class="direction-btn mr-2">
-                    UP
+                    <v-icon>mdi-arrow-up-bold</v-icon>
                   </v-btn>
                 </div>
                 <div>
-                  <v-btn @mousedown="startLogging('left_cannon')" @click="cannonLeft"
-                  class="direction-btn mr-2">Left</v-btn>
+                  <v-btn @mousedown="startLogging('left_cannon')" @click="cannonLeft" class="direction-btn mr-2">
+                    <v-icon>mdi-arrow-left-bold</v-icon>
+                  </v-btn>
                 
-                  <v-btn @mousedown="startLogging('fire_cannon')" @click="sendFire" class="direction-btn">FIRE</v-btn>
+                  <v-btn @mousedown="startLogging('fire_cannon')" @click="sendFire" class="direction-btn">
+                    <v-icon>mdi-target</v-icon>
+                  </v-btn>
                 
-                  <v-btn @mousedown="startLogging('right_cannon')" @click="cannonRight"
-                  class="direction-btn mr-2">Right</v-btn>
+                  <v-btn @mousedown="startLogging('right_cannon')" @click="cannonRight" class="direction-btn mr-2">
+                    <v-icon>mdi-arrow-right-bold</v-icon>
+                  </v-btn>
                 </div>
 
                 <div style="display: flex; flex-direction: row; justify-content: center; align-items: center">
-                <v-btn @mousedown="startLogging('down_cannon')" @click="cannonDown" class="direction-btn">DOWN</v-btn>
+                <v-btn @mousedown="startLogging('down_cannon')" @click="cannonDown" class="direction-btn">
+                  <v-icon>mdi-arrow-down-bold</v-icon>
+                </v-btn>
               </div>
               </div>
             </div>
