@@ -32,7 +32,6 @@ export const useUserStore = defineStore('counter', () => {
   //== 로그인 ==//
   const LogIn = function (payload) {
     const { username, password } = payload
-    
     axios({
       method: 'post',
       url: '/member/login',
@@ -42,6 +41,7 @@ export const useUserStore = defineStore('counter', () => {
 
     })
       .then((response) => {
+        console.log(response)
         sessionStorage.setItem("memberId", response.data.memberId)
         sessionStorage.setItem("memberRole", response.data.memberRole)
         sessionStorage.setItem("token", response.data.accessToken)
@@ -75,7 +75,7 @@ sessionStorage.setItem = function(key, value) {
 
   //== 로그인 상태 확인 ==//
   const isLogin = computed(() => {
-    if (token.value === null) {
+    if (token.value == null) {
       return false
     } else {
       return true

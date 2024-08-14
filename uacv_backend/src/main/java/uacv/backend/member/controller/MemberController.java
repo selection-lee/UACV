@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.View;
 import uacv.backend.member.domain.Member;
 import uacv.backend.member.domain.MemberAuthorizationUtil;
 import uacv.backend.member.domain.Response;
@@ -22,6 +23,7 @@ public class MemberController {
 
     private final MemberService memberService;
     private final PasswordEncoder passwordEncoder;
+    private final View error;
 
     //== 계정생성 ==//
     @ResponseStatus(HttpStatus.OK)
@@ -32,18 +34,19 @@ public class MemberController {
 
     //== 로그인 ==//
     @PostMapping("/login")
-    public TokenInfo login(@RequestBody MemberLoginRequestDto memberLoginRequestDto) {
+    public TokenInfo login(MemberLoginRequestDto memberLoginRequestDto) {
         String username = memberLoginRequestDto.getUsername();
         String password = memberLoginRequestDto.getPassword();
 
         Member userInfo = memberService.findUser(username);
         String DbPassword = userInfo.getPassword();
-        TokenInfo tokenInfo = null;
 
         if (passwordEncoder.matches(password, DbPassword)) {
-            tokenInfo = memberService.login(username, DbPassword);
+            TokenInfo tokenInfo = memberService.login(username, DbPassword);
+            return tokenInfo;
         }
-        return tokenInfo;
+
+        return memberService.login(username, password);
     }
 
     //== 회원삭제 ==//

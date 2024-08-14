@@ -56,6 +56,24 @@ export default {
         { text: "내용", value: "content" },
       ],
       filterOptions: ["소리인식", "발사기록", "센서인식"],
+      items: [
+        // {
+        //   time: "2024.07.25 18:07:41",
+        //   type: "발사기록",
+        //   content: "포 1발 발사",
+        // },
+        // {
+        //   time: "2024.07.25 11:54:52",
+        //   type: "센서인식",
+        //   content: "UACV 적발 추정",
+        // },
+        // {
+        //   time: "2024.07.25 11:08:07",
+        //   type: "소리인식",
+        //   content: "총 소리 인식 (M762으로 추정됨)",
+        // },
+      ],
+
     };
   },
 
@@ -73,7 +91,8 @@ export default {
       try {
         const response = await fetch(`${import.meta.env.VITE_BACKEND_API_URL}/sound-logs`);
         const data = await response.json();
-
+        console.log('DB 전체:', data);
+        
         this.items = data.map(log => ({
           time: new Date(log.receivedAt).toLocaleString('ko-KR'),
           type: "소리인식",
