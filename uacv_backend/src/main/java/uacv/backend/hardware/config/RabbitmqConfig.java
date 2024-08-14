@@ -75,5 +75,4 @@ public class RabbitmqConfig {
         rabbitTemplate.setMessageConverter(messageConverter);
         return rabbitTemplate;
     }
-
 }
