@@ -212,18 +212,14 @@ const startLogging = (message) => {
 
 input[type="range"] {
   -webkit-appearance: none;
-  /* 크롬, 사파리, 오페라 */
   appearance: none;
   background: transparent;
-  /* 기본 게이지 배경을 투명하게 설정 */
 }
 
 input[type="range"]::-webkit-slider-runnable-track {
   width: 100%;
   height: 8px;
-  /* 슬라이더 트랙의 높이를 원하는 크기로 설정 */
   background: #ddd;
-  /* 슬라이더 트랙의 색상 */
   border-radius: 5px;
 }
 
@@ -233,11 +229,9 @@ input[type="range"]::-webkit-slider-thumb {
   width: 16px;
   height: 16px;
   background: #007bff;
-  /* 슬라이더 핸들의 색상 */
   border-radius: 50%;
   cursor: pointer;
   margin-top: -4px;
-  /* 슬라이더 트랙의 중앙에 맞추기 위해 조정 */
 }
 
 input[type="range"]::-moz-range-track {
@@ -255,7 +249,6 @@ input[type="range"]::-moz-range-thumb {
   cursor: pointer;
 }
 
-/* IE 및 Edge의 경우 */
 input[type="range"]::-ms-track {
   width: 100%;
   height: 8px;

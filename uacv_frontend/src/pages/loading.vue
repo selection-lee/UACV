@@ -4,10 +4,6 @@
     </div>
 </template>
 
-<script setup>
-
-</script>
-
 <style scoped>
 .center-container {
     display: flex;

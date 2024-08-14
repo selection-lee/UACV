@@ -46,8 +46,6 @@ export const useUserStore = defineStore('counter', () => {
         sessionStorage.setItem("memberRole", response.data.memberRole)
         sessionStorage.setItem("token", response.data.accessToken)
 
-        //  로그인 성공시 메인 페이지로 이동
-
         router.push(
           {
             path: '/'

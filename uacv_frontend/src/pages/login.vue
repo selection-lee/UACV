@@ -81,5 +81,4 @@ const Login = function () {
   font-weight: bold;
   margin-top: 20px;
 }
-
 </style>

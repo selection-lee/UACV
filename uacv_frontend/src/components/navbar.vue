@@ -1,5 +1,5 @@
 <template>
-    <v-navigation-drawer expand-on-hover rail style="background-color: #ffef;">
+    <v-navigation-drawer expand-on-hover rail style="background-color: #ffffee;">
         <v-list>
             <v-list-item prepend-icon="mdi-tank" title="UACV"></v-list-item>
         </v-list>
@@ -39,5 +39,4 @@ onMounted(() => {
 })
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

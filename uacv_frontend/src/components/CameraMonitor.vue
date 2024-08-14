@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import mqtt from 'mqtt';
+import mqtt from 'mqtt'
 
 export default {
     name: "CameraMonitor",
@@ -19,7 +19,7 @@ export default {
         };
     },
     mounted() {
-        const chassisTopic = 'rpi/cam/chassis';
+        const chassisTopic = 'rpi/cam/chassis'
 
         const client = mqtt.connect({
             protocol: 'wss',
@@ -30,7 +30,6 @@ export default {
         });
 
         client.on('connect', () => {
-            console.log('Connected to MQTT Broker');
             client.subscribe(chassisTopic);
         });
 

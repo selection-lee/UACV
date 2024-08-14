@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import mqtt from 'mqtt';
+import mqtt from 'mqtt'
 
 export default {
     name: "CameraMonitor",
@@ -30,13 +30,12 @@ export default {
         });
 
         client.on('connect', () => {
-            console.log('Connected to MQTT Broker');
             client.subscribe(cannonTopic);
         });
 
         client.on('message', (topic, message) => {
-            const payload = message.toString();
-            this.cannonCam = 'data:image/jpeg;base64,' + payload;
+            const payload = message.toString()
+            this.cannonCam = 'data:image/jpeg;base64,' + payload
         });
     }
 };
