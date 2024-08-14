@@ -16,6 +16,7 @@
                   <!-- <Map /> -->
                    <mapTest/>
                 </div>
+                <CoordinateSender />
               </div>
               <SoundAlert />
             </div>
@@ -62,7 +63,8 @@ import Log from "@/components/Log.vue"
 import Navbar from "@/components/navbar.vue"
 import Appbar from "@/components/appbar.vue"
 import SoundAlert from "@/components/SoundAlert.vue"
-import mapTest from "@/components/mapTest.vue"
+import CoordinateSender from "@/components/CoordinateSender.vue"
+
 import { onUnmounted, onMounted, ref } from "vue"
 import { useDeviceControlStore } from "@/stores/device_control"
 import Loading from "./loading.vue"
