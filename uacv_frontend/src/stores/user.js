@@ -54,6 +54,8 @@ export const useUserStore = defineStore('counter', () => {
       })
       .catch((error) => {
         console.log(error)
+        alert("아이디 또는 비밀번호 오류")
+        router.go(0)
       })
   }
 

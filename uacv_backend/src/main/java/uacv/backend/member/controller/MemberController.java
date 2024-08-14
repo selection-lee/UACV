@@ -34,7 +34,7 @@ public class MemberController {
 
     //== 로그인 ==//
     @PostMapping("/login")
-    public TokenInfo login(MemberLoginRequestDto memberLoginRequestDto) {
+    public TokenInfo login(@RequestBody MemberLoginRequestDto memberLoginRequestDto) {
         String username = memberLoginRequestDto.getUsername();
         String password = memberLoginRequestDto.getPassword();
 
