@@ -46,7 +46,7 @@ export default {
 
     onMounted(() => {
       fetchInitialLogs();
-      socket.value = new WebSocket(`${import.meta.env.VITE_WEBSOCKET_URL}/ws/sound-logs`);
+      socket.value = new WebSocket(`${import.meta.env.VITE_WEBSOCKET_URL}/sound`);
       socket.value.onmessage = (event) => {
         const newLog = JSON.parse(event.data);
         addLog({
