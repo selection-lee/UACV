@@ -4,8 +4,12 @@
   ```
   VITE_BACKEND_API_URL=API_주소
   VITE_SOCKET_URL=맵핑_웹소켓_주소
+  VITE_MQTT_HOST=MQTT_주소
+  VITE_MQTT_USERNAME=MQTT_아이디
+  VITE_MQTT_PASSWORD=MQTT_비밀번호
   ```
-  ```
+  ```javascript
+  // 로컬 빌드일 경우
   VITE_BACKEND_API_URL="http://localhost:8080/api"
   VITE_SOCKET_URL="ws://localhost:8080/socket"
   ```

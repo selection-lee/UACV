@@ -23,10 +23,10 @@ export default {
 
         const client = mqtt.connect({
             protocol: 'wss',
-            host: "i11c102.p.ssafy.io",
             path: "/ws",
-            username: 'vue',
-            password: 'ssafyi11C102!!'
+            host: import.meta.env.VITE_MQTT_HOST,
+            username: import.meta.env.VITE_MQTT_USERNAME,
+            password: import.meta.env.VITE_MQTT_PASSWORD
         });
 
         client.on('connect', () => {
