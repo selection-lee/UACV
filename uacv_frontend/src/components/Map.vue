@@ -21,7 +21,7 @@ import { onMounted, ref } from 'vue';
 import ROSLIB from 'roslib';
 
 const zoomLevel = ref(1)
-const SOCKET_API_URL = import.meta.env.VITE_MAPPING_SOCKET_URL
+const SOCKET_API_URL = import.meta.env.VITE_SOCKET_URL
 
 const resetZoom = function () {
   zoomLevel.value = 1
@@ -33,7 +33,7 @@ onMounted(() => {
   });
 
   ros.on('connection', function () {
-    console.log('Connected to websocket server.');
+    console.log('Connected to mapping websocket server.');
   });
 
   ros.on('error', function (error) {
