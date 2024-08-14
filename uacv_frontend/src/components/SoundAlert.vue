@@ -16,14 +16,14 @@ window.global = window;
 export default {
   data() {
     return {
-      showAlert: false,
-      alertMessage: "",
+      showAlert: false, // 알림 표시 여부
+      alertMessage: "", // 표시할 알림메시지
       stompClient: null,
       alertTimer: null
     };
   },
   methods: {
-    displayAlert(message) {
+    displayAlert(message) {  // 일반 함수로 변경
       this.alertMessage = message;
       this.showAlert = true;
       // console.log("Alert status: ", this.showAlert);
@@ -47,13 +47,21 @@ export default {
       }
     },
 
+    replaceWsWithHttp(url) {
+      return url.replace(/^ws(s)?:\/\//, function (match, secure) {
+        return secure ? 'https://' : 'http://';
+      });
+    },
+
     connectWebSocket() {
-      const socket = new SockJS("http://localhost:8080/socket/sound");
+      const SOCKET_API_URL = import.meta.env.VITE_SOCKET_URL
+      const socket = new SockJS(`${this.replaceWsWithHttp(SOCKET_API_URL)}/sound`);
       this.stompClient = Stomp.over(socket);
 
       this.stompClient.connect({}, (frame) => {
-
+        // console.log("WebSocketConnected: " + frame);
         this.stompClient.subscribe("/orin/sensor", (message) => {
+          // console.log("Received WebSocket message:", message);
           try {
             const soundData = JSON.parse(message.body);
             let alertMessage = `총기소리 인식: ${soundData.soundType}`;
@@ -68,20 +76,16 @@ export default {
       });
     }
   },
-
   mounted() {
     this.connectWebSocket();
   },
-
   beforeDestroy() {
     if (this.stompClient !== null) {
       this.stompClient.disconnect();
     }
-
     if (this.alertTimer) {
       clearTimeout(this.alertTimer);
     }
   }
 }
-
 </script>
