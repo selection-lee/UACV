@@ -1,4 +1,3 @@
-<!-- log_text.vue -->
 <template>
   <v-app>
     <Navbar />
@@ -39,13 +38,13 @@ export default {
     Navbar,
   },
   setup() {
-    const logTypes = ref(['수동 조작', '센서 데이터', '총기 인식']);
+    const logTypes = ref(['총기 인식', '수동 조작', '센서 데이터']);
     const selectedLogType = ref('총기 인식');
 
     const commandCriteria = ref({
+      '사격': 'fire',
       '포신': 'cannon',
       '조향': 'steer',
-      '사격': 'fire',
       '이동': 'move',
       '모두 보기': 'all'
     });
@@ -74,8 +73,6 @@ export default {
           return;
       }
 
-      console.log(`Fetching ${selectedLogType.value} from ${url}`);
-
       try {
         const response = await axios.get(url, {
           headers: {
@@ -92,15 +89,20 @@ export default {
           })).sort((a, b) => b.receivedAt - a.receivedAt);
 
           tableHeaders.value = [
-            { title: "인식 시간", value: "time", align: "center" },
+            { title: "인식 시간", value: "time", align: "center", sortable: true },
             { title: "구분", value: "type", align: "center" },
-            { title: "분석 결과", value: "content", align: "center" },
+            { title: "분석 결과", value: "content", align: "center", sortable: true }
           ];
         } else {
           const { eventType, data } = response.data;
-          logs.value = data.queries;
+          // logs.value = data.queries;
 
           if (eventType === 'command') {
+            logs.value = data.queries.map(log => ({
+              ...log,
+              sendDate: new Date(log.sendDate).toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' }), // Converts ISO date to local date & time
+            }))
+
             tableHeaders.value = [
               { title: '명령일시', value: 'sendDate', align: 'center', sortable: true },
               { title: '명령', value: 'command', align: 'center' },
@@ -117,6 +119,11 @@ export default {
               { title: '조향 각도', value: 'controlData.steer', align: 'center' }
             ];
           } else if (eventType === 'sensor') {
+            logs.value = data.queries.map(log => ({
+              ...log,
+              receivedDate: new Date(log.receivedDate).toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' }), // Converts ISO date to local date & time
+            }))
+
             tableHeaders.value = [
               { title: '수신일시', value: 'receivedDate', align: 'center', sortable: true },
               { title: '각도', value: 'heading', align: 'center' },
@@ -190,8 +197,8 @@ export default {
 }
 
 .v-select {
-    color: #093028;
-    /* background-color: #ffffef; */
+  color: #093028;
+  /* background-color: #ffffef; */
 }
 
 /* 전체 앱에 대한 스타일 */
