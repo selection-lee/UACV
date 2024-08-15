@@ -33,7 +33,6 @@ public class JwtTokenProvider {
 
     public TokenInfo generateToken(Authentication authentication) {
 
-
         // 권한 가져오기
         String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
@@ -78,6 +77,7 @@ public class JwtTokenProvider {
                 .collect(Collectors.toList());
 
         UserDetails principal = new User(claims.getSubject(),"", authorities);
+
         return new UsernamePasswordAuthenticationToken(principal, "", authorities);
     }
 

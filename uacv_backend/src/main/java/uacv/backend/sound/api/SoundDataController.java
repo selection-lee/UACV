@@ -5,12 +5,15 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
+
+import lombok.extern.slf4j.Slf4j;
 import uacv.backend.sound.domain.SoundData;
 import uacv.backend.sound.dto.SoundDataDTO;
 import uacv.backend.sound.repository.SoundDataRepository;
 
 import java.util.List;
 
+@Slf4j
 @Controller
 public class SoundDataController {
 
@@ -29,14 +32,11 @@ public class SoundDataController {
     @MessageMapping("socket/sound")
     @SendTo("/orin/sensor")
     public String handleSoundMessage(SoundDataDTO soundData) {
-        // Process the incoming sound data
-        System.out.println("Received sound data: " + soundData.getType());
+        log.debug("Received sound data: {}", soundData.getType());
 
-        // Save to repository if needed
         SoundData newSoundData = new SoundData(soundData.getType());
         soundDataRepository.save(newSoundData);
 
-        // Return a message that will be sent to subscribers
         return "Processed sound: " + soundData.getType();
     }
 }

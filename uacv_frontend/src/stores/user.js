@@ -41,7 +41,6 @@ export const useUserStore = defineStore('counter', () => {
 
     })
       .then((response) => {
-        console.log(response)
         sessionStorage.setItem("memberId", response.data.memberId)
         sessionStorage.setItem("memberRole", response.data.memberRole)
         sessionStorage.setItem("token", response.data.accessToken)
