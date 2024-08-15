@@ -10,7 +10,7 @@ import lombok.Data;
 @Builder
 @AllArgsConstructor
 public class LogResponseDto {
-    private String log;
+    private String eventType;
     private LogDataDto data;
     
     @Data

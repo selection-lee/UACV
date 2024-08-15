@@ -38,22 +38,22 @@ public class DeviceController {
     @RequestMapping(value = "/log/{eventType}", method = RequestMethod.GET)
     public ResponseEntity<?> getDeviceLogs(
             @PathVariable("eventType") EventType eventType,
-            @RequestParam(name = "command") CommandType commandType,
+            @RequestParam(name = "command", required = false) CommandType commandType,
             @RequestParam(name = "page", defaultValue = "1") int pageCount) {
 
         try {
             List<?> queries = null;
 
             if (eventType == EventType.sensor) {
-                sendService.sendSensorLog(pageCount);
+                queries = sendService.sendSensorLog(pageCount);
             } else if (eventType == EventType.command) {
                 queries = sendService.sendCommandLog(commandType, pageCount);
             }
 
             LogResponseDto response = LogResponseDto.builder()
-                    .log(eventType.toString())
+                    .eventType(eventType.toString())
                     .data(LogResponseDto.LogDataDto.builder()
-                            .type(commandType.toString())
+                            .type(commandType == null ? eventType.toString() : commandType.toString())
                             .count(queries.size())
                             .queries(queries)
                             .build())
