@@ -90,17 +90,32 @@ import Navbar from "@/components/navbar.vue";
 
 import { ref, onMounted, watch } from "vue";
 import { useDeviceControlStore } from "@/stores/device_control";
+import { useRouter } from "vue-router";
 import Appbar from "@/components/appbar.vue";
 
 const store = useDeviceControlStore();
 
-// 상태 값
+//== 상태 값 ==//
 const steerAngle = ref(store.steerAngle || 90);
 const moveState = ref(store.moveState || null);
 const cannonAngle = ref(store.cannonAngle || 90);
 const cannonElevation = ref(store.cannonElevation || 140);
 
+//== memberRole ==//
+const memberRole = ref(null)
+const router = useRouter()
+
 onMounted(() => {
+  memberRole.value = sessionStorage.getItem("memberRole")
+  console.log(memberRole.value)
+
+  if (memberRole.value === "MONITOR") {
+    alert("권한이 없습니다.")
+    router.push({
+      path: '/'
+    })
+  }
+
   store.sendSteerCommand(steerAngle.value);
   store.sendMoveCommand(moveState.value, steerAngle.value);
   store.sendCannonCommand(cannonAngle.value, cannonElevation.value);
