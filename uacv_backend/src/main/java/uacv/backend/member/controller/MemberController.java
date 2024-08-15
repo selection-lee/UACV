@@ -56,10 +56,9 @@ public class MemberController {
     //== 중복확인 ==//
     @GetMapping("/check")
     public String checkUsername(@RequestParam String username) {
-        Member member = null;
 
         try {
-            member = memberService.findUser(username);
+            memberService.findUser(username);
             return "사용불가";
 
         } catch (IllegalStateException e) {
