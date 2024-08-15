@@ -13,8 +13,7 @@
               <div
                 style="background-color: #2c4d41; justify-content: center; align-items: center; border-radius: 10%; margin-left: 10px; padding: 10px;">
                 <div class="map-section" style="padding: 5px;">
-                  <!-- <Map /> -->
-                   <mapTest/>
+                  <Map />
                 </div>
                 <CoordinateSender />
               </div>
