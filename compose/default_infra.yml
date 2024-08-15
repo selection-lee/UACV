@@ -1,0 +1,60 @@
+services:
+    mysql:
+        container_name: mysql
+        expose:
+            - 3306
+            - 33060
+        restart: always
+        pull_policy: always
+        volumes:
+            - /etc/localtime:/etc/localtime:ro
+        image: mysql:lts
+        environment:
+            MYSQL_ROOT_PASSWORD: ssafyi11C102!!
+            MYSQL_DATABASE: uacv
+        networks:
+            - caddy
+    mongodb-ce:
+        container_name: mongodb
+        expose:
+            - 27017
+        networks:
+            - caddy
+        image: mongodb/mongodb-community-server:7.0-ubuntu2204
+    rabbitmq:
+        container_name: rabbitmq
+        hostname: ssafy-c102
+        expose:
+            - 15672
+        ports:
+            - 1883:1883
+            - 35551:5672
+        restart: unless-stopped
+        image: rabbitmq:3.13.4-management-alpine
+        networks:
+            - caddy
+        labels:
+            caddy: i11c102.p.ssafy.io
+            caddy.0_redir: /rabbit/console /rabbit/console/
+            caddy.0_handle_path: /rabbit/console/*
+            caddy.0_handle_path.reverse_proxy: "{{upstreams 15672}}"
+            caddy.1_handle: /ws*
+            caddy.1_handle.reverse_proxy: "{{ upstreams 15675 }}"
+            caddy_1: localhost:1883
+            caddy_1.reverse_proxy: "{{upstreams 1883}}"
+        command: "/bin/bash -c \"rabbitmq-plugins enable --offline rabbitmq_mqtt rabbitmq_web_mqtt; rabbitmq-server\""
+        volumes:
+            - rabbitmq_data:/var/lib/rabbitmq
+            - /etc/localtime:/etc/localtime:ro
+            - /home/ubuntu/docker/rabbitmq/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf
+            - /home/ubuntu/docker/rabbitmq/default.json:/etc/rabbitmq/default.json
+
+volumes:
+    rabbitmq_data:
+        name: rabbitmq_data
+        external: false
+
+networks:
+    caddy:
+        external: true
+        name: caddy
