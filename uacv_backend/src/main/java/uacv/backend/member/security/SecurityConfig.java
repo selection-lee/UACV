@@ -44,10 +44,15 @@ public class SecurityConfig implements WebMvcConfigurer {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/api/member/create", "/api/member/login", "/api/member/check",
-                                "/api/member/list", "/api/device/**", "/socket/**", "/api/sound-logs", "/api/coordinate").permitAll()
-                        .requestMatchers("/api/member/delete/{id}",
-                                "/api/member/update/role").hasRole("ADMIN")
-                        .requestMatchers("/api/member/update/password", "/api/member/{id}", "api/device/connect").authenticated()
+                                "/api/member/list", "/api/device/connect", "/socket/**")
+                        .permitAll()
+                        .requestMatchers("/api/member/delete/{id}", "/api/member/update/role")
+                        .hasRole("ADMIN")
+                        .requestMatchers("/api/device/control/**", "/api/device/coordinate")
+                        .hasAnyRole("ADMIN", "CONTROL")
+                        .requestMatchers("/api/member/update/password", "/api/member/{id}", "api/device/connect",
+                                "/api/device/log/**", "/api/sound-logs")
+                        .authenticated()
                         .anyRequest().authenticated())
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider),
                         UsernamePasswordAuthenticationFilter.class);

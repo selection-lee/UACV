@@ -1,6 +1,5 @@
 package uacv.backend.member.repository;
 
-import org.springframework.data.domain.Example;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import uacv.backend.member.domain.Member;

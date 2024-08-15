@@ -13,10 +13,9 @@
               <div
                 style="background-color: #2c4d41; justify-content: center; align-items: center; border-radius: 10%; margin-left: 10px; padding: 10px;">
                 <div class="map-section" style="padding: 5px;">
-                  <!-- <Map /> -->
-                   <mapTest/>
+                  <Map />
                 </div>
-                <CoordinateSender />
+                <CoordinateSender v-if="memberRole !== 'MONITOR'"/>
               </div>
               <SoundAlert />
             </div>
@@ -73,9 +72,11 @@ const connect = ref(null)
 const store = useDeviceControlStore()
 const logUpdateTrigger = ref(0)
 const socket = ref(null)
+const memberRole = ref(null)
 
 onMounted(async () => {
   connect.value = await store.connect()
+  memberRole.value = sessionStorage.getItem("memberRole")
 
   socket.value = new WebSocket(`${import.meta.env.VITE_SOUND_SOCKET_URL}`);
   socket.value.onmessage = () => {

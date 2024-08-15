@@ -1,31 +1,24 @@
 <template>
-  <V-APP>
+  
+
+  <v-app class="custom-app">
     <Navbar />
-    <v-container>
-      <v-app-bar app>
-        <v-toolbar-title>
-          <br />
-          <v-img src="@/assets/logo.png" height="100" contain />
-          <span class="ml-3">UACV</span>
-        </v-toolbar-title>
-        <v-spacer />
-      </v-app-bar>
+  <Appbar />
 
-      <div class="text-center">
-        <br />
-        <div class="text-h4 font-weight-bold mb-n1">사용자 등록</div>
-      </div>
-
-      <div class="text-center mt-5">
-        <v-form>
-          <v-text-field v-model.trim="username" label="Username" />
-          <v-text-field v-model.trim="password1" label="Password" type="password" />
-          <v-text-field v-model.trim="password2" label="Password 확인" type="password" />
-          <v-select label="Select" v-model.trim="userRole" :items="['CONTROL', 'MONITOR']"></v-select>
-          <v-text-field v-model.trim="rnk" label="소속계급" />
-          <v-text-field v-model.trim="m_id" label="군번" />
-          <v-btn class="block" @click="SignUp">등록</v-btn>
-        </v-form>
+    <v-container >
+      <div class="login-container">
+        <div class="logo-container">
+          <div class="logo-text">계정 등록</div>
+        </div>
+          <v-form>
+            <v-text-field v-model.trim="username" label="Username" />
+            <v-text-field v-model.trim="password1" label="Password" type="password" />
+            <v-text-field v-model.trim="password2" label="Password 확인" type="password" />
+            <v-select label="Select" v-model.trim="userRole" :items="['CONTROL', 'MONITOR']"></v-select>
+            <v-text-field v-model.trim="rnk" label="소속계급" />
+            <v-text-field v-model.trim="m_id" label="군번" />
+            <v-btn class="block" @click="SignUp">등록</v-btn>
+          </v-form>
       </div>
     </v-container>
   </V-APP>
@@ -34,6 +27,8 @@
 <script setup>
 import { ref } from "vue";
 import { userAdminStore } from "@/stores/admin";
+import Appbar from "@/components/appbar.vue";
+import Navbar from "@/components/navbar.vue";
 
 const store = userAdminStore();
 
@@ -59,7 +54,44 @@ const SignUp = function () {
 </script>
 
 <style scoped>
-.v-toolbar {
-  background-color: #004d40;
+.custom-app {
+  background-color: #093028;
+  color: #ffffef;
+  height: 100vh;
+  width: 100vw;
+}
+
+.v-container {
+  padding: 0.1px;
+  border-radius: 8px;
+  width: 800px;
+  margin: 100px auto;
+  text-align: center;
+}
+
+.logo-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.logo {
+  width: 80px;
+  height: auto;
+}
+
+.logo-text {
+  font-family: "Arial Black", sans-serif;
+  font-size: 40px;
+  font-weight: bold;
+  color: #d5e0d7;
+}
+
+.block {
+  background-color: #a3b18a;
+  color: #ffffff;
+  font-weight: bold;
+  margin: 10px;
 }
 </style>
