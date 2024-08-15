@@ -1,5 +1,9 @@
 package uacv.backend.hardware.service.implement;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.amqp.core.TopicExchange;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,12 +15,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import uacv.backend.hardware.domain.ControlData;
 import uacv.backend.hardware.domain.enums.CommandType;
-import uacv.backend.hardware.domain.enums.EventType;
-import uacv.backend.hardware.domain.enums.LogType;
 import uacv.backend.hardware.dto.CommandDto;
+import uacv.backend.hardware.dto.CommandQueryDto;
 import uacv.backend.hardware.dto.ControlDataDto;
 import uacv.backend.hardware.dto.CoordinateDto;
+import uacv.backend.hardware.dto.SensorDataQueryDto;
 import uacv.backend.hardware.repository.CommandRepository;
+import uacv.backend.hardware.repository.SensorDataRepository;
 import uacv.backend.hardware.service.SendService;
 
 // 송신 서비스 구현체
@@ -31,6 +36,9 @@ public class SendServiceImpl implements SendService {
     private CommandRepository commandRepository;
 
     @Autowired
+    private SensorDataRepository sensorDataRepository;
+
+    @Autowired
     private TopicExchange topicExchange;
 
     @Override
@@ -42,11 +50,6 @@ public class SendServiceImpl implements SendService {
     public void sendCommand(String routingKey, CommandDto commandDto) {
         log.debug("Routing Key: {}, Command Data: {}", routingKey, commandDto);
         rabbitTemplate.convertAndSend(topicExchange.getName(), routingKey, commandDto);
-    }
-
-    @Override
-    public void getDeviceLogs(LogType logType, EventType eventType, int pageCount) {
-
     }
 
     public Boolean insertControlData(CommandType commandType, ControlDataDto controlDataDto) {
@@ -68,9 +71,40 @@ public class SendServiceImpl implements SendService {
 
     @Override
     public void sendCoordinate(CoordinateDto coordinateDto) {
-        // Why: RabbitMQ를 통해 좌표 데이터 전송
-        // What: 'amq.topic' 교환기, 'orin.move' 라우팅 키로 메시지 전송
         log.debug("Sending coordinate: {}", coordinateDto);
         rabbitTemplate.convertAndSend(topicExchange.getName(), "orin.move", coordinateDto);
+    }
+
+    @Override
+    public List<CommandQueryDto> sendCommandLog(CommandType commandType, int pageCount) {
+        return commandRepository.findByCommand(commandType.toString()).stream()
+                .map(commandLog -> CommandQueryDto.builder()
+                        .command(commandLog.getCommand())
+                        .sendDate(commandLog.getSendDate())
+                        .build())
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<SensorDataQueryDto> sendSensorLog(int pageCount) {
+        return sensorDataRepository.findAll().stream()
+                .map(sensorLog -> SensorDataQueryDto.builder()
+                        .heading(sensorLog.getHeading())
+                        .direction(sensorLog.getDirection())
+                        .receivedDate(sensorLog.getReceivedDate())
+                        .accelerometer(
+                                SensorDataQueryDto.AxisData.builder()
+                                        .x(sensorLog.getAccelerometer().getX())
+                                        .y(sensorLog.getAccelerometer().getY())
+                                        .z(sensorLog.getAccelerometer().getZ())
+                                        .build())
+                        .gyroscope(
+                                SensorDataQueryDto.AxisData.builder()
+                                        .x(sensorLog.getGyroscope().getX())
+                                        .y(sensorLog.getGyroscope().getY())
+                                        .z(sensorLog.getGyroscope().getZ())
+                                        .build())
+                        .build())
+                .collect(Collectors.toList());
     }
 }

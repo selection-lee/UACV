@@ -10,10 +10,10 @@ import org.springframework.web.bind.annotation.RestController;
 import lombok.extern.slf4j.Slf4j;
 import uacv.backend.hardware.domain.enums.CommandType;
 import uacv.backend.hardware.domain.enums.EventType;
-import uacv.backend.hardware.domain.enums.LogType;
 import uacv.backend.hardware.dto.CommandDto;
 import uacv.backend.hardware.dto.ControlDataDto;
 import uacv.backend.hardware.dto.CoordinateDto;
+import uacv.backend.hardware.dto.LogResponseDto;
 import uacv.backend.hardware.service.SendService;
 
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
@@ -34,14 +35,35 @@ public class DeviceController {
 
     // 로그 기록 조회
     // 소리, 발사, 센서
-    @RequestMapping(value = "/log/{logType}", method = RequestMethod.GET)
+    @RequestMapping(value = "/log/{eventType}", method = RequestMethod.GET)
     public ResponseEntity<?> getDeviceLogs(
-            @PathVariable("logType") LogType logType,
-            @RequestParam(name = "type", required = true) EventType eventType,
+            @PathVariable("eventType") EventType eventType,
+            @RequestParam(name = "command", required = false) CommandType commandType,
             @RequestParam(name = "page", defaultValue = "1") int pageCount) {
 
-        sendService.getDeviceLogs(logType, eventType, pageCount);
-        return new ResponseEntity<>(HttpStatus.OK);
+        try {
+            List<?> queries = null;
+
+            if (eventType == EventType.sensor) {
+                queries = sendService.sendSensorLog(pageCount);
+            } else if (eventType == EventType.command) {
+                queries = sendService.sendCommandLog(commandType, pageCount);
+            }
+
+            LogResponseDto response = LogResponseDto.builder()
+                    .eventType(eventType.toString())
+                    .data(LogResponseDto.LogDataDto.builder()
+                            .type(commandType == null ? eventType.toString() : commandType.toString())
+                            .count(queries.size())
+                            .queries(queries)
+                            .build())
+                    .build();
+
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (Exception e) {
+            log.error("Error getting {} logs: {}", eventType.toString(), e.getMessage());
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     /*
