@@ -14,16 +14,11 @@
         <v-data-table :headers="headers" :items="filteredItems" class="elevation-1">
           <template v-slot:top>
             <v-toolbar flat>
-              <v-toolbar-title style="color: #FFFFEF;">기록보기</v-toolbar-title>
+              <v-toolbar-title style="color: #FFFFEF;">로그 기록</v-toolbar-title>
               <v-divider inset vertical class="mx-4" />
 
               <div class="filter-container">
-                <v-btn
-                  icon
-                  @click="toggleMenu"
-                  class="filter-button"
-                  ref="filterButton"
-                >
+                <v-btn icon @click="toggleMenu" class="filter-button" ref="filterButton">
                   <v-icon style="color: #FFFFEF;">mdi-filter</v-icon>
                 </v-btn>
 
@@ -47,19 +42,16 @@
 <script>
 import Appbar from '@/components/appbar.vue';
 import Navbar from '@/components/navbar.vue';
-import { useUserStore } from '@/stores/user';
-
-const store = useUserStore()
 
 export default {
   data() {
     return {
       headers: [
-        { text: "시간", value: "time" },
-        { text: "구분", value: "type" },
-        { text: "내용", value: "content" },
+        { title: "인식 시간", value: "time", align: "center" },
+        { title: "구분", value: "type", align: "center" },
+        { title: "분석 결과", value: "content", align: "center" },
       ],
-      filterOptions: ["소리인식", "발사기록", "센서인식"],
+      filterOptions: ['수동 조작', '센서 데이터', '총기 인식'],
       items: [],
       filterOption: null,
       menu: false,
@@ -88,11 +80,11 @@ export default {
 
         this.items = data.map(log => ({
           time: new Date(log.receivedAt).toLocaleString('ko-KR'),
-          type: "소리인식",
-          content: `총 소리 인식 (${log.soundType}로 추정)`,
+          type: '총기 인식',
+          content: `${log.soundType}`,
           receivedAt: new Date(log.receivedAt), // 정렬을 위해 Date 객체 추가
         }))
-        .sort((a, b) => b.receivedAt - a.receivedAt); // 날짜 기준 내림차순 정렬;
+          .sort((a, b) => b.receivedAt - a.receivedAt); // 날짜 기준 내림차순 정렬;
 
       } catch (error) {
         console.error('Error fetching sound logs:', error);
@@ -178,11 +170,13 @@ export default {
 
 .filter-container {
   position: relative;
-  z-index: 1000; /* 컨테이너의 z-index를 높임 */
+  z-index: 1000;
+  /* 컨테이너의 z-index를 높임 */
 }
 
 .filter-button {
-  z-index: 1001; /* 버튼의 z-index를 컨테이너보다 약간 높게 설정 */
+  z-index: 1001;
+  /* 버튼의 z-index를 컨테이너보다 약간 높게 설정 */
 }
 
 .filter-menu {
@@ -191,7 +185,8 @@ export default {
   border: 1px solid #ddd;
   border-radius: 4px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-  z-index: 1002; /* 메뉴의 z-index를 가장 높게 설정 */
+  z-index: 1002;
+  /* 메뉴의 z-index를 가장 높게 설정 */
 }
 
 /* 전체 앱에 대한 스타일 */
