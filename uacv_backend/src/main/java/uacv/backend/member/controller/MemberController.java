@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.View;
 import uacv.backend.member.domain.Member;
 import uacv.backend.member.domain.MemberAuthorizationUtil;
 import uacv.backend.member.domain.Response;
@@ -23,7 +22,6 @@ public class MemberController {
 
     private final MemberService memberService;
     private final PasswordEncoder passwordEncoder;
-    private final View error;
 
     //== 계정생성 ==//
     @ResponseStatus(HttpStatus.OK)
@@ -57,9 +55,7 @@ public class MemberController {
 
     //== 중복확인 ==//
     @GetMapping("/check")
-    public String checkUsername (@RequestParam String username) {
-        System.out.println(username);
-
+    public String checkUsername(@RequestParam String username) {
         Member member = null;
 
         try {
