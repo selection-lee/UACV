@@ -1,8 +1,6 @@
 package uacv.backend.member.service;
 
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -26,7 +24,6 @@ import java.util.stream.Collectors;
 @Transactional(readOnly = true)
 public class MemberService {
 
-    private static final Logger log = LoggerFactory.getLogger(MemberService.class);
     private final MemberRepository memberRepository;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final JwtTokenProvider jwtTokenProvider;

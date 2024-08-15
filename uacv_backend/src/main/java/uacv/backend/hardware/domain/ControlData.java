@@ -25,6 +25,9 @@ public class ControlData {
     private int cannon_y;
     private int steer;
 
+    // 명령 생성자
+    private String commander;
+
     // 명령 생성 시간
     @CreatedDate
     private LocalDateTime sendDate;

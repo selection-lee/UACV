@@ -1,12 +1,13 @@
 package uacv.backend.hardware.service.implement;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.amqp.core.TopicExchange;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.mongodb.MongoWriteException;
@@ -53,9 +54,14 @@ public class SendServiceImpl implements SendService {
     }
 
     public Boolean insertControlData(CommandType commandType, ControlDataDto controlDataDto) {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        log.debug("Auth info: {}", authentication);
+
         try {
             commandRepository.insert(ControlData.builder()
                     .command(commandType)
+                    .commander(authentication.getName())
                     .fire(controlDataDto.getFire())
                     .cannon_x(controlDataDto.getCannon_x())
                     .cannon_y(controlDataDto.getCannon_y())
