@@ -38,7 +38,7 @@ public class DeviceController {
     @RequestMapping(value = "/log/{eventType}", method = RequestMethod.GET)
     public ResponseEntity<?> getDeviceLogs(
             @PathVariable("eventType") EventType eventType,
-            @RequestParam(name = "command", required = false) CommandType commandType,
+            @RequestParam(name = "query", defaultValue = "all") CommandType commandType,
             @RequestParam(name = "page", defaultValue = "1") int pageCount) {
 
         try {

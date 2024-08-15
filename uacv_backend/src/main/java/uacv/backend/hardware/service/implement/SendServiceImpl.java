@@ -83,12 +83,37 @@ public class SendServiceImpl implements SendService {
 
     @Override
     public List<CommandQueryDto> sendCommandLog(CommandType commandType, int pageCount) {
-        return commandRepository.findByCommand(commandType.toString()).stream()
-                .map(commandLog -> CommandQueryDto.builder()
-                        .command(commandLog.getCommand())
-                        .sendDate(commandLog.getSendDate())
-                        .build())
-                .collect(Collectors.toList());
+        if (commandType == CommandType.all) {
+            return commandRepository.findAll().stream()
+                    .map(commandLog -> CommandQueryDto.builder()
+                            .command(commandLog.getCommand())
+                            .commander(commandLog.getCommander())
+                            .controlData(ControlDataDto.builder()
+                                    .cannon_x(commandLog.getCannon_x())
+                                    .cannon_y(commandLog.getCannon_y())
+                                    .fire(commandLog.getFire())
+                                    .move(commandLog.getMove())
+                                    .steer(commandLog.getSteer())
+                                    .build())
+                            .sendDate(commandLog.getSendDate())
+                            .build())
+                    .collect(Collectors.toList());
+        } else {
+            return commandRepository.findByCommand(commandType.toString()).stream()
+                    .map(commandLog -> CommandQueryDto.builder()
+                            .command(commandLog.getCommand())
+                            .commander(commandLog.getCommander())
+                            .controlData(ControlDataDto.builder()
+                                    .cannon_x(commandLog.getCannon_x())
+                                    .cannon_y(commandLog.getCannon_y())
+                                    .fire(commandLog.getFire())
+                                    .move(commandLog.getMove())
+                                    .steer(commandLog.getSteer())
+                                    .build())
+                            .sendDate(commandLog.getSendDate())
+                            .build())
+                    .collect(Collectors.toList());
+        }
     }
 
     @Override
