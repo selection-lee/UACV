@@ -21,9 +21,6 @@ export default {
     const logs = ref([]);
     const stompClient = ref(null);
 
-    // EDIT: Added a Set to track processed log IDs
-    // WHY: To implement de-duplication on the frontend
-    // WHAT: New ref to store processed log IDs
     const processedLogIds = ref(new Set());
 
     const displayedLogs = computed(() => {
@@ -37,9 +34,6 @@ export default {
     });
 
     const addLog = (newLog) => {
-      // EDIT: Added check for already processed logs
-      // WHY: To prevent duplicate logs from being added
-      // WHAT: New if statement to check if log has already been processed
       if (!processedLogIds.value.has(newLog.id)) {
         const formattedLog = createLogMessage(newLog);
         logs.value.push(formattedLog);
