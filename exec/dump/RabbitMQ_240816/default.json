@@ -1,0 +1,204 @@
+{
+    "permissions": [
+        {
+            "configure": ".*",
+            "read": ".*",
+            "user": "vue",
+            "vhost": "/",
+            "write": ".*"
+        },
+        {
+            "configure": ".*",
+            "read": ".*",
+            "user": "spring",
+            "vhost": "/",
+            "write": ".*"
+        },
+        {
+            "configure": ".*",
+            "read": ".*",
+            "user": "orin",
+            "vhost": "/",
+            "write": ".*"
+        },
+        {
+            "configure": ".*",
+            "read": ".*",
+            "user": "iamnotadmin",
+            "vhost": "/",
+            "write": ".*"
+        },
+        {
+            "configure": ".*",
+            "read": ".*",
+            "user": "rpi5",
+            "vhost": "/",
+            "write": ".*"
+        }
+    ],
+    "bindings": [
+        {
+            "arguments": {},
+            "destination": "command_queue",
+            "destination_type": "queue",
+            "routing_key": "orin.cannon",
+            "source": "amq.topic",
+            "vhost": "/"
+        },
+        {
+            "arguments": {},
+            "destination": "command_queue",
+            "destination_type": "queue",
+            "routing_key": "orin.move",
+            "source": "amq.topic",
+            "vhost": "/"
+        },
+        {
+            "arguments": {},
+            "destination": "sound_queue",
+            "destination_type": "queue",
+            "routing_key": "orin.sensor",
+            "source": "amq.topic",
+            "vhost": "/"
+        },
+        {
+            "arguments": {},
+            "destination": "command_queue",
+            "destination_type": "queue",
+            "routing_key": "orin.steer",
+            "source": "amq.topic",
+            "vhost": "/"
+        },
+        {
+            "arguments": {},
+            "destination": "command_queue",
+            "destination_type": "queue",
+            "routing_key": "orin.throttle",
+            "source": "amq.topic",
+            "vhost": "/"
+        },
+        {
+            "arguments": {},
+            "destination": "camera_queue",
+            "destination_type": "queue",
+            "routing_key": "rpi.cam.#",
+            "source": "amq.topic",
+            "vhost": "/"
+        },
+        {
+            "arguments": {},
+            "destination": "command_queue",
+            "destination_type": "queue",
+            "routing_key": "rpi.fire",
+            "source": "amq.topic",
+            "vhost": "/"
+        },
+        {
+            "arguments": {},
+            "destination": "sensor_queue",
+            "destination_type": "queue",
+            "routing_key": "rpi.sensor",
+            "source": "amq.topic",
+            "vhost": "/"
+        }
+    ],
+    "queues": [
+        {
+            "arguments": {},
+            "auto_delete": false,
+            "durable": true,
+            "name": "sound_queue",
+            "type": "classic",
+            "vhost": "/"
+        },
+        {
+            "arguments": {},
+            "auto_delete": false,
+            "durable": true,
+            "name": "sensor_queue",
+            "type": "classic",
+            "vhost": "/"
+        },
+        {
+            "arguments": {},
+            "auto_delete": false,
+            "durable": true,
+            "name": "command_queue",
+            "type": "classic",
+            "vhost": "/"
+        },
+        {
+            "arguments": {},
+            "auto_delete": false,
+            "durable": true,
+            "name": "camera_queue",
+            "type": "classic",
+            "vhost": "/"
+        }
+    ],
+    "parameters": [],
+    "policies": [],
+    "rabbitmq_version": "3.13.4",
+    "rabbit_version": "3.13.4",
+    "exchanges": [],
+    "users": [
+        {
+            "hashing_algorithm": "rabbit_password_hashing_sha256",
+            "limits": {},
+            "name": "iamnotadmin",
+            "password_hash": "arRCrXBz2ts/7/DvS1PhWMUTxcHoysxkWlQ1qhcJMnlNbqEE",
+            "tags": [
+                "administrator"
+            ]
+        },
+        {
+            "hashing_algorithm": "rabbit_password_hashing_sha256",
+            "limits": {},
+            "name": "spring",
+            "password_hash": "aBBTaqoeXIuubf/WzOisw3VjjHg65T3YxLjUSEJ0Ki80+Jlv",
+            "tags": [
+                "backend"
+            ]
+        },
+        {
+            "hashing_algorithm": "rabbit_password_hashing_sha256",
+            "limits": {},
+            "name": "rpi5",
+            "password_hash": "SlPnahHYg2qsdWC98AjqPymsGceJ5ASv29cx3M02532IWO+m",
+            "tags": [
+                "device"
+            ]
+        },
+        {
+            "hashing_algorithm": "rabbit_password_hashing_sha256",
+            "limits": {},
+            "name": "orin",
+            "password_hash": "oWQOQECC98uxtACB7JSk7Wp0/v5r9Upsm6JR7DO6Ig6zqiPh",
+            "tags": [
+                "device"
+            ]
+        },
+        {
+            "hashing_algorithm": "rabbit_password_hashing_sha256",
+            "limits": {},
+            "name": "vue",
+            "password_hash": "Zau60RdALRu/l6KQu10umOplGwraEiy/UESPhVzriANitblk",
+            "tags": [
+                "frontend"
+            ]
+        }
+    ],
+    "topic_permissions": [],
+    "vhosts": [
+        {
+            "limits": [],
+            "metadata": {
+                "description": "Default virtual host",
+                "tags": [],
+                "default_queue_type": "undefined"
+            },
+            "name": "/"
+        }
+    ],
+    "global_parameters": []
+}

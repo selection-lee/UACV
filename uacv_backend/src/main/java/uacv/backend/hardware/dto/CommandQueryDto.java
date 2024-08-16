@@ -14,5 +14,7 @@ import uacv.backend.hardware.domain.enums.CommandType;
 @AllArgsConstructor
 public class CommandQueryDto {
     CommandType command;
+    String commander;
+    ControlDataDto controlData;
     LocalDateTime sendDate;
 }
