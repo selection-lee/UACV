@@ -41,7 +41,7 @@ MFCC 기반 모델로 총기 소리를 판단
 ### 통신 개요도
 ![image.png](./assets/image.png)
 ### 아키텍처 구조도
-![아키텍처.png](./assets/아키텍처.png)
+![아키텍처.png](./assets/C102_Infra_white.png)
 
 ## 기술   스택
 
